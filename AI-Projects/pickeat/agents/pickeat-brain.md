@@ -408,3 +408,24 @@
 
 **Last Brain Update**: 18/11/2025 by Basilio
 **Next Review**: After Varese Game 5 or weekly sprint
+
+---
+
+## System & Workflow Learnings (Updated Nov 18, 2025)
+
+### Token Management
+- **CRITICAL**: Use Gemini/Llama for research/analysis, reserve Claude Sonnet for strategic work only
+- Hit token limits Wed Nov 18 - need better delegation
+
+### Agent Delegation Protocol  
+- File searches → Call Archivista agent first (don't grep manually)
+- Long analysis → Gemini background processing
+- Simple edits → Use Haiku model
+
+### Daily Workflow
+- Closing interview format: ddmmyy (e.g., 181125)
+- Works well for tracking, continue this pattern
+
+### Infrastructure  
+- Obsidian vaults: Project root = vault root (not subfolders)
+- Fixed Stratega/PickEat/Personal paths Nov 18

@@ -4,6 +4,7 @@
 **Owner**: Matteo (strategic direction + approval)
 **Autonomy Level**: Draft for approval
 **Status**: 🟢 Active (Phase 2)
+**Last Major Update**: Nov 18, 2025 - Q4 Content Strategy Delivered
 
 ---
 
@@ -349,27 +350,57 @@ Generate all PickEat content automatically: case studies, blog posts, social med
 
 ---
 
+## 🚀 Recent Activity
+
+### Nov 18, 2025 - Q4 Content Strategy Delivered
+
+**Deliverables Created**:
+1. **Copywriter Personality Profile** (`agents/copywriter-personality.md`)
+   - "Alex Ferretti" persona established as PickEat content voice
+   - Former sports journalist turned B2B SaaS storyteller
+   - Clear voice guidelines for all content
+
+2. **Q4 Blog Content Plan** (`outputs/content-engine/blog/Q4-2025-Blog-Content-Plan.md`)
+   - 6 SEO-optimized blog posts (1,000-1,500 words each)
+   - Publishing schedule: Nov 25 - Dec 31
+   - All posts aligned with primary SEO keywords
+   - Topics: Sports venues, music festivals, exhibitions, UYBA case study, trends
+
+3. **Q4 LinkedIn Strategy** (`outputs/content-engine/social/Q4-2025-LinkedIn-Content-Plan.md`)
+   - Content repurposing: 1 blog = 1 main post + 2-3 micro-posts
+   - Dual-posting strategy (Company Page + Matteo's profile)
+   - Engagement protocol and metrics
+
+**Status**: ✅ Awaiting Matteo's review and approval
+**Next Step**: If approved, draft Post #1 ("€50K Beer Problem") for Nov 25 publish
+
+**Q4 OKR Progress**:
+- Objective 4, KR3 (6 blog posts): Planning complete, execution ready
+
+---
+
 ## 📋 Immediate Q4 Priorities
 
-**Week of Nov 18-22**:
-1. Draft Varese Basket case study (use Game 3 + Game 4 data)
-2. Define SEO keyword targets (sync with Notion)
-3. Generate 2 short posts (1 product update, 1 learnings)
-4. Social content for next Varese/UYBA game
+**Week of Nov 18-22** (CURRENT):
+1. ✅ Q4 blog content plan (6 posts) - COMPLETE
+2. ✅ Q4 LinkedIn strategy - COMPLETE
+3. ✅ Copywriter personality profile - COMPLETE
+4. ⏳ Awaiting approval to proceed with drafting
 
-**Week of Nov 25-29**:
-1. Finalize and publish Case Study #1
-2. Draft Festival case study (summer activations)
-3. Generate 2 more short posts (4/6 total)
-4. Pitch 1 earned mention opportunity
+**Week of Nov 25-29** (IF APPROVED):
+1. Draft and publish Post #1 ("€50K Beer Problem") - Nov 25
+2. Draft Post #2 ("Schema Markup for Venues") - Dec 2
+3. Begin visual assets (charts, infographics) for blog
+4. Social content repurposing from Post #1
 
 **Dec 1-15**:
-1. Publish all 3 case studies ✅
-2. Complete 6 short posts ✅
-3. Secure 3 earned mentions ✅
-4. SEO optimization audit
+1. Publish Posts #2, #3, #4 (Dec 2, 9, 16)
+2. Complete UYBA case study (Post #5) - needs Matteo's data
+3. Generate LinkedIn amplification content
+4. Track SEO performance
 
 **Dec 16-31**:
-1. Q4 content performance review
-2. Plan Q1 2026 editorial calendar
-3. Archive learnings in memory
+1. Publish Posts #5 & #6 (Dec 23, 31)
+2. Q4 content performance review
+3. Plan Q1 2026 editorial calendar
+4. Archive learnings in memory
