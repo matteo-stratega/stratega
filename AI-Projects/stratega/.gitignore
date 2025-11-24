@@ -1,0 +1,42 @@
+# System Files
+.DS_Store
+.env
+*.log
+
+# Data Files (large CSVs, exports)
+data/
+*.csv
+*.xlsx
+*.zip
+*.pdf
+
+# Assets (images, videos - too large for git)
+assets/*.pdf
+assets/*.zip
+assets/*.mp4
+assets/*.mov
+
+# Temp Files
+temp/
+tmp/
+*.tmp
+
+# Credentials
+credentials.json
+*_credentials.json
+token.json
+
+# Node modules (if any)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# n8n local data
+n8n/data/
+
+# Editor
+.vscode/
+.idea/
