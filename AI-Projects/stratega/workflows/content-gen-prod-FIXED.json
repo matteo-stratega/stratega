@@ -1,0 +1,2829 @@
+{
+  "name": "content-gen-prod",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## INPUT\nURL:{{ $json.output }};\ncompany:{{ $('set_field_names').first().json['get-input'].company_url }};\ncompetitors:{{ JSON.stringify($('set_field_names').first().json['get-company-info'].company_competitors) }};\n\n\n## TASK\nSearch the provided URL with the serperTool and check the URL with the validTool. ONLY RETURN A URL IF IT PASSES with statusCode 200. Otherwise look for a URL which passes the test.\nAlso create a short meta title in {{ $('set_field_names').first().json['get-company-info'].company_language }}\n\n#CRITERIAS\n- Include only high domain authority links\n- Do not include links to competitors for the provided company (we do not want to link to competition)\n- For a non 200 URL continue search and output the exact amount of statusCode 200 URLs like supplied sources\n- links should be external not linking to {{ $('set_field_names').first().json['get-input'].company_url }}\n- Never include https://vertexaisearch.cloud.google.com/ links or  https://cloud.google.com/\n\n\nPlease just output in strict JSON format without further comments.\n```json\n{  \n  \"url\": \"valid_url\"\n  \"url_meta_title\": \"short url meta title\"\n}\n```",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a URL researcher and validator who carefully follows the instructions. IF you repeatedly encounter an error with an url just output:  \"```json\\n{    \\\"url\\\": \\\"{{ $('set_field_names').first().json['get-input'].company_url }}\\\",\\n    \\\"url_meta_title\\\": \\\"{{ $('set_field_names').first().json['get-input'].company_name }}\\\"\\n  }  }\\n```\"\n  ",
+          "maxIterations": 20,
+          "passthroughBinaryImages": false
+        }
+      },
+      "id": "e624c242-6523-4e7a-81d6-3a476142d4b4",
+      "name": "AI Agent3",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        2368,
+        400
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "maxOutputTokens": 65536
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2208,
+        672
+      ],
+      "id": "6c4af354-4cbe-4a26-be56-b460838b2362",
+      "name": "Google Gemini Chat Model3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR_SUPABASE_PROJECT.supabase.co/functions/v1/rapid-service",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1136,
+        -48
+      ],
+      "id": "d026e3cd-eab5-4dc5-b464-f27c10aa0543",
+      "name": "get_supabase_information",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f95e63e9-2a18-4522-8f00-4c9944eeaa5a",
+              "name": "gpt_language",
+              "value": "={{ $('get_supabase_information').item.json.gpt_language }}",
+              "type": "array"
+            },
+            {
+              "id": "497c7146-75c6-42c5-add1-2cda4295d40a",
+              "name": "get-company-info",
+              "value": "={{ $('get_supabase_information').item.json.company_data }}",
+              "type": "object"
+            },
+            {
+              "id": "ec3e1a13-9c8f-478e-86da-9b1b3674ead4",
+              "name": "get-input",
+              "value": "={{ $('get_supabase_information').item.json.blog_page }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -304,
+        -16
+      ],
+      "id": "efa87a1f-f49a-45ac-9e4f-5219a2ebfe89",
+      "name": "set_field_names"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96fc90a1-bcd0-4829-983a-9abcf0839618",
+              "name": "prompt",
+              "value": "=*** INPUT ***\nPrimary Keyword: {{ $json['get-input'].primary_keyword }};\nContent Generation Instructions: {{ $json['get-company-info'].content_generation_instruction }};\nCompany Info: {{ JSON.stringify($json['get-company-info'].company_info )}};\nGPT Language: {{ $json.gpt_language[0] }};\nInternal Links: {{ $json['get-input'].links }};\nOutput Language: {{ $json['get-company-info'].company_language }};\nTarget Country: {{ $json['get-company-info'].company_location }};\nCompany URL: {{ $json['get-company-info'].company_url }};\nCompetitors: {{ JSON.stringify($json['get-company-info'].company_competitors) }};\n\n*** TASK ***\nYou are writing a long-form blog post in <COMPANY>\u2019s voice, fully optimised for LLM discovery, on the topic defined by **Primary Keyword**.\n\n*** CONTENT RULES ***\n1. Word count flexible (~1 200\u20131 800) \u2013 keep storyline tight, info-dense.\n2. One-sentence hook \u2192 two-sentence summary.\n3. Create a <h2> \u201cKey Takeaways\u201d part into the dedicated variables.\n4. New H2/H3 every 150\u2013200 words; headings packed with natural keywords.\n5. Every paragraph \u2264 25 words & \u2265 90 % active voice, and **must contain** a number, KPI or real example.\n6. **Primary Keyword** must appear **naturally** (variations/inflections allowed for grammar and readability; no keyword stuffing).\n7.**NEVER** embed PAA, FAQ or Key Takeaways inside sections or section titles, intro or teaser; they live in separate JSON keys.\n8. **Internal links**: at least one per H2 block, woven seamlessly into the surrounding sentence.  \n   Example: `<a href=\"/target-slug\">Descriptive Anchor</a>` (\u2264 6 words, varied). ENSURE correct html format.\n9. Citations in-text as [1], [2]\u2026 matching the **Sources** list. MAX 20 sources. STRICT citation format in text [1],[2],[4][9].\n10. Highlight 1\u20132 insights per section with `<strong>\u2026</strong>` (never `**\u2026**`).\n11. Follow instructions from **GPT Language**.\n12. Rename each title to a McKinsey/BCG-style action title (concise, data/benefit-driven; **no HTML in titles**).\n13. In **2\u20134 sections**, insert either an HTML bulleted (`<ul>`) or numbered (`<ol>`) list **introduced by one short lead-in sentence**; 4\u20138 items per list.\n14. Avoid repetition\u2014vary examples, phrasing and data across sections.\n15. **Narrative flow**: end every section with one bridging sentence that naturally sets up the next section.\n\n*** SOURCES ***\n\u2022 Minimum 8 authoritative German / EU references.  \n\u2022 One line each: `[1]: https://\u2026 \u2013 8\u201315-word note` (canonical URLs only).\n\n*** SEARCH QUERIES ***\n\u2022 One line each: `Q1: keyword phrase \u2026`\n\n*** HARD RULES ***\n\u2022 Keep all HTML tags intact (<p>, <ul>, <ol>, <h2>, <h3> \u2026).  \n\u2022 No extra keys, comments or process explanations.  \n\u2022 **Meta Description CTA** must be clear, actionable and grounded in company info\u2014no vague buzzwords.  \n\u2022 Always follow the Content Generation Instructions, even if other sources differ.  \n\u2022 JSON must be valid and minified (no line breaks inside values).    \n\u2022 Maximum 3 citations per section (if more facts, cite at end of paragraph).  \n\u2022IMPORTANT: Whole textutal Output language = {{ $json['get-company-info'].company_language }}.\n\u2022 NEVER create the article sections using this kind of text structure using <p>, this text looks terrible in rendered html (overuse of <p> for each sentence): </p><p>It supports continuous manufacturing, increasing throughput by up to 50%. [1]</p><p>This efficiency directly translates to reduced production costs per dose of at least 10%.</p><p>Ethris and Lonza are collaborating on scalable spray-dried mRNA vaccines. [3]</p><p><strong>Many overlook the 20% reduction in facility footprint with continuous systems.</strong></p>;\n\u2022 **NEVER** embed PAA, FAQ or Key Takeaways inside sections or section titles, intro or teaser; they live in separate JSON keys.\n\u2022 **NEVER** mention or link to competing companies(Competitors) in the article.\n\n*** OUTPUT ***\nPlease separate the generated content into the output fields and ensure all required output fields are generated.\n\n***IMPORTANT OUTPUT RULES***\n- **NEVER** embed PAA, FAQ or Key Takeaways inside section_XX_content or section_XX_title, intro or teaser; they live in separate JSON keys.\n\nENSURE correct JSON output format\nOutput format:\n\n```json\n{\n  \"Headline\": \"Concise, eye-catching headline that states the main topic and includes the primary keyword\",\n  \"Subtitle\": \"Optional sub-headline that adds context or a fresh angle\",\n  \"Teaser\": \"2\u20133-sentence hook that highlights a pain point or benefit and invites readers to continue\",\n  \"Intro\": \"Brief opening paragraph (\u224880\u2013120 words) that frames the problem, shows relevance, and previews the value\",\n  \"Meta Title\": \"\u226455-character SEO title with the primary keyword and (optionally) brand\",\n  \"Meta Description\": \"\u2264130-character SEO description summarising the benefit and including a CTA\",\n  \"section_01_title\": \"Logical Section 01 Heading (H2)\",\n  \"section_01_content\": \"HTML content for Section 01. Separate the article logically; wrap each paragraph in <p>. Leave unused sections blank.\",\n  \"section_02_title\": \"Logical Section 02 Heading\",\n  \"section_02_content\": \"\",\n  \"section_03_title\": \"\",\n  \"section_03_content\": \"\",\n  \"section_04_title\": \"\",\n  \"section_04_content\": \"\",\n  \"section_05_title\": \"\",\n  \"section_05_content\": \"\",\n  \"section_06_title\": \"\",\n  \"section_06_content\": \"\",\n  \"section_07_title\": \"\",\n  \"section_07_content\": \"\",\n  \"section_08_title\": \"\",\n  \"section_08_content\": \"\",\n  \"section_09_title\": \"\",\n  \"section_09_content\": \"\",\n\n  \"key_takeaway_01\": \"Key point or insight #1 (1 sentence). Leave unused takeaways blank.\",\n  \"key_takeaway_02\": \"\",\n  \"key_takeaway_03\": \"\",\n\n  \"paa_01_question\": \"People also ask question #1\",\n  \"paa_01_answer\": \"Concise answer to question #1.\",\n  \"paa_02_question\": \"\",\n  \"paa_02_answer\": \"\",\n  \"paa_03_question\": \"\",\n  \"paa_03_answer\": \"\",\n  \"paa_04_question\": \"\",\n  \"paa_04_answer\": \"\",\n\n  \"faq_01_question\": \"Main FAQ question #1\",\n  \"faq_01_answer\": \"Clear, concise answer.\",\n  \"faq_02_question\": \"\",\n  \"faq_02_answer\": \"\",\n  \"faq_03_question\": \"\",\n  \"faq_03_answer\": \"\",\n  \"faq_04_question\": \"\",\n  \"faq_04_answer\": \"\",\n  \"faq_05_question\": \"\",\n  \"faq_05_answer\": \"\",\n  \"faq_06_question\": \"\",\n  \"faq_06_answer\": \"\",\n\n  \"Sources\": \"[1]: https://\u2026 \u2013 8-15-word note. List one source per line; leave blank until populated. LIMIT TO 20 sources\",\n  \"Search Queries\": \"Q1: keyword \u2026  List one query per line; leave blank until populated.\"\n}\n```\n\nALWAYS AT ANY TIMES STRICTLY OUTPUT IN THE JSON FORMAT. No extra keys or commentary.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "b9126f3d-dab3-4dc8-832d-5e646c50aee8",
+      "name": "create_prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Clean markdown JSON wrappers from LLM output\nconst items = $input.all();\n\nreturn items.map(item => {\n  // Try all possible field names\n  let text = item.json.output\n          || item.json.text\n          || item.json.concatenatedText\n          || item.json.response\n          || item.json.content\n          || JSON.stringify(item.json);\n\n  // If it's already an object, stringify it first\n  if (typeof text === 'object') {\n    text = JSON.stringify(text);\n  }\n\n  // Remove ALL markdown wrappers\n  text = text.replace(/^```json\\s*/gm, '');\n  text = text.replace(/^```\\s*/gm, '');\n  text = text.replace(/```\\s*$/gm, '');\n  text = text.trim();\n\n  return {\n    json: {\n      ...item.json,\n      output: text,\n      text: text,\n      concatenatedText: text,\n      cleanedOutput: text\n    }\n  };\n});"
+      },
+      "id": "6b22622a-b241-4a17-a854-c236b2301954",
+      "name": "Clean JSON Wrapper",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.concatenatedText }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Headline",
+              "description": "Headline",
+              "required": true
+            },
+            {
+              "name": "Subtitle",
+              "description": "Subtitle",
+              "required": true
+            },
+            {
+              "name": "Teaser",
+              "description": "Teaser",
+              "required": true
+            },
+            {
+              "name": "Intro",
+              "description": "Intro",
+              "required": true
+            },
+            {
+              "name": "Meta Title",
+              "description": "Meta Title",
+              "required": true
+            },
+            {
+              "name": "Meta Description",
+              "description": "Meta Description",
+              "required": true
+            },
+            {
+              "name": "Lead Survey Title",
+              "description": "Lead Survey Title",
+              "required": true
+            },
+            {
+              "name": "Lead Survey Button",
+              "description": "Lead Survey Button",
+              "required": true
+            },
+            {
+              "name": "section_01_title",
+              "description": "section_01_title",
+              "required": true
+            },
+            {
+              "name": "section_02_title",
+              "description": "section_02_title",
+              "required": true
+            },
+            {
+              "name": "section_03_title",
+              "description": "section_03_title",
+              "required": true
+            },
+            {
+              "name": "section_04_title",
+              "description": "section_04_title",
+              "required": true
+            },
+            {
+              "name": "section_05_title",
+              "description": "section_05_title",
+              "required": true
+            },
+            {
+              "name": "section_06_title",
+              "description": "section_06_title",
+              "required": true
+            },
+            {
+              "name": "section_07_title",
+              "description": "section_07_title",
+              "required": true
+            },
+            {
+              "name": "section_08_title",
+              "description": "section_08_title",
+              "required": true
+            },
+            {
+              "name": "section_09_title",
+              "description": "section_09_title",
+              "required": true
+            },
+            {
+              "name": "section_01_content",
+              "description": "section_01_content",
+              "required": true
+            },
+            {
+              "name": "section_02_content",
+              "description": "section_02_content",
+              "required": true
+            },
+            {
+              "name": "section_03_content",
+              "description": "section_03_content",
+              "required": true
+            },
+            {
+              "name": "section_04_content",
+              "description": "section_04_content",
+              "required": true
+            },
+            {
+              "name": "section_05_content",
+              "description": "section_05_content",
+              "required": true
+            },
+            {
+              "name": "section_06_content",
+              "description": "section_06_content",
+              "required": true
+            },
+            {
+              "name": "section_07_content",
+              "description": "section_07_content",
+              "required": true
+            },
+            {
+              "name": "section_08_content",
+              "description": "section_08_content",
+              "required": true
+            },
+            {
+              "name": "section_09_content",
+              "description": "section_09_content",
+              "required": true
+            },
+            {
+              "name": "key_takeaway_03",
+              "description": "key_takeaway_03",
+              "required": true
+            },
+            {
+              "name": "key_takeaway_02",
+              "description": "key_takeaway_02",
+              "required": true
+            },
+            {
+              "name": "key_takeaway_01",
+              "description": "key_takeaway_01",
+              "required": true
+            },
+            {
+              "name": "paa_01_question",
+              "description": "paa_01_question",
+              "required": true
+            },
+            {
+              "name": "paa_02_question",
+              "description": "paa_02_question",
+              "required": true
+            },
+            {
+              "name": "paa_03_question",
+              "description": "paa_03_question",
+              "required": true
+            },
+            {
+              "name": "paa_04_question",
+              "description": "paa_04_question",
+              "required": true
+            },
+            {
+              "name": "paa_01_answer",
+              "description": "paa_01_answer",
+              "required": true
+            },
+            {
+              "name": "paa_02_answer",
+              "description": "paa_02_answer",
+              "required": true
+            },
+            {
+              "name": "paa_03_answer",
+              "description": "paa_03_answer",
+              "required": true
+            },
+            {
+              "name": "paa_04_answer",
+              "description": "paa_04_answer",
+              "required": true
+            },
+            {
+              "name": "faq_01_question",
+              "description": "faq_01_question",
+              "required": true
+            },
+            {
+              "name": "faq_02_question",
+              "description": "faq_02_question",
+              "required": true
+            },
+            {
+              "name": "faq_03_question",
+              "description": "faq_03_question",
+              "required": true
+            },
+            {
+              "name": "faq_04_question",
+              "description": "faq_04_question",
+              "required": true
+            },
+            {
+              "name": "faq_05_question",
+              "description": "faq_05_question",
+              "required": true
+            },
+            {
+              "name": "faq_01_answer",
+              "description": "faq_01_answer",
+              "required": true
+            },
+            {
+              "name": "faq_02_answer",
+              "description": "faq_02_answer",
+              "required": true
+            },
+            {
+              "name": "faq_03_answer",
+              "description": "faq_03_answer",
+              "required": true
+            },
+            {
+              "name": "faq_04_answer",
+              "description": "faq_04_answer",
+              "required": true
+            },
+            {
+              "name": "faq_05_answer",
+              "description": "faq_05_answer",
+              "required": true
+            },
+            {
+              "name": "faq_06_answer",
+              "description": "faq_06_answer",
+              "required": true
+            },
+            {
+              "name": "faq_06_question",
+              "description": "faq_06_question",
+              "required": true
+            },
+            {
+              "name": "Sources",
+              "description": "Sources",
+              "required": true
+            },
+            {
+              "name": "Search_Queries",
+              "description": "Search_Queries"
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "=You are an expert extraction algorithm.\nOnly extract relevant information from the text. Please correct grammar and syntax issues for the {{ $('set_field_names').first().json[\"get-company-info\"].company_language }} text, please do not alter html code or links."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        -16
+      ],
+      "id": "478de6fa-0adb-453c-b105-2c59c2cd62a4",
+      "name": "Information Extractor",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        688,
+        160
+      ],
+      "id": "a2d7de84-2196-4fc1-9523-54fbdd37f7cc",
+      "name": "Google Gemini Chat Model4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop through all items in the input\nconst result = {};\n\nfor (let i = 0; i < items.length; i++) {\n  const rawOutput = items[i].json.output;\n\n  // Remove the triple backticks and 'json' label\n  const cleaned = rawOutput.replace(/```json|```/g, '').trim();\n\n  // Parse the cleaned JSON string\n  let parsed;\n  try {\n    parsed = JSON.parse(cleaned);\n  } catch (err) {\n    throw new Error(`Failed to parse JSON from item ${i + 1}: ${err.message}`);\n  }\n\n  // Store the URL with a numbered key\n  result[`[${i + 1}]`] = parsed.url_meta_title +\": \" +parsed.url ;\n}\n\n// Return a single item with combined results\nreturn [ { json: {output: result }}];\n\n"
+      },
+      "id": "e6244699-9ab8-4923-aba0-e4d3171fc784",
+      "name": "format-output1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        400
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "text": "=Sources:{{ $('Information Extractor').item.json.output.Sources }}\n\nPlease extract the URLS in json format:\n```json\n    {\n      \"[1]\": \"url\",\n      \"[2]\": \"url\",\n      \"[until end of sources]\": \"url\"\n    }\n```",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n\t\"[1]\": \"url\",\n    \"[2]\": \"url\",\n    \"[3]\": \"url\",\n    \"[4]\": \"url\",\n    \"[5]\": \"url\",\n    \"[6]\": \"url\",\n    \"[7]\": \"url\",\n    \"[8]\": \"url\",\n    \"[9]\": \"url\",\n    \"[10]\": \"url\",\n    \"[11]\": \"url\",\n    \"[12]\": \"url\",\n    \"[13]\": \"url\",\n    \"[14]\": \"url\",\n    \"[15]\": \"url\",\n    \"[16]\": \"url\",\n    \"[17]\": \"url\",\n    \"[18]\": \"url\",\n    \"[19]\": \"url\",\n    \"[20]\": \"url\",\n    \"[21]\": \"url\",\n    \"[22]\": \"url\",\n    \"[23]\": \"url\",\n    \"[24]\": \"url\",\n    \"[25]\": \"url\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        400
+      ],
+      "id": "aa2f3b13-9f97-43a9-b130-52d8e763c044",
+      "name": "Information Extractor1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        592
+      ],
+      "id": "a519bbdc-5bf5-480e-b5e3-443b564f7406",
+      "name": "Google Gemini Chat Model6"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        400
+      ],
+      "id": "2727d0fb-9f8e-4d6b-884e-e249f796ef5b",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search the internet to get further stats. ",
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "parametersHeaders": {
+          "values": [
+            {
+              "name": "Content-Type",
+              "valueProvider": "fieldValue",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-KEY",
+              "valueProvider": "fieldValue",
+              "value": "YOUR_SERPER_API_KEY_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "=q"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        2352,
+        672
+      ],
+      "id": "eed204f0-ed5f-46c0-a3db-6876e8c475f1",
+      "name": "serperTool"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP request and check for statusCode 200",
+        "method": "HEAD",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          },
+          "timeout": 6000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        2464,
+        672
+      ],
+      "id": "a62410bc-7a5b-4291-982b-2f749a6d0d27",
+      "name": "validTool"
+    },
+    {
+      "parameters": {
+        "content": "## Merge outputs, final sanitizations and variable name preperations",
+        "height": 500,
+        "width": 1440,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3504,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "f894ba2a-5084-4d80-baba-91a3ea348d1c",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "jsCode": "const fieldMap = {\n  more_links: \"More_Links\",\n  headline: \"Headline\",\n  subtitle: \"Subtitle\",\n  faq: \"faq\",\n  literature: \"literatureFormatted\",\n  meta_title: \"Meta Title\",\n  meta_description: \"Meta Description\",\n  key_takeaway_01: \"key_takeaway_01\",\n  key_takeaway_02: \"key_takeaway_02\",\n  key_takeaway_03: \"key_takeaway_03\",\n  teaser: \"Teaser\",\n  intro: \"Intro\",\n  section_01_title: \"section_01_title\",\n  section_01_content: \"section_01_content\",\n  section_02_title: \"section_02_title\",\n  section_02_content: \"section_02_content\",\n  section_03_title: \"section_03_title\",\n  section_03_content: \"section_03_content\",\n  section_04_title: \"section_04_title\",\n  section_04_content: \"section_04_content\",\n  section_05_title: \"section_05_title\",\n  section_05_content: \"section_05_content\",\n  section_06_title: \"section_06_title\",\n  section_06_content: \"section_06_content\",\n  section_07_title: \"section_07_title\",\n  section_07_content: \"section_07_content\",\n  section_08_title: \"section_08_title\",\n  section_08_content: \"section_08_content\",\n  section_09_title: \"section_09_title\",\n  section_09_content: \"section_09_content\",\n  format: \"Format\",\n  table_name: \"Table Name\",\n  image_1_alt: \"image_1_alt\",\n  date: \"Date\",\n  read_time: \"Read_Time\",\n  ToC01: \"ToC01\",\n  ToC02: \"ToC02\",\n  ToC03: \"ToC03\",\n  ToC04: \"ToC04\",\n  ToC05: \"ToC05\",\n  ToC06: \"ToC06\",\n  ToC07: \"ToC07\",\n  ToC08: \"ToC08\",\n  ToC09: \"ToC09\",\n};\n// Helpers\nconst decodeHTML = (str) => str\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&amp;/g, '&')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\");\nconst stripHTML = (str) => str.replace(/<[^>]*>/g, '');\nconst cleanText = (str) =>\n  decodeHTML(str)\n    .replace(/<h1>/gi, '<h2>')\n    .replace(/<\\/h1>/gi, '</h2>')\n    .replace(/Section\\s+\\d{1,2}\\s*[\u2013-]\\s*[^:]+:/gi, '')\n    .replace(/\\*{2}/g, '')\n    .trim();\nconst getFirstNWords = (str, n = 30) =>\n  str.split(/\\s+/).slice(0, n).join(' ');\nconst cleanSectionContent = (title, content) => {\n  if (!title || !content) return content;\n  const lowerTitle = stripHTML(decodeHTML(title)).replace(/\\s+/g, ' ').trim().toLowerCase();\n  return content.replace(/<h2[^>]*>[\\s\\S]*?<\\/h2>/i, (match) => {\n    const contentWithoutHTML = stripHTML(decodeHTML(content)).replace(/\\s+/g, ' ').trim().toLowerCase();\n    const preview = getFirstNWords(contentWithoutHTML, 30);\n    return preview.includes(lowerTitle) ? '' : match;\n  }).trim();\n};\n// Main logic\nconst source = $json;\nconst outputData = source.output || {};\nconst output = {};\nfor (const [col, field] of Object.entries(fieldMap)) {\n  let value = outputData[field] ?? source[field] ?? null;\n  if (typeof value === 'string') {\n    value = cleanText(value);\n  }\n  const match = col.match(/^section_0([1-6])_content$/);\n  if (match) {\n    const sectionNum = match[1];\n    const titleKey = `section_0${sectionNum}_title`;\n    const titleValue = outputData[titleKey] ?? source[titleKey] ?? '';\n    value = cleanSectionContent(titleValue, value);\n  }\n  \n  // Check if this is the intro field and wrap in <p> tag if not already wrapped in HTML\n  if (col === 'intro' && typeof value === 'string' && value.trim() !== '') {\n    // Check if the content is already wrapped in HTML tags (starts with < and ends with >)\n    const trimmedValue = value.trim();\n    const isWrappedInHTML = /^<[^>]+>.*<\\/[^>]+>$/s.test(trimmedValue);\n    \n    if (!isWrappedInHTML) {\n      value = `<p>${value}</p>`;\n    }\n  }\n  \n  output[col] = value;\n}\n// Combine sections 01\u201309 into single content\nlet combined = '';\nfor (let i = 1; i <= 9; i++) {\n  const idx = `0${i}`.slice(-2);\n  const titleKey = `section_${idx}_title`;\n  const contentKey = `section_${idx}_content`;\n  const t = cleanText(outputData[titleKey] ?? source[titleKey] ?? '');\n  const c = cleanText(outputData[contentKey] ?? source[contentKey] ?? '');\n  if (t || c) combined += `${t}\\n${c}\\n\\n`;\n}\nreturn [{ json: output }];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4032,
+        -80
+      ],
+      "id": "600bc507-18b6-4432-b749-98a9631c95cd",
+      "name": "prepare_variable_names-and-clean"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Provide me with 10 links that I can embed in my article about: \"{{ $('Information Extractor').first().json.output.Headline }}\" for SEO purposes. Output: 10 Links (no description). Best case Link to Authorities (Bundes\u00e4mter, Gesundheitsorganisationen, Statistikportale, Beh\u00f6rden, Unternehmensberatungen - Primary Focus on Germany). If available, reference specific Statistics, Reports, Surveys, Case studies or Interviews. Check if Link is valid before providing (cannot afford 404s). Always output 10 links.\n\nMake sure the URLs are from High Quality, High Credibility Sources (not like gebraucht24.de) - and please no competition to our Company: {{ JSON.stringify($('get_supabase_information').first().json.company_data.company_info) }}.\n\nPlease do not choose too generic URLs. The topic of the pages shall be closely aligned with the article topic.\n\nMinimum 1 Link has to be from Wikipedia.\n\n\nSTRICT OUTPUT FORMAT:\n\n{\n\"link1\": \"url\",\n\"link2\": \"url\",\n\"link3\": \"url\",\n\"link4\": \"url\",\n\"link5\": \"url\",\n\"link6\": \"url\",\n\"link7\": \"url\",\n\"link8\": \"url\",\n\"link9\": \"url\",\n\"link10\": \"url\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1648,
+        928
+      ],
+      "id": "a7a20f97-dfc1-4093-a610-f46df7fb9aa3",
+      "name": "create-more-section",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        1168
+      ],
+      "id": "75a33dc5-99ac-407e-846a-b9428aa7e7d2",
+      "name": "Google Gemini Chat Model14"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>{{ $json.meta_title }}</title>\n  <meta name=\"description\" content=\"{{ $json.meta_description }}\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <style>\n    body{font-family:Arial, sans-serif;line-height:1.5;margin:0;padding:20px;color:#333;}\n    article{max-width:800px;margin:0 auto;}\n    h1{font-size:2em;margin-bottom:0.3em;}\n    h2{font-size:1.6em;margin-top:1em;color:#222;}\n    h3{font-size:1.3em;margin-top:0.8em;color:#444;}\n    .lead-survey{border:1px solid #ddd;padding:16px;margin:24px 0;background:#f9f9f9;}\n    .key-takeaways ul{padding-left:20px;}\n    .paa, .faq{margin:24px 0;}\n    .sources, .queries{font-size:0.9em;margin:24px 0;white-space:pre-wrap;}\n    .sources li, .queries li{margin-bottom:4px;}\n  </style>\n</head>\n<body>\n  <article>\n    <header>\n      <h1>{{ $json.headline }}</h1>\n      <h2>{{ $json.subtitle }}</h2>\n      <p class=\"teaser\">{{ $json.teaser }}</p>\n      {{ $json.intro }}\n    </header>\n\n    <section id=\"section1\">\n      <h2>{{ $json.section_01_title }}</h2>\n    {{ $json.section_01_content }}\n    </section>\n\n    <section id=\"section2\">\n      <h2>{{ $json.section_02_title }}</h2>\n      {{ $json.section_02_content }}\n    </section>\n\n    <section id=\"section3\">\n      <h2>{{ $json.section_03_title }}</h2>\n      {{ $json.section_03_content }}\n    </section>\n\n    <section id=\"section4\">\n      <h2>{{ $json.section_04_title }}</h2>\n      {{ $json.section_04_content }}\n    </section>\n\n    <section id=\"section5\">\n      <h2>{{ $json.section_05_title }}</h2>\n      {{ $json.section_05_content }}\n    </section>\n\n    <section id=\"section6\">\n      <h2>{{ $json.section_06_title }}</h2>\n      {{ $json.section_06_content }}\n    </section>\n\n    <section id=\"section7\">\n      <h2>{{ $json.section_07_title }}</h2>\n      {{ $json.section_07_content }}\n    </section>\n\n    <section id=\"section8\">\n      <h2>{{ $json.section_08_title }}</h2>\n      {{ $json.section_08_content }}\n    </section>\n\n    <section id=\"section9\">\n      <h2>{{ $json.section_09_title }}</h2>\n      {{ $json.section_09_content }}\n    </section>\n\n    <section class=\"key-takeaways\">\n      <h2>Key Takeaways</h2>\n      <ul>\n        <li>{{ $('Information Extractor').first().json.output.key_takeaway_01 }}</li>\n        <li>{{ $('Information Extractor').first().json.output.key_takeaway_02 }}</li>\n        <li>{{ $('Information Extractor').first().json.output.key_takeaway_03 }}</li>\n      </ul>\n    </section>\n\n    <section class=\"sources\">\n      <h2>Literature</h2>\n      <p>{{ $json.literature }}</p>\n    </section>\n\n    <section class=\"queries\">\n      <h2>Search Queries</h2>\n      <p>{{ $('Information Extractor').first().json.output.Search_Queries }}</p>\n    </section>\n\n  </article>\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        3584,
+        480
+      ],
+      "id": "42df0db1-d936-42ad-b228-653c746455ad",
+      "name": "HTML1"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        3584,
+        -144
+      ],
+      "id": "81d073c7-9cd2-4779-8b1c-02974b9a92ce",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node (JavaScript)\n\n// Regex pattern to match bracketed numbers like [1], [2 3], [9,10], [ 12 ] etc.\nconst pattern = /\\[\\s*\\d+(?:[\\s,]+\\d+)*\\s*\\]/g;\n\n// Get the first input item's JSON data\nconst data = $('Information Extractor').first().json.output\n\n// Prepare a new object to hold the cleaned results\nconst cleaned = {};\n\n// Iterate through each property in the object\nfor (const key in data) {\n  if (typeof data[key] === 'string') {\n    // If the value is a string, clean it with the regex\n    cleaned[key] = data[key].replace(pattern, '').trim();\n  } else {\n    // Otherwise, keep the original value\n    cleaned[key] = data[key];\n  }\n}\n\n// Return the cleaned object\nreturn [\n  {\n    json: cleaned,\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        -448
+      ],
+      "id": "352d82ba-0d61-481e-ae50-5b4dd0299346",
+      "name": "CitationSanitizer"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This Code node transforms an object with keys like \"[1]\", \"[2]\", etc. into a literature-style string\n\n// Get the first item of input\nconst data = $('format-output1').first().json.output;\n\n// Extract and sort the keys numerically (in case they're out of order)\nconst sortedKeys = Object.keys(data).sort((a, b) => {\n  const numA = parseInt(a.match(/\\d+/)[0], 10);\n  const numB = parseInt(b.match(/\\d+/)[0], 10);\n  return numA - numB;\n});\n\n// Build the output string, wrapping each item in <p> \u2026 </p> with a clickable link\nconst literatureString = sortedKeys\n  .map(key => {\n    const fullValue = data[key]; // e.g., \"Remote Work Statistics in Germany: https://www.destatis.de/EN/Themes/Labour/Labour-Market/Quality-Employment/Dimension3/3_11_homeoffice.html\"\n    \n    // Split by \": \" to separate description from URL\n    const parts = fullValue.split(': ');\n    const description = parts[0]; // The part before \": \"\n    const url = parts.slice(1).join(': '); // The part after \": \" (use slice in case there are multiple colons in URL)\n    \n    // Use key as-is since it already contains brackets [1], [2], etc.\n    return `<p>${key}: <a href=\"${url}\" target=\"_blank\">${description}</a></p>`;\n  })\n  .join('');\n\n// Return as new field\nreturn [\n  {\n    json: {\n      literatureFormatted: literatureString\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3088,
+        400
+      ],
+      "id": "26e1b346-eec1-4975-a437-716656516ccc",
+      "name": "literature-formatter"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get current node input\nconst inputData = $json;\n\n\n// Count words in a given string\nfunction countWords(text) {\n  return text.split(/\\s+/).filter(word => word.length > 0).length;\n}\n\n// Estimate read time in minutes (default 200 words/min)\nfunction estimateReadTime(wordCount, wordsPerMinute = 200) {\n  return Math.ceil(wordCount / wordsPerMinute);\n}\n\n// Initialize counters\nlet totalWordCount = 0;\n\n// Iterate over all fields in input data\nfor (const key in inputData) {\n  if (typeof inputData[key] === 'string') {\n    // Count words for string values only\n    totalWordCount += countWords(inputData[key]);\n  }\n}\n\n// Calculate estimated read time\nconst estimatedReadTime = estimateReadTime(totalWordCount);\n\n// Return Index and formatted reading time\nreturn [{\n  json: {\n    Read_Time: `<p>${estimatedReadTime}</p>`\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -320
+      ],
+      "id": "85759ddc-db8a-4188-bce9-01527baf8ddf",
+      "name": "add-readtime"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ensure $today is a Date object\nconst todayDate = ($today instanceof Date) ? $today : new Date($today);\n\n// Calculate a random number of days (0-89) to subtract from today.\nconst randomDays = Math.floor(Math.random() * 90);\n\n// Subtract the days in milliseconds from todayDate.\nconst randomDate = new Date(todayDate.getTime() - randomDays * 24 * 60 * 60 * 1000);\n\n// Format the date as DD.MM.YYYY.\nconst day = randomDate.getDate().toString().padStart(2, '0');\nconst month = (randomDate.getMonth() + 1).toString().padStart(2, '0');\nconst year = randomDate.getFullYear();\nconst formattedDate = `${day}.${month}.${year}`;\n\nreturn [\n  {\n    json: {\n      Date: formattedDate\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -496
+      ],
+      "id": "db621b01-9459-4f33-98df-a8e47bc88b48",
+      "name": "add_date"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Initialize an empty object to store the merged data\nconst mergedData = {};\n\n// Loop through all incoming items\nfor (const item of $input.all()) {\n  // Merge the fields from the current item into the mergedData object\n  Object.assign(mergedData, item.json);\n}\n\n// Return the merged data as a single row\nreturn [\n  {\n    json: mergedData\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3808,
+        -80
+      ],
+      "id": "a46a9480-cee6-4bf1-8e3e-55120935fe9c",
+      "name": "merge-outputs",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=INPUT\nCompany Info: \"{{ JSON.stringify($('get_supabase_information').first().json.company_data.company_info )}}\nPrimary Keyword: \"{{ $('get_supabase_information').first().json.blog_page.primary_keyword }}\"\n\nTASK\nErstelle folgende SEO-Elemente f\u00fcr einen Blog-Artikel zum Thema \"{{ $('get_supabase_information').first().json.blog_page.primary_keyword }}\":\n\n\n[Table of Contents]:\nErstelle ein Inhaltsverzeichnis, das auf den in der Eingabe bereitgestellten Abschnittstiteln basiert:\nCurrent Content: \"\n1: {{ $('Information Extractor').first().json.output.section_01_title || \"\"}}\n2: {{ $('Information Extractor').first().json.output.section_02_title || \"\"}}\n3: {{ $('Information Extractor').first().json.output.section_03_title || \"\"}} \n4: {{ $('Information Extractor').first().json.output.section_04_title || \"\"}}  \n5: {{ $('Information Extractor').first().json.output.section_05_title || \"\"}}  \n6: {{ $('Information Extractor').first().json.output.section_06_title || \"\"}}  \n7: {{ $('Information Extractor').first().json.output.section_07_title || \"\"}}  \n8: {{ $('Information Extractor').first().json.output.section_08_title || \"\"}}  \n9: {{ $('Information Extractor').first().json.output.section_09_title || \"\"}}  \n(6/7/8/9 might be empty, in that case just ignore)\n\nIn dem Inhaltsverzeichnis sollte jeder Abschnittstitel auf maximal 1\u20132 aussagekr\u00e4ftige W\u00f6rter reduziert werden.\nVerwende daf\u00fcr nach M\u00f6glichkeit eine kurze, sinnvolle Zusammenfassung oder Stichw\u00f6rter, statt nur stumpf nach 2 W\u00f6rtern abzuschneiden.\nHinweise:\n\nSprache:\nAlle Inhalte (inkl. der gek\u00fcrzten Abschnittstitel) bitte auf {{ $('set_field_names').first().json['get-company-info'].company_language }} verfassen.\nFormatierung:\nAlle R\u00fcckgabewerte sollen als Strings formatiert sein.\nDas finale JSON-Objekt muss eine flache Hierarchie aufweisen.\nInhaltsverzeichnis-Eintr\u00e4ge:\nVerwende f\u00fcr die Eintr\u00e4ge Konsistenz in den Schl\u00fcsseln, also \"ToC01\", \"ToC02\", \u2026 \u2013 exakt so viele Eintr\u00e4ge, wie Abschnittstitel vorhanden sind.\nErwartetes JSON-Format (Beispiel):\n\n{\n  \"ToC01\": \"Steueroptimierung\",\n  \"ToC02\": \"Technische Details\",\n  \"ToC03\": \"Best Practices Morgenroutine\"\n}\nAchte dabei stets auf max. 1\u20132 W\u00f6rter je Eintrag, die den Kern des Abschnittstitels wiedergeben.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1712,
+        -128
+      ],
+      "id": "e6b0d63c-652f-41d4-af07-c09e4aad70e7",
+      "name": "add-short-headers",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "modelName": "=models/gemini-2.5-pro-preview-05-06",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        80
+      ],
+      "id": "203f3126-30fa-452a-af4d-0fb20508f0d1",
+      "name": "Google Gemini Chat Model2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node (JavaScript)\n\n// Regex pattern to match bracketed numbers like [1], [2 3], [9,10], [ 12 ] etc.\nconst pattern = /\\[\\s*\\d+(?:[\\s,]+\\d+)*\\s*\\]/g;\n\n// Regex pattern to match empty or whitespace-only square brackets like [], [  ]\nconst emptyBrackets = /\\[\\s*\\]/g;\n\n// Get the first input item's JSON data\nconst data = $('Information Extractor').first().json.output;\n\n// Prepare a new object to hold the cleaned results\nconst cleaned = {};\n\n// Iterate through each property in the object\nfor (const key in data) {\n  if (typeof data[key] === 'string') {\n    // Clean with both regex patterns\n    cleaned[key] = data[key]\n      .replace(pattern, '')       // Remove numbered brackets like [1, 2]\n      .replace(emptyBrackets, '') // Remove empty or whitespace brackets\n      .trim();                    // Trim any leftover whitespace\n  } else {\n    // Otherwise, keep the original value\n    cleaned[key] = data[key];\n  }\n}\n\n// Return the cleaned object\nreturn [\n  {\n    json: cleaned,\n  },\n];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -816
+      ],
+      "id": "5f165c95-daf4-43e4-ab61-95070bc96eb8",
+      "name": "CitationSanitizer1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1408,
+        -48
+      ],
+      "id": "efb7162d-e6cc-4706-8c80-331147b8721a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "function cleanData(input) {\n  const cleaned = JSON.parse(JSON.stringify(input)); // deep clone\n\n  const regexBold = /\\*\\*([^*]*)\\*\\*/g;\n\n  // Clean inside [ ]: remove letters, spaces, and parentheses\n  const regexInsideBrackets = /\\[([^\\[\\]]*)\\]/g;\n\n  // Fix broken href attributes with whitespace\n  const regexHrefFix = /href=\"([^\"]*?)\\s+([^\"]*)\"/g;\n\n  function cleanBrackets(str) {\n    return str.replace(regexInsideBrackets, (match, inner) => {\n      const cleanedInner = inner.replace(/[A-Za-z ()]/g, '');\n      return `[${cleanedInner}]`;\n    });\n  }\n\n  function recurse(obj) {\n    for (const key in obj) {\n      if (typeof obj[key] === 'string') {\n        let value = obj[key];\n\n        // Apply all regex transformations in order\n        value = value.replace(regexBold, '$1');         // Remove **bold**\n        value = cleanBrackets(value);                   // Clean content inside [ ]\n        value = value.replace(regexHrefFix, 'href=\"$1$2\"'); // Fix broken href\n\n        obj[key] = value;\n      } else if (typeof obj[key] === 'object' && obj[key] !== null) {\n        recurse(obj[key]); // Recursively clean nested objects\n      }\n    }\n  }\n\n  if (Array.isArray(cleaned)) {\n    cleaned.forEach(item => recurse(item));\n  } else {\n    recurse(cleaned);\n  }\n\n  return cleaned;\n}\n\nconst input = $json;\nconst output = cleanData(input);\nreturn Array.isArray(output) ? output : [output];\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4288,
+        -80
+      ],
+      "id": "09d787b0-11d1-4309-89b4-492499246c49",
+      "name": "output_sanitizer"
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  // 1. Get raw output from the input JSON\n  const rawOutput = $input.first().json.output || \"\";\n\n  // 2. Extract JSON from code fences, if present (supports json, html, or other language tags)\n  const jsonMatch = rawOutput.match(/```(?:json|html|[a-zA-Z]*)\\s*([\\s\\S]*?)\\s*```/);\n  let cleanedOutput = jsonMatch ? jsonMatch[1] : rawOutput;\n\n  // 3. Remove potential HTML wrappers like DOCTYPE, <html>, <head>, <body> tags\n  cleanedOutput = cleanedOutput.replace(\n    /<!DOCTYPE[^>]*>|<html[^>]*>|<\\/html>|<head[^>]*>[\\s\\S]*?<\\/head>|<body[^>]*>|<\\/body>/gi,\n    ''\n  );\n\n  // 4. Remove potential BOM (byte order mark) and trim whitespace\n  cleanedOutput = cleanedOutput.replace(/^\\uFEFF/, '').trim();\n\n  // 5. Sanitize control characters while preserving newlines (\\n), carriage returns (\\r), and tabs (\\t)\n  cleanedOutput = cleanedOutput.replace(/[\\u0000-\\u001F\\u007F]/g, (char) => {\n    return (char === '\\n' || char === '\\r' || char === '\\t') ? char : ' ';\n  });\n\n  // 6. Additional sanitization: flatten HTML content within JSON string fields\n  //    Remove spaces between tags and collapse multiple spaces into one.\n  cleanedOutput = cleanedOutput.replace(/>\\s+</g, '><').replace(/\\s+/g, ' ').trim();\n\n  // 7. Try to parse the JSON. If it fails, attempt further sanitization by escaping unescaped double quotes in HTML text\n  let parsedData;\n  try {\n    parsedData = JSON.parse(cleanedOutput);\n  } catch (parseError) {\n    const furtherSanitizedOutput = cleanedOutput.replace(/>([^<]*?)\"([^<]*?)</g, (match, p1, p2) => {\n      // Escape the double quote inside the content\n      return '>' + p1 + '\\\\\"' + p2 + '<';\n    });\n    parsedData = JSON.parse(furtherSanitizedOutput);\n  }\n\n  // 8. Function to convert HTML content fields to a single-line format\n  function convertHtmlToSingleLine(data) {\n    if (typeof data === 'string') {\n      return data\n        .replace(/[\\n\\r]+/g, ' ')  // Remove all newline and carriage return characters\n        .replace(/\\s+/g, ' ')      // Collapse multiple spaces into one\n        .trim();\n    } else if (Array.isArray(data)) {\n      return data.map(item => convertHtmlToSingleLine(item));\n    } else if (typeof data === 'object' && data !== null) {\n      const newObj = {};\n      for (const key in data) {\n        if (data.hasOwnProperty(key)) {\n          newObj[key] = convertHtmlToSingleLine(data[key]);\n        }\n      }\n      return newObj;\n    }\n    return data;\n  }\n\n  // 9. Apply the HTML conversion to the parsed data\n  parsedData = convertHtmlToSingleLine(parsedData);\n\n  // 10. Dynamically format the output:\n  //     If parsedData is an array, return it; if it\u2019s an object, wrap it in an array.\n  let formattedOutput;\n  if (Array.isArray(parsedData)) {\n    formattedOutput = parsedData.map(item => {\n      const dynamicObject = {};\n      for (const key in item) {\n        if (item.hasOwnProperty(key)) {\n          dynamicObject[key] = item[key];\n        }\n      }\n      return dynamicObject;\n    });\n  } else if (typeof parsedData === 'object' && parsedData !== null) {\n    const dynamicObject = {};\n    for (const key in parsedData) {\n      if (parsedData.hasOwnProperty(key)) {\n        dynamicObject[key] = parsedData[key];\n      }\n    }\n    formattedOutput = [dynamicObject];\n  } else {\n    throw new Error(\"Unsupported JSON format. Expected an array or object.\");\n  }\n\n  // 11. Return the formatted output\n  return formattedOutput;\n\n} catch (error) {\n  throw new Error(\"Failed to parse JSON output: \" + error.message);\n}\n"
+      },
+      "id": "06085e55-717a-46a4-a039-4b2c8bc46c68",
+      "name": "create-url-table1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        928
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Access the single item passed to this node\nconst response = $json;\n\n// Extract statusCode and statusMessage\nconst output = {\n    Row: $itemIndex + 1, // Keep track of the item index\n    StatusCode: response?.statusCode ?? \"Empty\", // Handle missing statusCode\n    StatusMessage: response?.statusMessage ?? \"No Status Message\", // Handle missing statusMessage\n};\n\n// Return the single object\nreturn { json: output };\n"
+      },
+      "id": "a65417f2-e4c5-4222-8b45-3685e8223251",
+      "name": "create-url-status-table1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        1328
+      ],
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "let allRowsData = '';\n\n// Check if there is any data\nif (items.length > 0) {\n  // Loop through each row\n  items.forEach(item => {\n    let rowData = '';\n\n    // Concatenate only 'URL' and 'Description' values in the row into a single string\n    ['URL', 'Description'].forEach((key, index) => {\n      const value = item.json[key] || ''; // Get data from 'URL' or 'Description'\n      rowData += value;\n\n      // Add delimiter (e.g., comma) if not the last value\n      if (index < 1) {\n        rowData += ', ';\n      }\n    });\n\n    // Add row delimiter (e.g., semicolon) after each row\n    allRowsData += rowData + '; ';\n  });\n}\n\n// Store the concatenated data into a single field\nreturn [{ json: { allDataConcatenated: allRowsData.trim() } }];\n"
+      },
+      "id": "a7624bd6-2718-424c-8b92-869ee7977ac5",
+      "name": "merge-rows1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        1168
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9f1784f2-3623-41b9-af53-f03baeb5ae01",
+              "leftValue": "={{ $json.StatusCode }}",
+              "rightValue": "=200",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "56a19fc4-70d3-4ea5-9a13-12b50850e322",
+      "name": "filter-on-200-status1",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2272,
+        1168
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        1152
+      ],
+      "id": "d647798b-5465-4213-a7f4-e453ce40078a",
+      "name": "Google Gemini Chat Model7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Input #: \n{{ JSON.stringify($json.output) }}\n\nThese links provide a mixture of governmental and professional resources relevant to the valuation and handling of collector's items. Ensure you review the content to match your article's specific needs.\n\n# Task #:\nStructure the Links in separate Rows (1 Row per Link). And output the description in {{ $('set_field_names').first().json['get-company-info'].company_language }}.\n\n# Output #:\n\nReturn ONLY a valid JSON array of objects called [output] (do not include any extra wrapping keys or text). For example:\n\n[\n  {\n    \"URL\": \"https://example.com\",\n    \"Row\": 1,\n    \"Description\": \"Talks about X\"\n  },\n  {\n    \"URL\": \"https://anotherexample.com\",\n    \"Row\": 2,\n    \"Description\": \"Talks about Y\"\n  }\n]",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2048,
+        928
+      ],
+      "id": "c7b5df12-a245-47cb-ab9c-8f7650600ede",
+      "name": "normalise-output2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  // 1. Get raw output from the input JSON\n  const rawOutput = $input.first().json.output || \"\";\n\n  // 2. Extract JSON from code fences, if present (supports json, html, or other language tags)\n  const jsonMatch = rawOutput.match(/```(?:json|html|[a-zA-Z]*)\\s*([\\s\\S]*?)\\s*```/);\n  let cleanedOutput = jsonMatch ? jsonMatch[1] : rawOutput;\n\n  // 3. Remove potential HTML wrappers like DOCTYPE, <html>, <head>, <body> tags\n  cleanedOutput = cleanedOutput.replace(\n    /<!DOCTYPE[^>]*>|<html[^>]*>|<\\/html>|<head[^>]*>[\\s\\S]*?<\\/head>|<body[^>]*>|<\\/body>/gi,\n    ''\n  );\n\n  // 4. Remove potential BOM (byte order mark) and trim whitespace\n  cleanedOutput = cleanedOutput.replace(/^\\uFEFF/, '').trim();\n\n  // 5. Sanitize control characters while preserving newlines (\\n), carriage returns (\\r), and tabs (\\t)\n  cleanedOutput = cleanedOutput.replace(/[\\u0000-\\u001F\\u007F]/g, (char) => {\n    return (char === '\\n' || char === '\\r' || char === '\\t') ? char : ' ';\n  });\n\n  // 6. Additional sanitization: flatten HTML content within JSON string fields\n  //    Remove spaces between tags and collapse multiple spaces into one.\n  cleanedOutput = cleanedOutput.replace(/>\\s+</g, '><').replace(/\\s+/g, ' ').trim();\n\n  // 7. Try to parse the JSON. If it fails, attempt further sanitization by escaping unescaped double quotes in HTML text\n  let parsedData;\n  try {\n    parsedData = JSON.parse(cleanedOutput);\n  } catch (parseError) {\n    // Fallback: Escape all double quotes that occur between a '>' and a '<'\n    const furtherSanitizedOutput = cleanedOutput.replace(/>([^<]+)</g, (match, p1) => {\n      // Replace all double quotes in the text content with escaped ones\n      return '>' + p1.replace(/\"/g, '\\\\\"') + '<';\n    });\n    parsedData = JSON.parse(furtherSanitizedOutput);\n  }\n\n  // 8. Function to convert HTML content fields to a single-line format\n  function convertHtmlToSingleLine(data) {\n    if (typeof data === 'string') {\n      return data\n        .replace(/[\\n\\r]+/g, ' ')  // Remove all newline and carriage return characters\n        .replace(/\\s+/g, ' ')      // Collapse multiple spaces into one\n        .trim();\n    } else if (Array.isArray(data)) {\n      return data.map(item => convertHtmlToSingleLine(item));\n    } else if (typeof data === 'object' && data !== null) {\n      const newObj = {};\n      for (const key in data) {\n        if (data.hasOwnProperty(key)) {\n          newObj[key] = convertHtmlToSingleLine(data[key]);\n        }\n      }\n      return newObj;\n    }\n    return data;\n  }\n\n  // 9. Apply the HTML conversion to the parsed data\n  parsedData = convertHtmlToSingleLine(parsedData);\n\n  // 10. Dynamically format the output:\n  //     If parsedData is an array, return it; if it\u2019s an object, wrap it in an array.\n  let formattedOutput;\n  if (Array.isArray(parsedData)) {\n    formattedOutput = parsedData.map(item => {\n      const dynamicObject = {};\n      for (const key in item) {\n        if (item.hasOwnProperty(key)) {\n          dynamicObject[key] = item[key];\n        }\n      }\n      return dynamicObject;\n    });\n  } else if (typeof parsedData === 'object' && parsedData !== null) {\n    const dynamicObject = {};\n    for (const key in parsedData) {\n      if (parsedData.hasOwnProperty(key)) {\n        dynamicObject[key] = parsedData[key];\n      }\n    }\n    formattedOutput = [dynamicObject];\n  } else {\n    throw new Error(\"Unsupported JSON format. Expected an array or object.\");\n  }\n\n  // 11. Return the formatted output\n  return formattedOutput;\n\n} catch (error) {\n  throw new Error(\"Failed to parse JSON output: \" + error.message);\n}\n"
+      },
+      "id": "89cb5f62-7847-4262-8b40-859c3ac122f0",
+      "name": "turn-into-table6",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3008,
+        1168
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "HEAD",
+        "url": "={{ $json.URL }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "0eabbaa2-f021-400f-a1d7-f13ce13b0d8c",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        1312
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "Row",
+        "options": {}
+      },
+      "id": "6755a06f-24e5-4fd3-808a-d4f30df8da56",
+      "name": "Merge2",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2080,
+        1312
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2624,
+        1344
+      ],
+      "id": "b61bcc53-a77c-4031-80d4-8b9f6b6fdd7a",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Prompt:\nOutput in the same language and tonality as the input article: {{ $('set_field_names').first().json['get-company-info'].company_language }}. Call the output \"More_Links\". The JSON hierarchy MUST be flat. Make sure to always return a \n\nExtract valid and working URLs from the input data. Create a section in HTML format that will be appended to the article content. In this section:\n\nDescribe the content available on the linked page in a concise and informative way.\nUse the name of the institution behind the link as the anchor text.\nFormat each link description within <p> tags.\nAvoid any use of titles or <h2> tags.\nOnly include links from high-credibility institutions (e.g., government, academic, or established industry organizations). Disregard links from non-credible sources (for example, gebrauchte24.de is not credible).\n\nInput:\nLanguage: {{ $('set_field_names').first().json['get-company-info'].company_language }}\n\nCurrent Content: \"{{ $('Information Extractor').first().json.output.section_01_title }}\n{{ $('Information Extractor').first().json.output.section_01_content }}\n{{ $('Information Extractor').first().json.output.section_02_title }}\n{{ $('Information Extractor').first().json.output.section_02_content }}\n\n{{ $('Information Extractor').first().json.output.section_03_title }}\n{{ $('Information Extractor').first().json.output.section_03_content }} \n{{ $('Information Extractor').first().json.output.section_04_title }}\n{{ $('Information Extractor').first().json.output.section_04_content }} \n{{ $('Information Extractor').first().json.output.section_05_title }}\n{{ $('Information Extractor').first().json.output.section_05_content }} \n\n{{ $('Information Extractor').first().json.output.section_06_title }}\n{{ $('Information Extractor').first().json.output.section_06_content }}\n\n{{ $('Information Extractor').first().json.output.section_07_title }}\n{{ $('Information Extractor').first().json.output.section_07_content }}\n\n{{ $('Information Extractor').first().json.output.section_08_title }}\n{{ $('Information Extractor').first().json.output.section_08_content }} \n\n{{ $('Information Extractor').first().json.output.section_09_title }}\n{{ $('Information Extractor').first().json.output.section_09_content }}\"\nAll Links incl Description: \"{{ $json.allDataConcatenated }}\"\n\nConsider the search intent behind the primary keyword to ensure alignment of all SEO elements with user expectations when searching for this term.\n\nLanguage: Matches the article's language: {{ $('set_field_names').first().json['get-company-info'].company_language }}.\n\nExample Output:\n\njson\n{\n  \"More_Links\": \"<p><a href=\"https://de.wikipedia.org/wiki/Eloxal-Verfahren\">Wikipedia</a> bietet eine umfassende \u00dcbersicht \u00fcber das Eloxal-Verfahren, das in der Anodisation von Aluminium verwendet wird.</p>\n<p><a href=\"https://www.coatinc.com/de/verfahren/anodisierung/\">Coatinc</a> erkl\u00e4rt die verschiedenen Anodisationsprozesse und deren Anwendungen in der Industrie.</p>\n<p><a href=\"https://www.wotech-technical-media.de/womag/ausgabe/2021/07-08/21_ipa_rubrik_07-08j2021/21_ipa_rubrik_07-08j2021.php\">Fraunhofer IPA</a> diskutiert die Herausforderungen und L\u00f6sungen bei der Anodisation von Aluminium.</p>\n<p>Dia <a href=\"https://www.dgm.de/\">Deutsche Gesellschaft f\u00fcr Materialkunde</a> bietet Informationen \u00fcber Materialien und deren Behandlungen, einschlie\u00dflich Anodisation.</p>\n<p>Die <a href=\"https://www.bam.de/\">Bundesanstalt f\u00fcr Materialforschung und -pr\u00fcfung (BAM)</a> f\u00fchrt Forschungen zu Materialbehandlungen durch, einschlie\u00dflich der Anodisation.</p>\n<p><a href=\"https://www.vdma.org/\">VDMA</a> stellt Ressourcen und Publikationen zu industriellen Prozessen, einschlie\u00dflich Oberfl\u00e4chenbehandlungen, bereit.</p>\n<p>Das <a href=\"https://www.kupferinstitut.de/\">Deutsches Kupferinstitut</a> bietet Informationen zu Metalloberfl\u00e4chenbehandlungen und Vergleiche, die Aluminium einbeziehen.</p>\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2640,
+        1168
+      ],
+      "id": "af3084e4-325a-4b82-af11-ac47683cfdc2",
+      "name": "create-more-section1",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Create more links section",
+        "height": 660,
+        "width": 1680,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        800
+      ],
+      "typeVersion": 1,
+      "id": "4aafb439-2fa7-466d-a347-c0f25b6aa39a",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search the internet to get further stats. ",
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "parametersHeaders": {
+          "values": [
+            {
+              "name": "Content-Type",
+              "valueProvider": "fieldValue",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-KEY",
+              "valueProvider": "fieldValue",
+              "value": "YOUR_SERPER_API_KEY_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "=q"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        1744,
+        1168
+      ],
+      "id": "604d1a76-d83f-4fae-b7a3-690b11d96a81",
+      "name": "serperTool1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract all input fields\nconst data = $input.first().json.output;\n\nlet faq = '';\n\n// Collect all matching faq key suffixes\nconst faqIndexes = new Set();\n\n// Find all index identifiers (e.g., '01', '02') based on question keys\nObject.keys(data).forEach((key) => {\n  const match = key.match(/^faq_(\\d+)_question$/);\n  if (match) {\n    faqIndexes.add(match[1]);\n  }\n});\n\n// Sort by index (numerically)\n[...faqIndexes].sort((a, b) => parseInt(a) - parseInt(b)).forEach((index) => {\n  const question = data[`faq_${index}_question`];\n  const answer = data[`faq_${index}_answer`];\n\n  if (question && answer) {\n    faq += `<h3>${question}</h3><p>${answer}</p><br>`;\n  }\n});\n\nreturn [{ json: { faq } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        -528
+      ],
+      "id": "721bfe19-0416-4d89-8b35-b0d62cbfe836",
+      "name": "faq_creator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Regex pattern to match bracketed numbers like [1], [2 3], [9,10], [ 12 ] etc.\nconst pattern = /\\[\\s*\\d+(?:[\\s,]+\\d+)*\\s*\\]/g;\n\n// Get the HTML from the previous node (assumes 'html' key)\nconst html = $input.first().json.faq;\n\n// Remove bracketed references like [1], [2, 3]\nconst cleanedHtml = html.replace(pattern, '').trim();\n\nreturn [\n  {\n    json: {\n      faq: cleanedHtml\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        -544
+      ],
+      "id": "9455ba40-8536-4ade-8141-eb5b0c3cdd6c",
+      "name": "CitationSanitizer2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\"link1\": \"url\",\n\"link2\": \"url\",\n\"link3\": \"url\",\n\"link4\": \"url\",\n\"link5\": \"url\",\n\"link6\": \"url\",\n\"link7\": \"url\",\n\"link8\": \"url\",\n\"link9\": \"url\",\n\"link10\": \"url\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1888,
+        1168
+      ],
+      "id": "6743a16d-9b14-4da7-acf6-d3b97d58ff70",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "## Get gpt-language, current job and a blog item from supabase\n\nEdge function:\nrapid-service",
+        "height": 460
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        -304
+      ],
+      "id": "c59ac675-a454-465b-9e7c-03ee46e6ae7a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d7a5385a-a7c2-4738-bdf5-f1824ec547dd",
+              "leftValue": "={{ $json.gpt_language }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2600fbee-ea7a-4a2d-8a2f-3bd3ca971c34",
+              "leftValue": "={{ $json.company_data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1eda3a0c-54f9-4442-93b1-2bab6624d65d",
+              "leftValue": "={{ $json.blog_page }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        -48
+      ],
+      "id": "32e17a18-6d3c-4432-ace6-e5eceb9d2b27",
+      "name": "information_incomplete?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -304
+      ],
+      "id": "a3a4a6aa-f082-4792-99a6-c204323f4f46",
+      "name": "Do Nothing (no error)"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "jobs",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.blog_page.job_fk }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -16
+      ],
+      "id": "b8942581-79ef-483f-9806-609167b0c66c",
+      "name": "Get_job"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"role\": \"user\",\n      \"parts\": [\n        {\n          \"text\": {{ JSON.stringify($json.prompt) }}\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseMimeType\": \"text/plain\",\n    \"temperature\": 0.2\n  },\n  \"tools\": [\n    {\n      \"urlContext\": {}\n    },\n    {\n      \"googleSearch\": {}\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "531e1dbf-fe0b-4666-aedb-2fd6fab845f9",
+      "name": "gemini-research",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node: Concatenate all 'text' fields across all items\n\nlet fullText = '';\n\n// Loop over all incoming items\nfor (const item of items) {\n  // Navigate safely through nested structure\n  const candidates = item.json.candidates || [];\n  for (const candidate of candidates) {\n    const parts = candidate.content?.parts || [];\n    for (const part of parts) {\n      if (typeof part.text === 'string') {\n        fullText += part.text + ' ';\n      }\n    }\n  }\n}\n\n// Return single item with concatenated string\nreturn [\n  {\n    json: {\n      concatenatedText: fullText.trim()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -16
+      ],
+      "id": "1775e542-315b-4509-a8c6-e10188f7540b",
+      "name": "concatenate_text"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0ca94cfb-361a-486b-b1e8-e6b303ca7075",
+              "leftValue": "={{ $('Get_job').first().json.citations }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        912
+      ],
+      "id": "46bcdda5-c284-42c3-b6ac-d2dbed9b50c8",
+      "name": "citations_enabled?2"
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  // 1. Get raw output from the input JSON\n  const rawOutput = $input.first().json.output || \"\";\n\n  // 2. Extract JSON from code fences, if present (supports json, html, or other language tags)\n  const jsonMatch = rawOutput.match(/```(?:json|html|[a-zA-Z]*)\\s*([\\s\\S]*?)\\s*```/);\n  let cleanedOutput = jsonMatch ? jsonMatch[1] : rawOutput;\n\n  // 3. Remove potential HTML wrappers like DOCTYPE, <html>, <head>, <body> tags\n  cleanedOutput = cleanedOutput.replace(\n    /<!DOCTYPE[^>]*>|<html[^>]*>|<\\/html>|<head[^>]*>[\\s\\S]*?<\\/head>|<body[^>]*>|<\\/body>/gi,\n    ''\n  );\n\n  // 4. Remove potential BOM (byte order mark) and trim whitespace\n  cleanedOutput = cleanedOutput.replace(/^\\uFEFF/, '').trim();\n\n  // 5. Sanitize control characters while preserving newlines (\\n), carriage returns (\\r), and tabs (\\t)\n  cleanedOutput = cleanedOutput.replace(/[\\u0000-\\u001F\\u007F]/g, (char) => {\n    return (char === '\\n' || char === '\\r' || char === '\\t') ? char : ' ';\n  });\n\n  // 6. Additional sanitization: flatten HTML content within JSON string fields\n  //    Remove spaces between tags and collapse multiple spaces into one.\n  cleanedOutput = cleanedOutput.replace(/>\\s+</g, '><').replace(/\\s+/g, ' ').trim();\n\n  // 7. Try to parse the JSON. If it fails, attempt further sanitization (escape unescaped double quotes in HTML)\n  let parsedData;\n  try {\n    parsedData = JSON.parse(cleanedOutput);\n  } catch (parseError) {\n    const furtherSanitizedOutput = cleanedOutput.replace(/>([^<]*?)\"([^<]*?)</g, (match, p1, p2) => {\n      return '>' + p1 + '\\\\\"' + p2 + '<';\n    });\n    parsedData = JSON.parse(furtherSanitizedOutput);\n  }\n\n  // 8. Function to convert HTML content fields to a single-line format\n  function convertHtmlToSingleLine(data) {\n    if (typeof data === 'string') {\n      return data\n        .replace(/[\\n\\r]+/g, ' ')  // Remove all newline and carriage return characters\n        .replace(/\\s+/g, ' ')      // Collapse multiple spaces into one\n        .trim();\n    } else if (Array.isArray(data)) {\n      return data.map(item => convertHtmlToSingleLine(item));\n    } else if (typeof data === 'object' && data !== null) {\n      const newObj = {};\n      for (const key in data) {\n        if (data.hasOwnProperty(key)) {\n          newObj[key] = convertHtmlToSingleLine(data[key]);\n        }\n      }\n      return newObj;\n    }\n    return data;\n  }\n\n  // 9. Apply the HTML conversion to the parsed data\n  parsedData = convertHtmlToSingleLine(parsedData);\n\n  // 10. Dynamically format the output:\n  //     If parsedData is an array, return it; if it\u2019s an object, wrap it in an array.\n  let formattedOutput;\n  if (Array.isArray(parsedData)) {\n    formattedOutput = parsedData.map(item => {\n      const dynamicObject = {};\n      for (const key in item) {\n        if (item.hasOwnProperty(key)) {\n          dynamicObject[key] = item[key];\n        }\n      }\n      return dynamicObject;\n    });\n  } else if (typeof parsedData === 'object' && parsedData !== null) {\n    const dynamicObject = {};\n    for (const key in parsedData) {\n      if (parsedData.hasOwnProperty(key)) {\n        dynamicObject[key] = parsedData[key];\n      }\n    }\n    formattedOutput = [dynamicObject];\n  } else {\n    throw new Error(\"Unsupported JSON format. Expected an array or object.\");\n  }\n\n  // 11. Return the formatted output\n  return formattedOutput;\n\n} catch (error) {\n  throw new Error(\"Failed to parse JSON output: \" + error.message);\n}\n"
+      },
+      "id": "6f0122ae-3089-4bcb-8a75-ee4ad18701bf",
+      "name": "reformat_short_headers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -128
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "content": "## Create literature section",
+        "height": 600,
+        "width": 1670,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        208
+      ],
+      "id": "3e7c332d-be66-4276-8113-831b631fd3bb",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Create and format short headers\n",
+        "height": 380,
+        "width": 1660,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -176
+      ],
+      "id": "eadb0fe2-d4c6-42fa-9995-077098e37179",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01900173-6f85-48e5-a4bf-775d4bb470b7",
+              "leftValue": "={{ $('Get_job').first().json.citations }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        -768
+      ],
+      "id": "bbb9731e-41da-4d4a-800e-4fc69692bbe7",
+      "name": "citations_disabled?"
+    },
+    {
+      "parameters": {
+        "content": "## Create FAQ section",
+        "height": 420,
+        "width": 1660,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -608
+      ],
+      "id": "ec9a1c04-0f24-4ee0-8607-b4b9002b0548",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Removing citations from text if turned off",
+        "height": 320,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -928
+      ],
+      "id": "86204a4b-1c94-409f-bf44-dd8d769c0035",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Possibility to check text (adjusting variables in html possible)",
+        "height": 340,
+        "width": 280
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3504,
+        304
+      ],
+      "id": "efa717f4-6a3d-484b-a94b-20c8d088762a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "18754999-963a-45e4-af80-055d145dd635",
+              "leftValue": "={{ $json.section_01_title }}",
+              "rightValue": "Key Takeaways",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "6398d5a0-a63f-46d4-9fcc-86b116301eb1",
+              "leftValue": "={{ $json.section_01_content }}",
+              "rightValue": "Key Takeaways",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "a548698c-155b-4481-979c-aac272a5d155",
+              "leftValue": "={{ $json.section_02_title }}",
+              "rightValue": "Key Takeaways",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b941898e-0c1c-4564-926b-43967fb11e94",
+              "leftValue": "={{ $json.section_02_content }}",
+              "rightValue": "Key Takeaways",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4544,
+        -80
+      ],
+      "id": "bade1949-c6a3-4da0-b926-8dcb42ea367d",
+      "name": "KeyTakeawaysInSection?"
+    },
+    {
+      "parameters": {
+        "content": "## Set article to pending again due to error",
+        "height": 300,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4704,
+        -496
+      ],
+      "id": "c9c03080-30c8-42c1-9f93-648f6b3fa36f",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "blog_pages",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('set_field_names').first().json[\"get-input\"].id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "generation_status",
+              "fieldValue": "pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4768,
+        -368
+      ],
+      "id": "759e3c4c-4817-4968-aa07-b283931d565c",
+      "name": "article_pending"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "blog_pages",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('set_field_names').first().json[\"get-input\"].id }}"
+            }
+          ]
+        },
+        "dataToSend": "autoMapInputData",
+        "inputsToIgnore": "id, row_index, primary_keyword"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5008,
+        -64
+      ],
+      "id": "480c411c-4759-430f-9ca8-e4c484352507",
+      "name": "store_article"
+    },
+    {
+      "parameters": {
+        "content": "## Storing article in supabase",
+        "height": 500,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4144,
+        704
+      ],
+      "id": "f7ea7fa2-bb91-4b1a-b111-444ac83f7094",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "=m2J58NQkmKR4E7Z7",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "image_folder": "={{ $('set_field_names').first().json['get-company-info'].image_folder }}",
+            "Headline": "={{ $json.headline }}",
+            "Index": "={{ $json.row_index }}",
+            "company_info": "={{ JSON.stringify($('set_field_names').first().json['get-company-info']) }}",
+            "job_fk": "={{ $json.job_fk }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "image_folder",
+              "displayName": "image_folder",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Index",
+              "displayName": "Index",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Headline",
+              "displayName": "Headline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company_info",
+              "displayName": "company_info",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "job_fk",
+              "displayName": "job_fk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        5920,
+        304
+      ],
+      "id": "ba8a749b-6d01-4379-946a-b0342b48e84b",
+      "name": "execute_image_generation",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a0643285-3507-4b05-8512-a184ee8ad817",
+              "leftValue": "={{ $json.image_headline }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3539a669-04da-4c16-a815-4d400f620506",
+              "leftValue": "={{ $json.company_name }}",
+              "rightValue": "HEERO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "e983106e-3aa6-49a9-9b8b-8abce9f3507c",
+              "leftValue": "={{ $json.company_name }}",
+              "rightValue": "LipoCheck",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5248,
+        -64
+      ],
+      "id": "dead717f-8a73-44bf-a6d8-53bbccb8ce49",
+      "name": "image_empty?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        5472,
+        144
+      ],
+      "id": "3a631fbb-19b8-4406-a815-1ad8dd8d3642",
+      "name": "image_already_created"
+    },
+    {
+      "parameters": {
+        "content": "## Image Generation",
+        "height": 500,
+        "width": 520,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5184,
+        -208
+      ],
+      "id": "117a5a3c-573a-4370-a1bf-f1af62ab5d96",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Research setup and processing\n",
+        "height": 500,
+        "width": 1900,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -176
+      ],
+      "id": "568a1031-169f-4236-9ccd-bb25b87d9e94",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## n8n has an error here therefor I include the image-generation into the flow.\n",
+        "height": 240,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5824,
+        224
+      ],
+      "id": "40e36419-edd3-49cc-a5d8-7b6bbcb92f6a",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7fb5c552-9968-4867-a013-6a9a7f670254",
+              "name": "image_folder",
+              "value": "={{ $('set_field_names').first().json['get-company-info'].image_folder }}",
+              "type": "string"
+            },
+            {
+              "id": "acc0904c-a33d-4287-a486-402d00697e12",
+              "name": "Index",
+              "value": "={{ $json.row_index }}",
+              "type": "string"
+            },
+            {
+              "id": "2cc9599c-4a50-4420-a4d1-3c92ebb33b3c",
+              "name": "Headline",
+              "value": "={{ $json.headline }}",
+              "type": "string"
+            },
+            {
+              "id": "2c2fcfd3-402d-49a0-853c-f7d5bfc8e30a",
+              "name": "company_info",
+              "value": "={{ JSON.stringify($('set_field_names').first().json['get-company-info']) }}",
+              "type": "string"
+            },
+            {
+              "id": "15949c1f-461c-4615-a37e-0881786626e2",
+              "name": "job_fk",
+              "value": "={{ $json.job_fk }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5584,
+        -96
+      ],
+      "id": "d43eaab1-be26-4d3b-85e7-e28444baabc5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Edit Fields').item.json.Headline }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Edit Fields').item.json.image_folder }}",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        7792,
+        -624
+      ],
+      "id": "32c1b47f-52ab-4152-930d-dc19ba10fda0",
+      "name": "Google Drive"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an intelligent prompt generator and creative director for an image generation tasks. Your job is to output a high quality prompt to generate an image for a blog article. The image should always fit the setting of the company and the keyword the blog is created for. Please also create a short and precise alt text for the image in the specified Output Language from the Input.\n\n\nMaintain always:\n\nStyle: realistic, natural daylight, authentic, not overly futuristic or high-tech look, documentary-style.\n\n***Input:\n\nArticle Title: {{ $json.Headline }}\nOutput language: {{ $('Edit Fields').item.json.company_info.parseJson().company_language }}\nCompany_description: \"{{ $('Edit Fields').item.json.company_info }}\"\"\n\n\n***Example prompts:\n\n1. Example: \n\nA realistic, documentary-style image of a modern medical clinic interior: a Latina doctor in her mid-30s, wearing a white lab coat over a seafoam green turtleneck and dark jeans, gently examines a young boy\u2019s arm. The child, a 7-year-old African-American boy, sits calmly on a teal exam table, holding a small plush toy, his expression one of quiet trust. The setting is clean and minimalist, with pale oak flooring, white walls accented in muted green, and large windows letting in natural daylight. Subtle artwork in soft blues and greens decorates the space.The atmosphere should convey calm, care, and professionalism, emphasizing the trust between doctor and patient. The image is shot from a slightly low angle to highlight the doctor\u2019s attentive posture and the emotional connection.\n\n2. Example:\nA split-scene or\ncontrasting image of a construction\nsite: one side showing traditional,\nanalog workflows - a foreman with\npaper plans, handwritten notes,\nand printed schedules - and the\nother side showing digital\nworkflows with tablets, digital\nchecklists, and modern\ncommunication tools. The setting\nshould be realistic and grounded,\nhighlighting the contrast between\noutdated methods and modern\ndigital solutions in construction.\nThe atmosphere should suggest\ntransition and change, not chaos.\n\n\n3. Example:\nA wide, documentary-style image of a tropical beach: three travelers standing at the shoreline. One is a young Asian woman in a coral sundress, smiling with wind-blown hair. Next to her, a middle-aged African American man in khaki shorts and a linen shirt stands relaxed, arms open. On the other side, an older Caucasian woman in a sunhat and jumpsuit looks out calmly.\nThe scene should feel natural and grounded, with turquoise water gently lapping at their feet, palm trees in the background, and a clear blue sky above. The composition suggests freedom, connection, and shared exploration\u2014not staged or exaggerated.\n\n\nReturn only this strict JSON:\n\njson\n{\n  \"prompt\": \"slightly adjusted prompt\",\n  \"image_alt_text\": \"alt text for the generated picture\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        6512,
+        -368
+      ],
+      "id": "e2b02fbd-eef4-43d4-832c-9e9b56491459",
+      "name": "get-insights"
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  const rawOutput = $input.first().json.output || \"\";\n\n  // Extract JSON from code fences if present\n  const codeBlockMatch = rawOutput.match(/```(?:json|html)?\\s*([\\s\\S]*?)\\s*```/);\n  let content = codeBlockMatch ? codeBlockMatch[1] : rawOutput;\n\n  // Strip HTML and BOM\n  content = content\n    .replace(/<!DOCTYPE[^>]*>|<html[^>]*>|<\\/html>|<head[^>]*>[\\s\\S]*?<\\/head>|<body[^>]*>|<\\/body>/gi, '')\n    .replace(/^\\uFEFF/, '')\n    .trim();\n\n  // Sanitize control characters\n  content = content.replace(/[\\u0000-\\u0019\\u007F]/g, (char) => {\n    return ['\\n', '\\r', '\\t'].includes(char) ? char : ' ';\n  });\n\n  // Attempt to parse\n  let parsedData;\n  try {\n    parsedData = JSON.parse(content);\n  } catch (parseError) {\n    const fallback = content.replace(/>([^<]+)</g, (match, p1) => {\n      return '>' + p1.replace(/\"/g, '') + '<';\n    });\n\n    try {\n      parsedData = JSON.parse(fallback);\n    } catch (finalError) {\n      throw new Error(\"Final parse attempt failed: \" + finalError.message);\n    }\n  }\n\n  // Normalize + remove inner double quotes from string content\n  const sanitizeValues = (data) => {\n    if (typeof data === 'string') {\n      return data\n        .replace(/[\\n\\r]+/g, ' ') // Flatten to single line\n        .replace(/\\s+/g, ' ')     // Collapse multiple spaces\n        .replace(/\"/g, '')        // \ud83d\udd25 Remove all internal double quotes\n        .trim();\n    } else if (Array.isArray(data)) {\n      return data.map(sanitizeValues);\n    } else if (data && typeof data === 'object') {\n      const result = {};\n      for (const key in data) {\n        result[key] = sanitizeValues(data[key]);\n      }\n      return result;\n    }\n    return data;\n  };\n\n  const sanitized = sanitizeValues(parsedData);\n\n  return [{ output: sanitized }];\n} catch (error) {\n  return [{ error: \"Sanitization failed: \" + error.message }];\n}\n\n"
+      },
+      "id": "5b7810b6-a187-418d-b17c-f02e1ac8f069",
+      "name": "LLM Chain",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6080,
+        32
+      ],
+      "executeOnce": false,
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        6608,
+        32
+      ],
+      "id": "cb17e59a-6f01-4d73-a767-b6561c53266d",
+      "name": "Wait",
+      "webhookId": "4e8dbf1f-b950-4315-8651-079863acf1e2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-1.1-pro-ultra/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token YOUR_REPLICATE_API_TOKEN_HERE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {\n    \"prompt\": \"{{ $json.output.prompt }}\",\n    \"aspect_ratio\": \"3:2\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6448,
+        32
+      ],
+      "id": "30ce8103-a6af-4aad-bc04-07ad3c5ec5d2",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token YOUR_REPLICATE_API_TOKEN_HERE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6768,
+        32
+      ],
+      "id": "ad3d3f18-32a3-4410-ae03-bd29aa78f6e0",
+      "name": "Replicate_get"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.output }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token YOUR_REPLICATE_API_TOKEN_HERE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6928,
+        32
+      ],
+      "id": "69aa2cd7-fb68-4892-887a-b3ee5094a503",
+      "name": "ReplicateGetImage",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        7104,
+        -96
+      ],
+      "id": "e33349b9-42fd-4121-a124-ab2709f1cd7e",
+      "name": "Google Gemini Chat Model9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This code transforms malformed Google Drive image links into proper embeddable links\nreturn $input.all().map(item => {\n  const inputUrl = item.json.webContentLink;\n\n  // Define the regex to match various malformed Google Drive links\n  const correctedUrl = inputUrl.replace(\n    /https?:\\/\\/drive\\.google\\.com\\/(?:uc\\?(?:[^&]*&)?id=|open\\?id=|file\\/d\\/)([A-Za-z0-9_-]+)/,\n    'https://drive.google.com/uc?export=view&id=$1'\n  );\n\n  return {\n    json: {\n      originalUrl: inputUrl,\n      fixedUrl: correctedUrl\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8000,
+        -624
+      ],
+      "id": "6978e97c-1a3a-4e96-b7c7-64fa0e968e2d",
+      "name": "format_download_link"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "blog_pages",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "row_index",
+              "condition": "eq",
+              "keyValue": "={{ $('Edit Fields').item.json.Index }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "image_headline",
+              "fieldValue": "={{ $json.fixedUrl }}"
+            },
+            {
+              "fieldId": "image_headline_alt",
+              "fieldValue": "={{ $('LLM Chain').item.json.output.image_alt_text }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        8272,
+        -624
+      ],
+      "id": "91625dce-9b46-49be-b342-6a8502514354",
+      "name": "store_image_in_blog"
+    },
+    {
+      "parameters": {
+        "content": "## Create Image\n",
+        "height": 600,
+        "width": 1460,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5888,
+        -416
+      ],
+      "id": "da60c206-e998-40f9-a6dd-d55136e34f7b",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## Save images\n",
+        "height": 460,
+        "width": 740,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7712,
+        -848
+      ],
+      "id": "ace05331-2285-4c4b-8f37-1b5fc0081f1c",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## exception to just create a single image\n\n\nNOW FOR EVRY PORTAL THE HEADLINE IMAGE IS GETTING CREATED WITH FLUX\n",
+        "height": 140,
+        "width": 740
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7712,
+        -368
+      ],
+      "id": "35dec809-6225-4739-9265-6d4a314321d4",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## Who created this flow and what is the reason? Please contcact Anton to explain?",
+        "height": 1424,
+        "width": 1456,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1504,
+        -864
+      ],
+      "id": "29a9440c-cb3d-4cd7-9f6b-0c2f645f252a",
+      "name": "Sticky Note16"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_supabase_information": {
+      "main": [
+        [
+          {
+            "node": "information_incomplete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set_field_names": {
+      "main": [
+        [
+          {
+            "node": "create_prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_prompt": {
+      "main": [
+        [
+          {
+            "node": "gemini-research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "citations_disabled?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "faq_creator",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "citations_enabled?2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "add-short-headers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "format-output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format-output1": {
+      "main": [
+        [
+          {
+            "node": "literature-formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "serperTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validTool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prepare_variable_names-and-clean": {
+      "main": [
+        [
+          {
+            "node": "HTML1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "output_sanitizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model14": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "create-more-section",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create-more-section": {
+      "main": [
+        [
+          {
+            "node": "normalise-output2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML1": {
+      "main": [
+        []
+      ]
+    },
+    "literature-formatter": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "CitationSanitizer": {
+      "main": [
+        [
+          {
+            "node": "add_date",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "add-readtime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add_date": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "add-readtime": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "merge-outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add-short-headers": {
+      "main": [
+        [
+          {
+            "node": "reformat_short_headers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "add-short-headers",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge-outputs": {
+      "main": [
+        [
+          {
+            "node": "prepare_variable_names-and-clean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CitationSanitizer1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "get_supabase_information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "output_sanitizer": {
+      "main": [
+        [
+          {
+            "node": "KeyTakeawaysInSection?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create-url-table1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create-url-status-table1": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "merge-rows1": {
+      "main": [
+        [
+          {
+            "node": "create-more-section1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter-on-200-status1": {
+      "main": [
+        [
+          {
+            "node": "merge-rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "normalise-output2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "normalise-output2": {
+      "main": [
+        [
+          {
+            "node": "create-url-table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "create-url-status-table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "filter-on-200-status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "create-more-section1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create-more-section1": {
+      "main": [
+        [
+          {
+            "node": "turn-into-table6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "serperTool1": {
+      "ai_tool": [
+        [
+          {
+            "node": "create-more-section",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "turn-into-table6": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "faq_creator": {
+      "main": [
+        [
+          {
+            "node": "CitationSanitizer2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CitationSanitizer2": {
+      "main": [
+        [
+          {
+            "node": "CitationSanitizer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "create-more-section",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "information_incomplete?": {
+      "main": [
+        [
+          {
+            "node": "Do Nothing (no error)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get_job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_job": {
+      "main": [
+        [
+          {
+            "node": "set_field_names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gemini-research": {
+      "main": [
+        [
+          {
+            "node": "concatenate_text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "concatenate_text": {
+      "main": [
+        [
+          {
+            "node": "Clean JSON Wrapper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "citations_enabled?2": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "create-more-section",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reformat_short_headers": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "citations_disabled?": {
+      "main": [
+        [
+          {
+            "node": "CitationSanitizer1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KeyTakeawaysInSection?": {
+      "main": [
+        [
+          {
+            "node": "article_pending",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "store_article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "store_article": {
+      "main": [
+        [
+          {
+            "node": "image_empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "image_empty?": {
+      "main": [
+        [
+          {
+            "node": "execute_image_generation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "image_already_created",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "format_download_link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get-insights": {
+      "main": [
+        [
+          {
+            "node": "LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replicate_get",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate_get": {
+      "main": [
+        [
+          {
+            "node": "ReplicateGetImage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReplicateGetImage": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "get-insights",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format_download_link": {
+      "main": [
+        [
+          {
+            "node": "store_image_in_blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "get-insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean JSON Wrapper": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "75ed54f9-a943-417f-87b6-92dc7eab4baa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9e788a0915de7570e651e6a720e1b787d9d4f18c594ef5433bdf5da109f910c2"
+  },
+  "id": "XOJBdM3ry4sYgRBR",
+  "tags": [
+    {
+      "createdAt": "2025-03-06T14:48:37.076Z",
+      "updatedAt": "2025-03-06T14:48:37.076Z",
+      "id": "UfKIoVO6XRWA32TH",
+      "name": "\ud83d\udea8 Production \ud83d\udea8"
+    }
+  ]
+}
