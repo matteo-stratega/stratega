@@ -8,13 +8,38 @@ data/
 *.csv
 *.xlsx
 *.zip
-*.pdf
 
-# Assets (images, videos - too large for git)
-assets/*.pdf
-assets/*.zip
-assets/*.mp4
-assets/*.mov
+# Media files - NOT for git
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.heic
+*.tiff
+*.bmp
+*.mp4
+*.mov
+*.psd
+*.pptx
+*.gsheet
+
+# Folders to exclude entirely
+archive/
+assets/
+side-projects/
+stratega/
+Users/
+**/Photos/
+**/Photos-compressed/
+**/Catalogues/
+**/Catalogues-compressed/
+**/database/
+
+# Local config
+.obsidian/
+.claude/
+.credentials/
 
 # Temp Files
 temp/
