@@ -103,7 +103,7 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 | 25% Video views | 2,000-2,400 | ⭐⭐⭐⭐ |
 | Brevo Dec 24 (CRM) | 1,000 | ⭐⭐⭐⭐⭐ |
 
-### Lookalike
+### Lookalike (Legacy 5-10%)
 | Audience | Size | Note |
 |----------|------|------|
 | LAL IT 5% Pageview | 1.6-1.9M | Ampia |
@@ -111,10 +111,23 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 | LAL IT 5% Video views | 1.5-1.8M | Ampia |
 | LAL IT 5% Instant Experience | 1.5-1.8M | Ampia |
 
+### Lookalike (New 1-5%) - Creati 11 Dic 2025
+| Audience | ID | Size | Status |
+|----------|-----|------|--------|
+| LAL IT 1-5% - Instant Experience 365 | 120239287024060471 | 1.3-1.5M | Ready |
+| LAL IT 1-5% - FB Engagement 365 | 120239287037310471 | 1.3-1.6M | Ready |
+| LAL IT 1-5% - IG Engagement 365 | 120239287040970471 | 1.3-1.5M | Ready |
+| LAL IT 1-5% - 25% Video Views | 120239287043560471 | 1.4-1.6M | Ready |
+
+### Adset Attivi
+| Adset | ID | Targeting | Status |
+|-------|-----|-----------|--------|
+| Retargeting FB+IG Engagement | 120239287066770471 | FB+IG Eng 365 | ACTIVE |
+
 ### ⚠️ Problemi Identificati
-- Audience website (pixel) tutte ~20 persone - verificare pixel
-- LAL usati (5-10%) troppo ampi, performance simile a Broad
-- Retargeting audience non in uso attivo
+- Audience website (pixel) tutte ~20 persone - CAPI non implementato
+- Consent banner + iOS 14.5 riducono tracking
+- LAL 5-10% troppo ampi → sostituiti con LAL 1-5%
 
 ---
 
@@ -225,21 +238,76 @@ curl -X POST "https://graph.facebook.com/v18.0/[AD_ID]?status=PAUSED&access_toke
 4. Analisi audience (quali convertono meglio)
 5. Piano mese successivo
 
+### Annual Wrap-Up (Dicembre)
+Report "Spotify Wrapped" style con:
+1. **Numeri dell'anno**
+   - Spend totale vs anno precedente
+   - Lead totali generati
+   - CPL medio annuale
+   - Miglior mese / peggior mese
+
+2. **Top Performers**
+   - Ad dell'anno (miglior CPL con volume)
+   - Audience dell'anno
+   - Formato vincente
+   - Modello letto più performante
+
+3. **Trend & Pattern**
+   - Stagionalità identificata
+   - Miglioramenti YoY
+   - Cosa ha funzionato vs cosa no
+
+4. **Piano Anno Nuovo**
+   - Budget raccomandato
+   - Test da fare
+   - Audience da sviluppare
+   - Creative roadmap
+
+---
+
+## Reportistica Interna
+
+### File di Riferimento
+- `CONTENT_TRACKER.md` - Inventario contenuti per modello/format
+- `Brief.md` - Backlog e task list
+
+### Metriche da Tracciare
+```
+Per ogni Ad:
+- Modello letto
+- Formato (IE, Post, Carousel)
+- Data lancio
+- Spend lifetime
+- Leads lifetime
+- CPL lifetime
+- Status (Active/Paused/Killed)
+- Note performance
+```
+
+### Cadenza Aggiornamenti
+- **Giornaliero:** Monitoraggio anomalie (CPL spike, frequency)
+- **Settimanale:** Update CONTENT_TRACKER, pause/scale decisions
+- **Mensile:** Report completo, update benchmark
+- **Annuale:** Wrap-up + planning
+
 ---
 
 ## Priorità Attuali
 
-### Immediate (Oggi)
-1. [ ] Analisi completa YTD + trend mensili
-2. [ ] Identificare pattern stagionali
-3. [ ] Audit pixel Facebook
-4. [ ] Piano d'azione con priorità
+### Completati (11 Dic 2025)
+- [x] Analisi completa YTD + trend mensili
+- [x] Identificare pattern stagionali
+- [x] Audit pixel Facebook
+- [x] Piano d'azione con priorità
+- [x] Pausa ads underperformer (Atlante)
+- [x] Setup adset retargeting (LIVE)
+- [x] Crea 4x LAL 1-5%
 
-### Questa Settimana
-1. [ ] Pausa ads underperformer
-2. [ ] Setup adset retargeting
-3. [ ] Crea LAL 1% da Instant Experience
-4. [ ] Nuova IE creative
+### Prossimi Step
+1. [ ] Attivare LAL 1-5% Instant Experience (14-15 Dic)
+2. [ ] Nuova IE creative (Lera Soft)
+3. [ ] Review performance retargeting (18 Dic)
+4. [ ] Annual Wrap-Up report (fine Dic)
 
 ---
 
@@ -252,3 +320,4 @@ curl -X POST "https://graph.facebook.com/v18.0/[AD_ID]?status=PAUSED&access_toke
 ---
 
 *Agent creato: 10 Dicembre 2025*
+*Ultimo aggiornamento: 11 Dicembre 2025*

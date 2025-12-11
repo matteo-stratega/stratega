@@ -1,0 +1,123 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    TRANSCRIPT DISCREPANCY ANALYSIS RESULTS                     ║
+║                            Stratega Academy Modules                            ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ SIMILARITY SCORES: Original JSON vs. Corrected SRT                            │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  100% ┤
+       │
+   90% ┤                                                          ████
+       │                                                          ████
+   80% ┤                                                          ████
+       │                                                          ████
+   70% ┤                                                          ████
+       │                                                          ████
+   60% ┤                              ████                        ████
+       │                              ████                        ████
+   50% ┤             ████             ████  ████                  ████
+       │             ████             ████  ████                  ████
+   40% ┤      ████   ████             ████  ████  ████            ████
+       │      ████   ████             ████  ████  ████            ████
+   30% ┤      ████   ████             ████  ████  ████            ████
+       │      ████   ████             ████  ████  ████            ████
+   20% ┤      ████   ████  ████       ████  ████  ████            ████
+       │      ████   ████  ████       ████  ████  ████            ████
+   10% ┤      ████   ████  ████       ████  ████  ████            ████
+       │      ████   ████  ████       ████  ████  ████            ████
+    0% ┤──────────────────────────────────────────────────────────────────
+       └──────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────
+             intro  m2   m3    m4    m5    m6    m7    m8
+             46.5% 18.0% 41.5% 20.8% 51.6% 36.6% 55.2% 86.6%
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ STATUS ASSESSMENT                                                             │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  🔴 CRITICAL (Review Required)
+     └─ m2-ICP ......... 18.0% | 50 differences
+     └─ m4-content ..... 20.8% | 54 differences
+     └─ m6-tools ....... 36.6% | 69 differences
+
+  ⚠️  MODERATE (Spot Check Needed)
+     └─ m3-icp ......... 41.5% | 49 differences
+     └─ intro .......... 46.5% | 41 differences
+     └─ m5-copy ........ 51.6% | 53 differences
+     └─ m7-ops ......... 55.2% | 33 differences
+
+  ✅ ACCEPTABLE (Minor Review)
+     └─ m8-fin ......... 86.6% | 18 differences
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ KEY FINDINGS                                                                  │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  • 7 out of 8 modules show SIGNIFICANT discrepancies (< 60% match)
+  • Only m8-fin maintains high fidelity to original audio
+  • Most differences are EDITORIAL, not just corrections
+  • Many instances of paraphrasing and rewording
+  • Some critical business terms changed (tools, frameworks)
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ CRITICAL CHANGES EXAMPLES                                                     │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  🔴 Meaning Altered:
+     • "stuff" → "staff" (m7-ops)
+     • "replaced" → "a response" (m2-ICP)
+     • "cs navigator" → "apollo" (m3-icp)
+
+  ⚠️  Paraphrased:
+     • "getting out of our minds" → "driving ourselves crazy" (m2-ICP)
+     • "window" → "winning formula" (m5-copy)
+     • "take all this" → "do it" (m2-ICP)
+
+  ✅ Legitimate Corrections:
+     • "copyrighted" → "copywriting" (multiple)
+     • "iedapas" → "aida" (m5-copy)
+     • "lits" → "leads" (m6-tools)
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ RECOMMENDATIONS                                                               │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  IMMEDIATE:
+  1. Review m2-ICP and m4-content in detail (lowest scores)
+  2. Spot-check audio for 5-10 critical sections
+  3. Decide on transcript standard (verbatim vs. edited)
+
+  SHORT-TERM:
+  4. Address critical business term changes (tool names, frameworks)
+  5. Verify m7-ops "stuff" → "staff" issue
+  6. Establish editing guidelines for future modules
+
+  LONG-TERM:
+  7. Create transcript style guide
+  8. Define acceptable vs. unacceptable edits
+  9. Consider hybrid approach: clean but accurate
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ FILES GENERATED                                                               │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  📄 TRANSCRIPT_DISCREPANCY_REPORT.md ............ 15KB (Detailed analysis)
+  📄 TRANSCRIPT_ANALYSIS_SUMMARY.md ............... 5.5KB (Executive summary)
+  📄 TRANSCRIPT_QUICK_ACTION_GUIDE.md ............. 5.3KB (Decision guide)
+  📄 compare_transcripts.py ....................... 10KB (Reusable script)
+  📄 TRANSCRIPT_RESULTS_VISUAL.txt ................ This file
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ NEXT STEPS                                                                    │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+  1. Read: TRANSCRIPT_QUICK_ACTION_GUIDE.md (5 min)
+  2. Decide: Verbatim, Edited, or Hybrid approach (15 min)
+  3. Execute: Follow recommended action plan (1-4 hours)
+  4. Document: Create style guide for future modules (30 min)
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  Analysis completed on: December 3, 2025                                      ║
+║  Location: /Users/matteolombardi/AI-Projects/stratega/stratega-academy/      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝

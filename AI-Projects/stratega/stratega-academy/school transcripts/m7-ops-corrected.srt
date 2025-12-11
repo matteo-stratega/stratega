@@ -1,0 +1,515 @@
+1
+00:00:00,210 --> 00:00:04,060
+Here we go, guys. Welcome to
+
+2
+00:00:04,060 --> 00:00:07,930
+the very last module before we wrap
+
+3
+00:00:07,930 --> 00:00:11,690
+it up. So we came a long way.
+
+4
+00:00:11,690 --> 00:00:15,200
+I think I was able to distill quite
+
+5
+00:00:15,200 --> 00:00:18,740
+a lot in short. I want to give you the
+
+6
+00:00:18,740 --> 00:00:23,120
+very last important bit: the one that really makes a difference.
+
+7
+00:00:23,120 --> 00:00:27,130
+And this comes from growth marketing. So perhaps
+
+8
+00:00:27,130 --> 00:00:30,700
+I'll do something about that later on. But it's
+
+9
+00:00:30,700 --> 00:00:34,470
+a matter of testing and learning. And we'll see how
+
+10
+00:00:34,470 --> 00:00:38,640
+to make this effective in a really simple way.
+
+11
+00:00:38,640 --> 00:00:42,190
+So I see campaigns, and then
+
+12
+00:00:42,190 --> 00:00:45,920
+I ask for a report. And the
+
+13
+00:00:45,920 --> 00:00:50,360
+report has inconsistency.
+
+14
+00:00:50,430 --> 00:00:53,990
+I see perhaps reply rate on software,
+
+15
+00:00:53,990 --> 00:00:59,240
+but I don't have, let's say, a call approach.
+
+16
+00:00:59,240 --> 00:01:03,120
+Data are monitored, they're not
+
+17
+00:01:03,120 --> 00:01:07,080
+managed. It becomes hard to trust
+
+18
+00:01:07,080 --> 00:01:10,710
+the process because we fill
+
+19
+00:01:10,710 --> 00:01:14,760
+the KPIs, we fill the sales. But we don't
+
+20
+00:01:14,760 --> 00:01:19,040
+kind of get the learnings right.
+
+21
+00:01:19,040 --> 00:01:23,200
+So how can we make this effective?
+
+22
+00:01:23,200 --> 00:01:26,880
+Remember by this time we have an offering. We
+
+23
+00:01:26,880 --> 00:01:30,600
+have an ICP or perhaps two, three different
+
+24
+00:01:30,600 --> 00:01:34,200
+ICPs that we might want to test in sequence.
+
+25
+00:01:34,200 --> 00:01:38,280
+We have some content, we have some kind of copywriting
+
+26
+00:01:38,280 --> 00:01:42,160
+with flow and timing, and we know which channels
+
+27
+00:01:42,160 --> 00:01:45,690
+to use. So if I take back the example of
+
+28
+00:01:45,690 --> 00:01:49,920
+the SaaS, I can offer a POC, a course, free to walk away,
+
+29
+00:01:49,920 --> 00:01:53,590
+I can target the head of marketing or the marketing staff,
+
+30
+00:01:53,590 --> 00:01:57,440
+I can interview them, I have a landing page with the demo
+
+31
+00:01:57,440 --> 00:02:01,080
+and the flow and timing is medium: LinkedIn+
+
+32
+00:02:01,080 --> 00:02:05,510
+email, with a really soft copy on the validation
+
+33
+00:02:05,510 --> 00:02:09,030
+points. So in which direction am
+
+34
+00:02:09,030 --> 00:02:12,650
+I going to work? For the next
+
+35
+00:02:12,650 --> 00:02:16,580
+three months, my only goal
+
+36
+00:02:16,580 --> 00:02:20,640
+will be to find new clients.
+
+37
+00:02:20,640 --> 00:02:24,240
+How many? And that is
+
+38
+00:02:24,240 --> 00:02:28,460
+the goal. We're going to have a baseline
+
+39
+00:02:28,460 --> 00:02:32,420
+metric. So we start from five clients. We're going to target
+
+40
+00:02:32,420 --> 00:02:36,120
+24, with a target of 20 new clients. And the
+
+41
+00:02:36,120 --> 00:02:40,170
+leading indicators will be demos scheduled and positive
+
+42
+00:02:40,170 --> 00:02:44,400
+replies. Target date is
+
+43
+00:02:44,400 --> 00:02:48,580
+Q+1. So assuming
+
+44
+00:02:48,580 --> 00:02:52,200
+a 10% booking rate at a 15%
+
+45
+00:02:52,200 --> 00:02:56,300
+conversion rate, we need 1,340
+
+46
+00:02:56,300 --> 00:03:00,050
+prospects split: 55% go to tier
+
+47
+00:03:00,050 --> 00:03:03,650
+one, 30% go to tier two, 15% go to
+
+48
+00:03:03,650 --> 00:03:07,920
+tier three. So this is my only goal.
+
+49
+00:03:07,920 --> 00:03:11,830
+This is the only number that I take a look at.
+
+50
+00:03:11,830 --> 00:03:15,940
+And if not, it's noise. And this is your high
+
+51
+00:03:15,940 --> 00:03:20,520
+level operational set.
+
+52
+00:03:20,520 --> 00:03:24,270
+So you see: this is working, this is not working. Now you see what's
+
+53
+00:03:24,270 --> 00:03:28,000
+really working and what's not really working.
+
+54
+00:03:28,000 --> 00:03:32,110
+Of course, you're going to have breakdown by campaign, as it happens
+
+55
+00:03:32,110 --> 00:03:35,830
+for Facebook, Meta, and so on and so forth. So within this,
+
+56
+00:03:35,830 --> 00:03:39,390
+you will just have this breakdown. So I
+
+57
+00:03:39,390 --> 00:03:42,940
+actually have a campaign naming that
+
+58
+00:03:42,940 --> 00:03:46,740
+tells me exactly. Let's say, EMAIL,
+
+59
+00:03:46,740 --> 00:03:50,610
+1150, startups, seed,
+
+60
+00:03:50,610 --> 00:03:56,320
+and perhaps I had the marketing.
+
+61
+00:03:56,320 --> 00:03:59,920
+And every time that a campaign concludes, I come here,
+
+62
+00:03:59,920 --> 00:04:04,080
+I update this, and this tells me what happens.
+
+63
+00:04:04,130 --> 00:04:07,990
+Now, this is from the analytics standpoint. Then,
+
+64
+00:04:07,990 --> 00:04:11,600
+of course, we have to analyze it from a
+
+65
+00:04:11,600 --> 00:04:15,240
+qualitative point of view, meaning: why did
+
+66
+00:04:15,240 --> 00:04:18,790
+these people say no? Because
+
+67
+00:04:18,790 --> 00:04:23,120
+we might then want to tweak something.
+
+68
+00:04:23,120 --> 00:04:27,040
+So it's important that we test the variables
+
+69
+00:04:27,040 --> 00:04:30,600
+that we have, because we are unsure if the
+
+70
+00:04:30,600 --> 00:04:34,170
+offering is right. We're unsure if the channel is right, or
+
+71
+00:04:34,170 --> 00:04:38,070
+the channel mix is right. So as we were saying, we're going
+
+72
+00:04:38,070 --> 00:04:41,650
+to have a bunch of things. There are the ones that we
+
+73
+00:04:41,650 --> 00:04:45,960
+are most likely to succeed with because they're covering
+
+74
+00:04:45,960 --> 00:04:49,760
+the recovery point in the business, starting from the value proposition.
+
+75
+00:04:49,760 --> 00:04:53,610
+And then we test anything that we can
+
+76
+00:04:53,610 --> 00:04:57,480
+test, so we can find, again, the winner.
+
+77
+00:04:57,480 --> 00:05:01,380
+Every two weeks, you can
+
+78
+00:05:01,380 --> 00:05:05,060
+tweak something and you can find
+
+79
+00:05:05,060 --> 00:05:10,340
+out what's going on. Most importantly,
+
+80
+00:05:10,340 --> 00:05:14,200
+you can really make quick changes.
+
+81
+00:05:14,200 --> 00:05:17,800
+You can just change completely an angle of an email. So if you
+
+82
+00:05:17,800 --> 00:05:21,610
+get no reply, why are you not getting replies? So you
+
+83
+00:05:21,610 --> 00:05:25,200
+can just change direction, do something to
+
+84
+00:05:25,200 --> 00:05:30,480
+test, because that audience might be good.
+
+85
+00:05:30,480 --> 00:05:34,310
+It might be just not the right timing because perhaps
+
+86
+00:05:34,310 --> 00:05:38,670
+at that very moment, they are, I don't know, closing
+
+87
+00:05:38,670 --> 00:05:42,360
+the budgeting. It happened to us. So I had
+
+88
+00:05:42,360 --> 00:05:46,190
+to say I was validated. I spoke with the marketing
+
+89
+00:05:46,190 --> 00:05:49,740
+manager, and I asked him: "When is the right timing to get in touch with
+
+90
+00:05:49,740 --> 00:05:53,450
+you?" And what's your favorite channel? He told me: "You have to get in touch
+
+91
+00:05:53,450 --> 00:05:57,190
+at this exact date because we will prepare the budget for next
+
+92
+00:05:57,190 --> 00:06:01,070
+year in this exact frame." So
+
+93
+00:06:01,070 --> 00:06:06,200
+change it and ask.
+
+94
+00:06:06,200 --> 00:06:09,850
+Then: find top performers. Once you find the top performers, you can find ways to scale
+
+95
+00:06:09,850 --> 00:06:13,440
+your campaigns. Okay? If you get more advanced, you
+
+96
+00:06:13,440 --> 00:06:17,540
+can use Clay and other tools to automate. Or any then to automate
+
+97
+00:06:17,540 --> 00:06:21,450
+your flow. That's probably require
+
+98
+00:06:21,450 --> 00:06:25,280
+one or two people looking after it.
+
+99
+00:06:25,280 --> 00:06:29,160
+But yeah, extra tips here.
+
+100
+00:06:29,160 --> 00:06:32,820
+So please keep these. These
+
+101
+00:06:32,820 --> 00:06:36,520
+are super. I made super simple these dashboards.
+
+102
+00:06:36,520 --> 00:06:40,310
+So please keep them clean every two, three
+
+103
+00:06:40,310 --> 00:06:44,160
+weeks. Update them. Do always,
+
+104
+00:06:44,160 --> 00:06:48,240
+as we said: "Why did they say no?"
+
+105
+00:06:48,240 --> 00:06:51,870
+Because with a simple shift in copy, you might completely change
+
+106
+00:06:51,870 --> 00:06:55,530
+your campaign. It happened to me many times. And
+
+107
+00:06:55,530 --> 00:06:59,680
+yeah, as I mentioned in the example, seasonality and time-to-market.
+
+108
+00:06:59,680 --> 00:07:03,510
+As key takeaways: target structure, again.
+
+109
+00:07:03,510 --> 00:07:07,160
+Segmentation leads to scalability because
+
+110
+00:07:07,160 --> 00:07:10,780
+then you can scale. Let's say if you're taking sports, you can do one sport
+
+111
+00:07:10,780 --> 00:07:14,860
+at a time and just changing the variables or other
+
+112
+00:07:14,860 --> 00:07:18,470
+related segments. But once you've figured
+
+113
+00:07:18,470 --> 00:07:22,440
+out the channels and everything else, it's easy game. Or changing
+
+114
+00:07:22,440 --> 00:07:25,950
+to a country, perhaps you have to change, adapt the
+
+115
+00:07:25,950 --> 00:07:29,630
+tone, be more formal, and that kind of thing. But
+
+116
+00:07:29,630 --> 00:07:33,180
+it makes the job a lot easier because you tested
+
+117
+00:07:33,180 --> 00:07:36,790
+quite a lot of variables. Again, entry points. I've
+
+118
+00:07:36,790 --> 00:07:40,560
+been stressing this quite a lot. And that's
+
+119
+00:07:40,560 --> 00:07:44,920
+what works the most, at least for me.
+
+120
+00:07:44,920 --> 00:07:49,520
+And yeah: priorities. Priorities.
+
+121
+00:07:49,520 --> 00:07:53,120
+It can be frustrating from a start standpoint.
+
+122
+00:07:53,120 --> 00:07:56,840
+I know that.
+
+123
+00:07:56,840 --> 00:08:00,440
+But yeah, by prioritizing, you can speed
+
+124
+00:08:00,440 --> 00:08:04,280
+up the flow. And the more you get, let's say,
+
+125
+00:08:04,280 --> 00:08:08,030
+into a better flow, the better it is for you. So
+
+126
+00:08:08,030 --> 00:08:12,360
+yeah, I'll see you at the very, very,
+
+127
+00:08:12,360 --> 00:08:16,960
+very, very last video of the course.
+
+128
+00:08:16,960 --> 00:08:21,480
+Oh yeah, please do this.
+
+129
+00:08:21,480 --> 00:08:32,000
+Okay? [BLANK_AUDIO]

@@ -1,0 +1,33 @@
+# Quick Startup — Off the Curious Path
+
+Quando apri una nuova sessione per lavorare su questo progetto, di' a Claude:
+
+```
+Ciao MC! Lavoriamo su Off the Curious Path.
+Carica off-the-path/README.md e latest notes.
+```
+
+Claude caricherà automaticamente:
+- README.md (project overview)
+- CLAUDE.md (operating instructions)
+- notes/closing-*.md (latest session)
+- docs/NEXT_SESSION_PLAN.md (priorities)
+
+---
+
+**Files da avere sempre sotto mano:**
+- `README.md` → Project status snapshot
+- `docs/CTO_REPORT_ANALYSIS.md` → Technical audit
+- `docs/NEXT_SESSION_PLAN.md` → Implementation roadmap
+- `notes/closing-[latest].md` → Last session summary
+
+---
+
+**Comandi rapidi:**
+```bash
+# Dev server
+cd codebase && npm run dev
+
+# Verifica struttura
+ls -la docs/ notes/
+```
