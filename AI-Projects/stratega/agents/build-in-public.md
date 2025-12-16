@@ -207,6 +207,42 @@ Based on recent work, these are content-ready:
 - n8n + Claude content generation workflow
 - Competitive intel on Lovable/Cursor/Bolt
 
+### Week of Dec 10-12 - META ADS API + AI AGENT (HOT!)
+**Sessione Duomo Design ADV - Build in Public gold:**
+
+1. **Setup Meta Ads API via Claude Code**
+   - Connesso API Meta Ads in tempo reale
+   - Token generation, long-lived exchange
+   - Prima campagna attivata via terminale
+   - "Ho acceso una campagna Meta dal terminale con Claude"
+
+2. **Bug Discovery in Real-Time**
+   - Creato 4 LAL audience → cancellate
+   - Creato adset retargeting → attivato → rollback immediato
+   - Scoperto: nuove engagement audience Meta non fanno prefill (bug Dec 2025)
+   - Documentato tutto in tempo reale
+
+3. **Learning: Regola CBO**
+   - Con €25/giorno, non aggiungere adset mentre altri in learning
+   - Aspettare 3-4 giorni tra modifiche significative
+   - "Ho fatto l'errore così non lo fai tu"
+
+4. **Agent ADV dedicato**
+   - Creato `/agents/duomo-adv.md` con knowledge base completa
+   - Playbook ottimizzazioni, benchmark, audience inventory
+   - Best practice aggiunte in tempo reale dopo ogni errore
+
+**Source files:**
+- `/notes/daily-summaries/session-2025-12-11-duomo-adv.md`
+- `/notes/daily-summaries/session-2025-12-12-duomo-adv.md`
+- `/agents/duomo-adv.md`
+
+**Post ideas:**
+- "Ho attivato una campagna Meta dal terminale. Poi l'ho spenta 5 minuti dopo. Ecco perché."
+- "Ho scoperto un bug di Meta in diretta. Le nuove audience non funzionano come prima."
+- "Costruisco un AI agent che gestisce Meta Ads. Day 1: Setup API + primo errore."
+- "€25/giorno di budget. Ecco la regola che ho imparato a mie spese."
+
 ---
 
 ## Immediate Post Queue

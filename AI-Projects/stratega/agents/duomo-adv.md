@@ -47,13 +47,15 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 | CPL medio | €17.15 | <€12 |
 | CPL best month | €10.45 | - |
 
-### Benchmark Ultimi 30 Giorni (Nov-Dic 2025)
+### Benchmark Ultimi 7 Giorni (9-15 Dic 2025)
 | Metrica | Valore |
 |---------|--------|
-| Spend | €752.65 |
-| Lead | 67 |
-| CPL | €11.23 |
+| Spend | €174.52 |
+| Lead | 30 |
+| **CPL** | **€5.82** 🔥 |
 | Budget giornaliero | ~€25 |
+
+**Note:** CPL record - miglior settimana mai registrata. Carousel Mono alto v2 a €1.10 CPL (10 leads).
 
 ### Stagionalità
 - **Q1:** Post-fiere, buon periodo
@@ -71,23 +73,30 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 - Struttura: 2 adset
 
 ### Adset
-| Adset | Targeting | CPL 30d |
-|-------|-----------|---------|
-| Broad | Italia, interessi ampi | €11.12 |
-| LAL Website Mix 5-10% | Lookalike | €11.47 |
+| Adset | Targeting | CPL 7d | Status |
+|-------|-----------|--------|--------|
+| Broad | Italia, interessi ampi | €4.63 | ACTIVE |
+| Retargeting FB+IG Eng | Engagement 365 | - | ACTIVE (learning) |
+| LAL Website Mix 5-10% | Lookalike | ∞ | PAUSED |
 
-### Top Ads (by CPL)
-| Ad | Formato | CPL | Leads |
-|----|---------|-----|-------|
-| Dress 23/9 | Post | €0.97 | 2 |
-| IE - Gladys wood 30/4 | Instant Experience | €6.69 | 22 |
-| IE - Lera | Instant Experience | €10.96 | 16 |
+### Top Ads (7d - by CPL)
+| Ad | Formato | Spend | Leads | CPL |
+|----|---------|-------|-------|-----|
+| Carousel Mono alto v2 | Carousel | €11.04 | 10 | **€1.10** 🔥 |
+| IE - Gladys wood 30/4 | Instant Experience | €31.67 | 6 | €5.28 |
+| Elettra - post 8/8 | Post | €86.03 | 12 | €7.17 |
 
-### Worst Ads (by CPL)
-| Ad | Formato | CPL | Leads |
-|----|---------|-----|-------|
-| Atlante 12/08/25 | Post | €20.04 | 9 |
-| Gladys wood - post 5/8 | Post | €18.57 | 4 |
+### Underperformers (7d - 0 leads)
+| Ad | Formato | Spend | Note |
+|----|---------|-------|------|
+| IE - Lera | Instant Experience | €21.64 | Monitorare |
+| Gladys wood - post 5/8 | Post | €9.99 | Monitorare |
+
+### Nuovi Ads (in learning)
+| Ad | Adset | Created | Status |
+|----|-------|---------|--------|
+| Lera Baldacchino - post 19/8 | Broad | 15 Dic | ACTIVE |
+| IE Gladys wood (Retargeting) | Retargeting | 15 Dic | ACTIVE |
 
 ---
 
@@ -111,23 +120,20 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 | LAL IT 5% Video views | 1.5-1.8M | Ampia |
 | LAL IT 5% Instant Experience | 1.5-1.8M | Ampia |
 
-### Lookalike (New 1-5%) - Creati 11 Dic 2025
-| Audience | ID | Size | Status |
-|----------|-----|------|--------|
-| LAL IT 1-5% - Instant Experience 365 | 120239287024060471 | 1.3-1.5M | Ready |
-| LAL IT 1-5% - FB Engagement 365 | 120239287037310471 | 1.3-1.6M | Ready |
-| LAL IT 1-5% - IG Engagement 365 | 120239287040970471 | 1.3-1.5M | Ready |
-| LAL IT 1-5% - 25% Video Views | 120239287043560471 | 1.4-1.6M | Ready |
+### Lookalike (New 1-5%) - DA CREARE
+Le LAL 1-5% create l'11 Dic sono state cancellate perché basate su source audience stale (2022).
+Da ricreare quando si attiva adset retargeting e si conferma delivery.
 
-### Adset Attivi
-| Adset | ID | Targeting | Status |
-|-------|-----|-----------|--------|
-| Retargeting FB+IG Engagement | 120239287066770471 | FB+IG Eng 365 | ACTIVE |
+### Adset Pronti (non attivi)
+| Adset | ID | Targeting | Status | Note |
+|-------|-----|-----------|--------|------|
+| Retargeting FB+IG Engagement (test) | 120239329035460471 | FB+IG Eng 365 (vecchie) | PAUSED | Pronto, attivare 15-16 Dic |
 
 ### ⚠️ Problemi Identificati
 - Audience website (pixel) tutte ~20 persone - CAPI non implementato
 - Consent banner + iOS 14.5 riducono tracking
-- LAL 5-10% troppo ampi → sostituiti con LAL 1-5%
+- **Nuove engagement audience (Dec 2025) non si popolano** - bug Meta, usare le vecchie
+- LAL 5-10% troppo ampi → da sostituire con LAL 1-5% (dopo test retargeting)
 
 ---
 
@@ -294,20 +300,39 @@ Per ogni Ad:
 
 ## Priorità Attuali
 
-### Completati (11 Dic 2025)
+### Completati (11-15 Dic 2025)
 - [x] Analisi completa YTD + trend mensili
 - [x] Identificare pattern stagionali
 - [x] Audit pixel Facebook
 - [x] Piano d'azione con priorità
 - [x] Pausa ads underperformer (Atlante)
-- [x] Setup adset retargeting (LIVE)
-- [x] Crea 4x LAL 1-5%
+- [x] Riattivato Elettra, Dress, IE Gladys wood (11 Dic sera)
+- [x] Creato adset Retargeting (pronto, in pausa)
+- [x] **Pausa adset LAL 5-10%** (15 Dic) - 0 leads in 7 giorni
+- [x] **Attivato adset Retargeting** (15 Dic)
+- [x] **Creato ad Lera Baldacchino** (15 Dic) - nuovo test in Broad
 
-### Prossimi Step
-1. [ ] Attivare LAL 1-5% Instant Experience (14-15 Dic)
-2. [ ] Nuova IE creative (Lera Soft)
-3. [ ] Review performance retargeting (18 Dic)
-4. [ ] Annual Wrap-Up report (fine Dic)
+### Prossimi Step (Pianificazione Rivista)
+
+**⚠️ REGOLA CBO:** Con budget €25/giorno, non attivare nuovi adset mentre altri sono in fase di learning. Aspettare 3-4 giorni tra modifiche significative.
+
+| Data | Azione | Condizione |
+|------|--------|------------|
+| 11 Dic | Riattivati Elettra, Dress, IE Gladys | ✅ Done |
+| 15 Dic | Pausa LAL 5-10%, Attiva Retargeting | ✅ Done |
+| 15 Dic | Nuovo ad Lera Baldacchino in Broad | ✅ Done |
+| 18-19 Dic | Review performance Retargeting + Lera Baldacchino | - |
+| 19-20 Dic | Creare LAL 1-5% da engagement | Se retargeting funziona |
+| 20-21 Dic | Attivare adset LAL 1-5% | Se retargeting stabile |
+| Fine Dic | Annual Wrap-Up report | - |
+| Backlog | Nuova IE creative (Lera Soft) | Quando c'è spazio |
+| Backlog | Post Ground (17 Ott) | Prossimo test post |
+
+### Best Practice Aggiunte (12-15 Dic)
+1. **Aspettare 3-4 giorni** dopo riattivazione/creazione ads prima di aggiungere nuovi adset
+2. **Verificare source audience** prima di creare LAL - se >6 mesi senza update, potrebbero essere stale
+3. **Bug Meta Dec 2025:** Nuove engagement audience non fanno prefill storico - usare le vecchie
+4. **Verifica 3 livelli quando attivi:** Campaign, Adset E Ads hanno status indipendenti. Attivare l'adset NON attiva automaticamente gli ads al suo interno. Sempre verificare `/adset_id/ads?fields=status` dopo aver attivato un adset.
 
 ---
 
@@ -320,4 +345,4 @@ Per ogni Ad:
 ---
 
 *Agent creato: 10 Dicembre 2025*
-*Ultimo aggiornamento: 11 Dicembre 2025*
+*Ultimo aggiornamento: 16 Dicembre 2025*
