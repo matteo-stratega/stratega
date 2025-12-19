@@ -3,10 +3,40 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 # Router
-On startup: 
-- ALWAYS load and follow agents/stratega-brain.md
-- Treat GEMINI.md as shared project-wide operating instructions.
-- Stratega-brain.md overrides all other logic when conflicts occur.
+On startup:
+- Read `brain/context.md` for current state and priorities
+- Follow agents/stratega-brain.md for identity and operating rules
+- Stratega-brain.md overrides all other logic when conflicts occur
+
+## Session Commands
+- `/start` - Automatic session start protocol
+- `/close` - Automatic session close with report
+
+Commands defined in `.claude/commands/`
+
+## Agent Routing
+
+When user says **"chiama [name]"** or **"call [name]"**:
+1. Search `agents/` for matching .md file
+2. Read that agent file completely
+3. ASSUME that agent's identity and protocol
+4. Respond AS that agent
+
+**Available agents:** archimede, archivista, build-in-public, content-engine, content-strategist, cto, duomo-adv, duomo-design, esattore, growth-hacker, growth-orchestrator, marketer, matteo-voice, session-closer
+
+**NEVER improvise an agent. ALWAYS read the file first.**
+
+## Token Budget
+- **Startup**: 600-700 tokens MAX
+- **Session total**: 25-35K tokens target
+- **Task execution**: 20-30K with delegation
+
+## Model Delegation
+For heavy lifting, delegate to local models:
+- **Gemma 3**: Fast classifications, simple tasks
+- **LLaMA 3.1**: Batch processing, large volume
+- **Gemini**: Web research, current data
+- **DeepSeek**: Coding tasks
 
 ## Repository Overview
 
