@@ -139,6 +139,36 @@ pickeat/
 
 ---
 
+## 🤖 Basilio Upgrade Status (22 dic 2025)
+
+### ✅ Completato
+1. **MCP Memory Server** - Configurato in `~/.claude.json` → richiede restart per attivazione
+2. **CLAUDE.md** - Creato con token budget, model delegation, agent routing, anti-patterns
+3. **close.md** - Nuovo sistema APPEND (niente più `-2, -3` naming)
+4. **session-closer.md** - Multi-Agent Append Protocol
+5. **cto.md** - Nuovo agente per codebase review
+6. **start.md** - Step 6 con conditional agent loading
+
+### ⏳ Pending
+- [ ] **Step 2**: Enforcement hooks (prevenire "faking" agent calls)
+- [ ] **Step 3**: Feedback loop structure (`.feedback/` directory)
+- [ ] **Git repo**: Separare PickEat in repo dedicato (ora va su stratega.git)
+- [ ] **Test memory**: Verificare che MCP memory funzioni dopo restart
+
+### 📁 File Modificati
+- `/Users/matteolombardi/.claude.json` → mcpServers.memory
+- `~/.claude/claude_desktop_config.json` → memory server
+- `.gitignore` → added `.memory/`
+- `.claude/commands/close.md` → APPEND pattern
+- `agents/session-closer.md` → Multi-Agent Append
+- `CLAUDE.md` (nuovo)
+- `agents/cto.md` (nuovo)
+
+### 🔗 Riferimento
+Basilio Upgrade Brief: `notes/Basilio upgrade brief.md`
+
+---
+
 ## 🔄 Session Protocol
 
 ### Start
