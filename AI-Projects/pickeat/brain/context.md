@@ -150,10 +150,15 @@ pickeat/
 6. **start.md** - Step 6 con conditional agent loading
 
 ### ⏳ Pending
-- [ ] **Memory debug**: Server connesso ma tools non esposti. Aggiunto `mcp__memory__*` a `.claude/settings.local.json`. Restart necessario.
 - [ ] **Step 2**: Enforcement hooks (prevenire "faking" agent calls)
 - [ ] **Step 3**: Feedback loop structure (`.feedback/` directory)
 - [ ] **Git repo**: Separare PickEat in repo dedicato (ora va su stratega.git)
+
+### ✅ Memory MCP (22 dic - FIXED)
+- Server: `memory` in `~/.claude.json`
+- Permissions: `mcp__memory__*` in `.claude/settings.local.json`
+- File: `.memory/knowledge-graph.jsonl`
+- **Tools disponibili**: create_entities, read_graph, search_nodes, add_observations, etc.
 
 ### 📁 File Modificati
 - `/Users/matteolombardi/.claude.json` → mcpServers.memory
