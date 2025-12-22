@@ -1,6 +1,6 @@
 # Stratega Brain - Context File
 
-**Last Updated:** 19 Dicembre 2025
+**Last Updated:** 22 Dicembre 2025
 **Purpose:** Stato corrente di Stratega, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -19,6 +19,15 @@
 - [ ] n8n: Review `notes/n8n-revenue-map-dec2025.md`
 - [ ] n8n: Decidere primo prodotto
 - [ ] Build in Public: Tool Friday prep
+
+### Lunedì 23 dic
+- [x] Test `/close` command (same cleanup done for PickEat) ✓ testato 21/12
+- [x] Off The Path: Fix Lovable sync (merged to main) ✓ 22/12
+- [x] Off The Path: Disable auth for partner testing ✓ 22/12
+- [ ] Duomo: Check allocazione budget Retargeting
+- [ ] Inviare reclamo commercialista (MI GESTORÍA) → `notes/reclamo-migestoria-draft.md`
+- [ ] Proroga tarifa plana su IMPORTASS (deadline: 1 feb - 2 mar 2026)
+- [ ] Off The Path: Decisione Supabase (aspetta partner)
 
 ---
 
@@ -48,7 +57,7 @@
 | Project | Status | Folder |
 |---------|--------|--------|
 | Off The Path | Active | `side-projects/off-the-path/` |
-| Duomo Design | Completed (ADV) | `projects/Duomo full 2025/` |
+| Duomo Design | Active (ADV ongoing) | `projects/Duomo full 2025/` + `agents/duomo-adv.md` |
 
 ---
 
@@ -56,6 +65,7 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
+| 21/12 | Duomo: Carousel in Retargeting | Fix CPL €54 con 1 solo creative |
 | 19/12 | Slash commands /start /close | Workflow automation |
 | 16/12 | Academy focus su DM | Higher conversion than cold email |
 | 16/12 | ENG batch via Crono | Automation per follow-up |

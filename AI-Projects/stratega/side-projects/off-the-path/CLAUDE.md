@@ -19,7 +19,7 @@ This side project follows a **mini Stratega structure**:
 
 ```
 off-the-path/
-├── codebase/              # React app (don't modify without asking)
+├── codebase/              # React app - GitHub synced
 ├── docs/                  # Strategic documents, reports, specs
 ├── notes/                 # Session summaries, raw thoughts
 ├── *.pdf                  # Design briefs (read-only)
@@ -36,17 +36,43 @@ off-the-path/
 - **Frontend:** React + TypeScript + Vite + shadcn-ui
 - **Backend:** Supabase (PostgreSQL + Auth + Storage + RLS)
 - **Map:** Mapbox GL JS (free tier, 50K loads/mese)
-- **Deploy:** Lovable (https://lovable.dev/projects/f4167f36-486e-4fcd-8f43-03ff1b511e74)
+- **SEO:** react-helmet-async + JSON-LD structured data
+- **Hosting:** Lovable (migrating to Vercel)
+- **Repo:** https://github.com/matteo-stratega/barcelona-vibe-guide
 
-### Current Status
-- CMS Admin: 70% complete
-- Security: ⚠️ Not production-ready (RLS pubbliche)
-- MVP Target: 1 week to production
+### Infrastructure (Updated 22 Dec 2025)
 
-### Critical Gaps
-1. Auth + Security (Supabase Auth + RLS)
-2. Geocoding automatico (Mapbox API)
-3. Image Upload (Supabase Storage)
+⚠️ **CRITICAL: There are TWO Supabase projects. Know the difference!**
+
+| Environment | Supabase Project ID | Data | .env status |
+|-------------|---------------------|------|-------------|
+| **Lovable (prod)** | `casprhxtfzjlnzmfceiy` | 174 places (CSV import) | Committed in Git |
+| **Our dev** | `facdxrllyilohbubdrtc` | Empty | Local only, NOT committed |
+
+**Current state:**
+- Lovable uses their Supabase (has data)
+- Local dev uses our Supabase (empty)
+- `.env` change is NOT committed intentionally (keeps environments separate)
+
+**Decision pending:** Which Supabase to use for production? Options:
+1. Keep Lovable's (has data, but no admin access)
+2. Use ours (need to import data, but full control)
+3. Export from Lovable → import to ours
+
+### Current Status (Updated 22 Dec 2025)
+- **CMS Admin:** 90% complete
+- **Auth:** ⚠️ DISABLED temporarily (partner testing) - re-enable before prod
+- **Geocoding:** ✅ Implemented (Mapbox API)
+- **Image Upload:** ✅ Implemented (Supabase Storage)
+- **SEO:** ✅ Structured (meta, sitemap, JSON-LD)
+- **Branding:** ✅ Complete (Off the Curious Path)
+- **Security:** ⚠️ RLS policies need review before production
+
+### Remaining for Production
+1. Configure Supabase RLS policies
+2. Deploy to Vercel (migration from Lovable)
+3. Connect domain `offthecuriouspath.com`
+4. Add real content
 
 ---
 
@@ -68,34 +94,34 @@ The client manages content through `/admin`. Every feature must be:
 - If we hit limits → Pivot to MapLibre + Maptiler
 - Don't over-engineer for scale yet
 
-### 4. Documentation Style
-- Keep `docs/` for strategic deliverables (reports, specs)
-- Keep `notes/` for session summaries, daily work
-- Use clear headers, bullet points, decision logs
-- Link to Lovable project when relevant
+### 4. No Vendor Lock-in
+- Code is standard React/Vite — portable anywhere
+- Supabase is owned separately
+- Can migrate hosting anytime (Vercel recommended)
 
 ---
 
 ## Code Modification Rules
 
 **BEFORE touching `codebase/`:**
-1. Ask Matteo if unsure about architecture changes
-2. Read latest `docs/CTO_REPORT_ANALYSIS.md` for context
-3. Check `docs/NEXT_SESSION_PLAN.md` for priorities
-4. Test locally before deploy
+1. Pull latest from GitHub first
+2. Read this file for context
+3. Check `notes/` for recent session summaries
+4. Test locally before commit
 
 **When implementing:**
 - Follow existing patterns (React Query, Zod validation, shadcn-ui)
 - Keep forms simple and accessible
 - Add loading states and error handling
-- Document new API integrations
+- Use SEO component for new pages
 
 ---
 
-## Brand Guidelines (Reference Only)
+## Brand Guidelines
 
 **Tone:** Curious, playful, honest — never formal or touristy
-**Colors:**
+
+**Colors (CSS custom properties in index.css):**
 - Solar Tangerine: `#F58E2E` (primary accent)
 - Teal Green: `#2CA6A4` (secondary)
 - Light Sand: `#F6F3EF` (background)
@@ -105,86 +131,99 @@ The client manages content through `/admin`. Every feature must be:
 - Short sentences, contractions (you'll, we're)
 - Avoid clichés ("hidden gems", "must-see")
 - Feel: editorial yet relaxed
+- Tagline: "Hidden corners & everyday wonders"
+
+---
+
+## Key Components
+
+### SEO (`src/components/SEO.tsx`)
+- Use on every page
+- Supports dynamic title, description, image
+- JSON-LD for places and articles
+- Example: `<SEO title="Map" description="..." />`
+
+### Auth (`src/hooks/useAuth.tsx`)
+- Magic link (primary)
+- Password (fallback)
+- `ProtectedRoute` wraps `/admin`
+
+### Footer (`src/components/Footer.tsx`)
+- Brand identity
+- Newsletter signup (ready for integration)
+- Social links
 
 ---
 
 ## Session Workflow
 
 **At session start:**
-1. Load `README.md` for project context
-2. Check latest `notes/closing-*.md` for what we did last
-3. Check `docs/NEXT_SESSION_PLAN.md` for priorities
-4. Ask Matteo what we're working on today
+1. Pull latest from GitHub
+2. Check latest `notes/session-*.md` for context
+3. Start dev server: `cd codebase && npm run dev`
 
 **At session end:**
-1. Create `notes/closing-DD-MM-YY.md` with summary
-2. Update `docs/NEXT_SESSION_PLAN.md` if priorities changed
-3. Update `README.md` status if milestones reached
+1. Create `notes/session-DD-MMM-YYYY.md` with summary
+2. **UPDATE this CLAUDE.md if any infrastructure/architecture discoveries** (Supabase, env vars, services, etc.)
+3. Commit and push to GitHub
+4. Update Decision Log if major decisions made
 
 ---
 
-## Decision Log (Key Choices)
+## Decision Log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 25 Nov 2025 | Supabase Auth Magic Link | Zero-friction for solo user |
 | 25 Nov 2025 | Keep Mapbox free tier | Already integrated, monitor usage |
-| 25 Nov 2025 | Stay on Lovable for MVP | Fast iteration, migration path later |
-| 25 Nov 2025 | Tiptap for rich text editor | React-native, extensible |
+| 16 Dec 2025 | Migrate from Lovable to Vercel | No lock-in, free, faster deploys |
+| 16 Dec 2025 | React over WordPress | Full control, better performance, AI integrations easy |
+| 16 Dec 2025 | SEO with react-helmet-async | Per-page meta, JSON-LD structured data |
+| 22 Dec 2025 | Disable auth temporarily | Partner needs to test /admin without login |
+| 22 Dec 2025 | Document dual-Supabase situation | Lovable vs our Supabase - decision pending |
+
+---
+
+## Future Integrations (Easy to Add)
+
+| Integration | Effort | Notes |
+|-------------|--------|-------|
+| Google Tag Manager | 5 min | Script in index.html |
+| Google Analytics 4 | 5 min | Via GTM or direct |
+| Meta Pixel | 5 min | Via GTM or direct |
+| Newsletter (Buttondown/ConvertKit) | 30 min | Footer form ready |
+| AI Chatbot (OpenAI/Claude) | 1 session | API integration |
+| Recommendation Engine | 1 session | Based on tags/vibes |
 
 ---
 
 ## Quick Commands
 
-**Navigate to project:**
 ```bash
+# Navigate to project
 cd /Users/matteolombardi/AI-Projects/stratega/side-projects/off-the-path
-```
 
-**Start dev server:**
-```bash
-cd codebase/
-npm run dev
-```
+# Start dev server
+cd codebase && npm run dev
 
-**Check Mapbox usage:**
-Visit: https://account.mapbox.com/
+# Git workflow
+git pull origin feature/mvp-core-features
+git add -A && git commit -m "message"
+git push origin feature/mvp-core-features
 
----
-
-## Common Tasks
-
-### Creating a session summary
-```bash
-# Location
-notes/closing-DD-MM-YY.md
-
-# Template
-## Session Closing — [Date]
-**Focus:** [What we worked on]
-**Deliverables:** [Files created/modified]
-**Decisions:** [Key choices made]
-**Next:** [What's next]
-```
-
-### Creating strategic docs
-```bash
-# Location
-docs/[DESCRIPTIVE_NAME].md
-
-# Examples
-docs/CTO_REPORT_ANALYSIS.md
-docs/NEXT_SESSION_PLAN.md
-docs/AUTH_IMPLEMENTATION_SPEC.md
+# Deploy to Vercel (when ready)
+npm i -g vercel && vercel
 ```
 
 ---
 
 ## Links
 
-- **Lovable Project:** https://lovable.dev/projects/f4167f36-486e-4fcd-8f43-03ff1b511e74
+- **GitHub Repo:** https://github.com/matteo-stratega/barcelona-vibe-guide
+- **Branch:** `feature/mvp-core-features`
+- **Lovable (legacy):** https://lovable.dev/projects/f4167f36-486e-4fcd-8f43-03ff1b511e74
 - **Mapbox Account:** https://account.mapbox.com/
-- **Supabase Dashboard:** (check codebase/.env for project URL)
+- **Supabase:** https://facdxrllyilohbubdrtc.supabase.co
 
 ---
 
@@ -197,4 +236,4 @@ When this project is referenced from main Stratega workspace:
 
 ---
 
-*This is a living document. Update when key decisions are made.*
+*Last updated: 22 December 2025*
