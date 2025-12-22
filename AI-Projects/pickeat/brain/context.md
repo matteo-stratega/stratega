@@ -1,6 +1,6 @@
 # PickEat Brain - Context File
 
-**Last Updated:** 17 Dicembre 2025
+**Last Updated:** 22 Dicembre 2025
 **Purpose:** Stato corrente dell'azienda, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -16,7 +16,8 @@
 - [ ] Varese: ricevere codici voucher da Lorenzo
 - [ ] Varese: contenuto social pre-partita (18-20 dic)
 - [ ] Varese: partita 21 dic - promo voucher €10
-- [ ] Content: review Post #2 (domattina)
+- [x] Content: Blog Post #1 "20-Minute Problem" → HubSpot ✅
+- [ ] Content: review Post #2 (Paper Stock List)
 
 ---
 
@@ -24,11 +25,11 @@
 
 ### Varese Basket
 - **Status:** Pilot attivo
-- **Partite giocate:** 5+ (G1-G5)
-- **Performance:** ~10-13 ordini/partita, AOV €18
-- **Problema risolto:** Ritardi consegna G3 (rimborsi emessi)
-- **Prossima partita:** 21 dic vs Trieste
-- **Promo attiva:** Ordine ≥€25 = Voucher €10 e-commerce
+- **Partite giocate:** 6 (G1-G6)
+- **G6 Results (21 dic):** 14 ordini, €219.56 revenue, AOV €15.68
+- **Voucher eligibili:** 2 (Davide Macchi, Catherine Flumiani) - email pronte
+- **Problemi G6:** Hot dog sold out 40 min, bar chiuso 20 min intervallo
+- **Prossima partita:** 3 gen vs Napoli
 - **Contatto:** Lorenzo Gaudina (marketing)
 - **Files:** `clients/varese/`
 
@@ -40,23 +41,28 @@
 
 ## 👥 Team & Ruoli
 
-| Nome | Ruolo | Note |
-|------|-------|------|
-| Matteo | CEO/Founder | Decision maker |
-| Giacomo | Co-founder/Ops | On-site events |
-| Asim | Developer | Unico dev, NON tech lead |
-| Stephane | Advisor (Sales) | Welcome post pending |
-| Federico | Investor/Advisor | Welcome post pending |
+| Nome     | Ruolo            | Note                     |
+| -------- | ---------------- | ------------------------ |
+| Matteo   | CEO/Founder      | Decision maker           |
+| Giacomo  | Co-founder/Ops   | On-site events           |
+| Asim     | Developer        | Unico dev, NON tech lead |
+| Stephane | Advisor (Sales)  | Welcome post pending     |
+| Federico | Investor/Advisor | Welcome post pending     |
 
 ---
 
 ## 📝 Content Engine Status
 
 ### Blog Articles (4 READY)
-1. The 20-Minute Problem → Dec 17 ✅
+1. The 20-Minute Problem → Dec 17 ✅ **PUBBLICATO**
 2. Paper Stock List Problem → Dec 31
 3. Exhibition Centers F&B → Jan 14
 4. 2026 F&B Trends → Jan 21
+
+### HubSpot Blog Integration
+- **Status:** Manual (HTML copy-paste)
+- **File ready:** `outputs/content-engine/blog/the-20-minute-problem-HUBSPOT-READY.html`
+- **TODO:** Creare workflow automatico (n8n o API)
 
 ### Welcome Posts
 - Asim → Dec 10 ✅ PUBBLICATO
@@ -92,6 +98,11 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
+| 22/12 | GA MCP configurato | Service account `claude@n8npe-474619`, Property ID 467442633 |
+| 19/12 | Benedetto XIV renewal | €495 closed won (€99/mese fino apr) |
+| 19/12 | CRM cleanup massivo | 11 deal closed lost, pipeline pulita |
+| 18/12 | Asim review → fine gennaio | 6 mesi, observation period |
+| 18/12 | Hiring dev #2 pausa | Budget pending (Biper/Apex/Corengers) |
 | 11/12 | No hostess Varese | Tigros sponsor blocca |
 | 04/12 | Cut Article 3 (Vendor Coordination) | ICP mismatch |
 | 04/12 | Voucher digitali > gadget fisici | Zero logistica |
