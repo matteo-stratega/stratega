@@ -2,38 +2,50 @@
 
 Esegui il protocollo di chiusura sessione:
 
-## Step 1: Verifica naming
-1. Controlla se esiste già `task/daily-summaries/closing-DDMMYY.md`
-2. Se **non esiste** → usa `closing-DDMMYY.md`
-3. Se **esiste** → usa `closing-DDMMYY-2.md` (o `-3`, `-4`... incrementa)
-4. Se sessione ha topic specifico → usa `closing-DDMMYY-[topic].md` (es. `closing-221225-content-engine.md`)
+## Step 1: Verifica file esistente
+1. Controlla se esiste `task/daily-summaries/closing-DDMMYY.md`
+2. Se **non esiste** → crealo con header e il tuo report
+3. Se **esiste** → APPEND il tuo report sotto (come nuovo capitolo)
 
-## Step 2: Scrivi closing report
+**IMPORTANTE:** NON creare file con `-2`, `-3`. Sempre APPEND allo stesso file del giorno.
+
+## Step 2: Formato report
+
+### Se file NON esiste (prima sessione del giorno):
 ```markdown
 # Closing DD-MM-YY
 
-## TL;DR
+---
+
+## Session 1: [HH:MM] - [Topic/Agent]
+
+### TL;DR
 - **Done**: [max 3 bullet]
 - **Pending**: [max 3 bullet]
-- **Next**: [1 riga - prossima azione]
-
-## Dettagli
-
-### Done
-- [bullet con contesto breve]
-
-### Pending
-- [ ] [task] - [perché importante]
 
 ### Files
 - [lista file creati/modificati]
 
-### Notes
-- [opzionale]
+---
+**Agent**: Basilio
+```
+
+### Se file ESISTE (append al fondo):
+```markdown
 
 ---
-**Session Status**: Completed
-**Prepared by**: Basilio
+
+## Session N: [HH:MM] - [Topic/Agent]
+
+### TL;DR
+- **Done**: [max 3 bullet]
+- **Pending**: [max 3 bullet]
+
+### Files
+- [lista file creati/modificati]
+
+---
+**Agent**: [Nome agente]
 ```
 
 ## Step 3: Aggiorna context (se necessario)
@@ -43,11 +55,12 @@ Aggiorna `brain/context.md` se ci sono:
 - Cose da ricordare
 
 ## Step 4: Conferma
-Conferma all'utente: "Sessione chiusa. Report: [path]"
+Conferma: "Sessione chiusa. Report appeso a: [path]"
 
 ---
 
 **REGOLE:**
-- Max 30 righe totale
-- NON chiedere conferma - scrivi direttamente
-- Se multiple sessioni stesso giorno → Session Closer farà merge
+- SEMPRE append, MAI file separati per stesso giorno
+- Session Closer farà merge finale a fine giornata
+- Max 20 righe per sessione
+- NON chiedere conferma - scrivi/appendi direttamente

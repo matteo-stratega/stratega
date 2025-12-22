@@ -1,0 +1,9 @@
+# Credentials - NEVER commit sensitive data
+data/.credentials/
+Vault/.credentials/*.json
+Vault/.credentials/*-credentials.*
+*-credentials.json
+*.key
+*.pem
+.env.local
+.memory/

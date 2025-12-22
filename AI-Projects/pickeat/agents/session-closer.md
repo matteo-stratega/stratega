@@ -482,10 +482,8 @@ Quick close mode. I'll capture the essentials:
 **Daily summaries:**
 ```
 task/daily-summaries/
-  └── closing-DDMMYY.md           (final merged)
-  └── closing-DDMMYY-2.md         (second session same day)
-  └── closing-DDMMYY-[topic].md   (topic-specific, es. content-engine)
-  └── prep-DDMMYY.md              (startup brief)
+  └── closing-DDMMYY.md    (single file per day - agents APPEND to it)
+  └── prep-DDMMYY.md       (startup brief)
 ```
 
 **Weekly rollups:**
@@ -494,18 +492,32 @@ task/weekly-reviews/
   └── week-WW-YYYY.md
 ```
 
-### MULTI-TAB MERGE PROTOCOL
+### MULTI-AGENT APPEND PROTOCOL
 
-When multiple closing files exist for same day:
+Each day has ONE closing file. Multiple agents APPEND their sessions:
 
-1. **Detect**: Find all `closing-DDMMYY*.md` files
-2. **Read & Merge**:
-   - Combine "Done" (deduplicate)
-   - Combine "Pending" (deduplicate)
-   - Keep most recent "Next"
-   - Merge "Files" lists
-3. **Output**: Single `closing-DDMMYY.md` with sections per session
-4. **Update**: `brain/context.md` if key decisions
+**Structure of a daily closing file:**
+```markdown
+# Closing DD-MM-YY
+
+---
+## Session 1: [HH:MM] - Basilio
+[session 1 content]
+
+---
+## Session 2: [HH:MM] - Content Engine
+[session 2 content]
+
+---
+## Session 3: [HH:MM] - Sales Orchestrator
+[session 3 content]
+```
+
+**Session Closer's job at end of day:**
+1. **Review**: Read entire closing file
+2. **Clean**: Remove duplicates in Done/Pending
+3. **Consolidate**: Create unified TL;DR at top
+4. **Update**: `brain/context.md` with key decisions
 
 ### Cross-Reference
 
