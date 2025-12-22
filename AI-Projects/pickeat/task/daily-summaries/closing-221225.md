@@ -50,3 +50,40 @@
 
 **Session Status**: Pausa per riavvio (GA MCP)
 **Prepared by**: Basilio
+
+---
+
+## Session 2: 20:15 - Basilio Upgrade
+
+### TL;DR
+- **Done**: MCP Memory configurato, close/session-closer con APPEND pattern, context.md aggiornato
+- **Pending**: Test memory dopo restart, Step 2-3 upgrade (hooks, feedback)
+
+### Done
+1. **MCP Memory Server** - Configurato in `~/.claude.json` per persistenza knowledge graph
+2. **Close.md refactor** - Nuovo sistema APPEND (niente più `-2, -3, -4` naming)
+3. **Session-closer.md** - Multi-Agent Append Protocol implementato
+4. **context.md** - Aggiunta sezione "Basilio Upgrade Status" per continuità sessioni
+
+### Pending
+- [ ] Verificare memory server funzionante dopo restart
+- [ ] Step 2: Enforcement hooks
+- [ ] Step 3: Feedback loop structure
+- [ ] Separare PickEat in Git repo dedicato
+
+### Files
+- `~/.claude.json` (mcpServers.memory aggiunto)
+- `.claude/commands/close.md` (APPEND pattern)
+- `agents/session-closer.md` (Multi-Agent Append)
+- `brain/context.md` (upgrade status)
+- `.gitignore` (added `.memory/`)
+
+### Commits
+- `18aa582` - Basilio upgrade: APPEND closing pattern, MCP memory setup
+- `a340b43` - Update context.md with Basilio upgrade status
+
+---
+
+**Session Status**: Completata
+**Prepared by**: Basilio
+**Next**: Restart → Test memory → Step 2-3
