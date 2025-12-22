@@ -1,6 +1,6 @@
 # PickEat Brain - Context File
 
-**Last Updated:** 22 Dicembre 2025
+**Last Updated:** 22 Dicembre 2025 (sera)
 **Purpose:** Stato corrente dell'azienda, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -66,8 +66,8 @@
 
 ### Welcome Posts
 - Asim → Dec 10 ✅ PUBBLICATO
-- Stephane → Pending risposte
-- Federico → Pending risposte
+- Stephane → [DRAFT] v5 ready, pending Matteo review (UEFA/FEI/ThinkSport authority)
+- Federico → [DRAFT] v2 ready, pending Matteo review (8.5+ roast score)
 
 ### Voice
 - **Alex Ferretti** - Copywriter persona
@@ -150,10 +150,10 @@ pickeat/
 6. **start.md** - Step 6 con conditional agent loading
 
 ### ⏳ Pending
+- [ ] **Memory debug**: Server connesso ma tools non esposti. Aggiunto `mcp__memory__*` a `.claude/settings.local.json`. Restart necessario.
 - [ ] **Step 2**: Enforcement hooks (prevenire "faking" agent calls)
 - [ ] **Step 3**: Feedback loop structure (`.feedback/` directory)
 - [ ] **Git repo**: Separare PickEat in repo dedicato (ora va su stratega.git)
-- [ ] **Test memory**: Verificare che MCP memory funzioni dopo restart
 
 ### 📁 File Modificati
 - `/Users/matteolombardi/.claude.json` → mcpServers.memory
