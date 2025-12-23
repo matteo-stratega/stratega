@@ -1,6 +1,6 @@
 # Stratega Brain - Context File
 
-**Last Updated:** 22 Dicembre 2025
+**Last Updated:** 23 Dicembre 2025
 **Purpose:** Stato corrente di Stratega, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -20,14 +20,18 @@
 - [ ] n8n: Decidere primo prodotto
 - [ ] Build in Public: Tool Friday prep
 
-### Lunedì 23 dic
-- [x] Test `/close` command (same cleanup done for PickEat) ✓ testato 21/12
-- [x] Off The Path: Fix Lovable sync (merged to main) ✓ 22/12
-- [x] Off The Path: Disable auth for partner testing ✓ 22/12
-- [ ] Duomo: Check allocazione budget Retargeting
+### Completati 23 Dic
+- [x] Duomo: Check allocazione budget Retargeting (Carousel 8.5%, aspettare 25-26)
+- [x] Duomo: MCP GA4 configurato (property 324232337)
+
+### Prossima Sessione
+- [ ] **Academy: Review uTeach** - Decidere se migrare o sistemare prima di campagne gennaio
+- [ ] **Academy: Trovare 6 prospect** - Per completare sfida 50 (serve source file scoring)
 - [ ] Inviare reclamo commercialista (MI GESTORÍA) → `notes/reclamo-migestoria-draft.md`
 - [ ] Proroga tarifa plana su IMPORTASS (deadline: 1 feb - 2 mar 2026)
 - [ ] Off The Path: Decisione Supabase (aspetta partner)
+- [ ] Duomo: Re-check Carousel Retargeting (25-26 Dic)
+- [ ] Duomo: Test GA4 dopo restart Claude
 
 ---
 
@@ -65,6 +69,9 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
+| 23/12 | Memory-First Infrastructure | Implementata per Stratega, separata da PickEat |
+| 23/12 | Academy: Liste pulite da VC | Rimossi 6 investor, non ICP-fit |
+| 23/12 | uTeach review pending | Decidere migrazione prima campagne |
 | 21/12 | Duomo: Carousel in Retargeting | Fix CPL €54 con 1 solo creative |
 | 19/12 | Slash commands /start /close | Workflow automation |
 | 16/12 | Academy focus su DM | Higher conversion than cold email |

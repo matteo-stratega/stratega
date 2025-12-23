@@ -24,9 +24,10 @@ Permessi: ads_read, ads_management, business_management
 
 ### Google Analytics 4
 ```
-Credentials: /.credentials/google-analytics-duomo.json
-Service Account: duomo-ga-reader@duomo-analytics.iam.gserviceaccount.com
-Property ID: [DA CONFIGURARE - in attesa accesso Editor]
+Property ID: 324232337
+MCP Server: google-analytics-duomo (aggiunto 23 Dic 2025)
+Service Account: claude@n8npe-474619.iam.gserviceaccount.com
+Status: ✅ Configurato - richiede restart Claude per attivare
 ```
 
 ---
@@ -47,15 +48,17 @@ Property ID: [DA CONFIGURARE - in attesa accesso Editor]
 | CPL medio | €17.15 | <€12 |
 | CPL best month | €10.45 | - |
 
-### Benchmark Ultimi 7 Giorni (9-15 Dic 2025)
+### Benchmark Ultimi 7 Giorni (16-22 Dic 2025)
 | Metrica | Valore |
 |---------|--------|
-| Spend | €174.52 |
-| Lead | 30 |
-| **CPL** | **€5.82** 🔥 |
-| Budget giornaliero | ~€25 |
+| Spend | €173.71 |
+| Lead (pixel) | 6 |
+| Comments | 7 |
+| **Lead stimati** | **~13** |
+| **CPL (solo pixel)** | €28.95 |
+| **CPL (con comments)** | **~€13.36** |
 
-**Note:** CPL record - miglior settimana mai registrata. Carousel Mono alto v2 a €1.10 CPL (10 leads).
+**Note (23 Dic):** Elettra è il top performer (5 leads + 5 comments = €6.69/interazione). Retargeting ancora debole (€76.81 per 1 lead + 1 comment). Carousel aggiunto il 21 Dic sta ricevendo solo 8.5% del budget Retargeting - troppo presto per valutare, aspettare 25-26 Dic.
 
 ### Stagionalità
 - **Q1:** Post-fiere, buon periodo
@@ -144,6 +147,18 @@ Da ricreare quando si attiva adset retargeting e si conferma delivery.
 2. **Livelli:** Account → Campaign → Adset → Ad
 3. **Breakdown:** Età, genere, placement, dispositivo, giorno/ora
 4. **Metriche chiave:** Spend, Leads, CPL, CTR, Frequency, Reach
+
+### ⚠️ Tracking Reale
+**I leads da Meta Pixel sono SOLO form submissions.** Molti leads arrivano via:
+- **Comments** sui post (gente chiede prezzo, rivenditore, info)
+- **DM** su Instagram
+- **Risposte Messenger** alle IE
+
+⚠️ **I comments da Meta API sono SOTTOSTIMATI.** I comments reali sono molti di più - l'API non cattura tutto.
+
+Quando analizzi CPL: `leads_pixel + comments = floor estimate`. Il CPL reale è probabilmente più basso.
+
+**GA4 CONFIGURATO** (23 Dic) - MCP `google-analytics-duomo` pronto, restart Claude per attivare.
 
 ### Red Flags da Monitorare
 - CPL > €15 (sopra target)
@@ -300,7 +315,7 @@ Per ogni Ad:
 
 ## Priorità Attuali
 
-### Completati (11-15 Dic 2025)
+### Completati (11-21 Dic 2025)
 - [x] Analisi completa YTD + trend mensili
 - [x] Identificare pattern stagionali
 - [x] Audit pixel Facebook
@@ -311,22 +326,23 @@ Per ogni Ad:
 - [x] **Pausa adset LAL 5-10%** (15 Dic) - 0 leads in 7 giorni
 - [x] **Attivato adset Retargeting** (15 Dic)
 - [x] **Creato ad Lera Baldacchino** (15 Dic) - nuovo test in Broad
+- [x] **Review performance 14-20 Dic** (21 Dic) - Retargeting CPL €54, problema = 1 solo creative
+- [x] **Aggiunto Carousel Mono alto v2 al Retargeting** (21 Dic) - ID: 120239909215550471
 
-### Prossimi Step (Pianificazione Rivista)
+### Prossimi Step
 
 **⚠️ REGOLA CBO:** Con budget €25/giorno, non attivare nuovi adset mentre altri sono in fase di learning. Aspettare 3-4 giorni tra modifiche significative.
 
 | Data | Azione | Condizione |
 |------|--------|------------|
-| 11 Dic | Riattivati Elettra, Dress, IE Gladys | ✅ Done |
-| 15 Dic | Pausa LAL 5-10%, Attiva Retargeting | ✅ Done |
-| 15 Dic | Nuovo ad Lera Baldacchino in Broad | ✅ Done |
-| 18-19 Dic | Review performance Retargeting + Lera Baldacchino | - |
-| 19-20 Dic | Creare LAL 1-5% da engagement | Se retargeting funziona |
-| 20-21 Dic | Attivare adset LAL 1-5% | Se retargeting stabile |
+| ~~23-24 Dic~~ | ~~Verificare se CBO alloca budget su Carousel in Retargeting~~ | ✓ Check 23/12: Carousel ha solo 8.5% budget (€6.55), troppo presto |
+| 25-26 Dic | Re-check Carousel Retargeting | Aspettare 4 giorni dal 21/12 |
+| 26-27 Dic | Decisione: tenere/pausare IE in Retargeting | Se Carousel > 0 leads |
+| 27-28 Dic | Creare LAL 1-5% da engagement | Se retargeting stabile |
 | Fine Dic | Annual Wrap-Up report | - |
 | Backlog | Nuova IE creative (Lera Soft) | Quando c'è spazio |
 | Backlog | Post Ground (17 Ott) | Prossimo test post |
+| Backlog | Post con CTA diretta per Retargeting | Se serve 3° creative |
 
 ### Best Practice Aggiunte (12-15 Dic)
 1. **Aspettare 3-4 giorni** dopo riattivazione/creazione ads prima di aggiungere nuovi adset
@@ -345,4 +361,4 @@ Per ogni Ad:
 ---
 
 *Agent creato: 10 Dicembre 2025*
-*Ultimo aggiornamento: 16 Dicembre 2025*
+*Ultimo aggiornamento: 23 Dicembre 2025*
