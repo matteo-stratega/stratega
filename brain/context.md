@@ -1,6 +1,6 @@
 # Stratega Brain - Context File
 
-**Last Updated:** 23 Dicembre 2025
+**Last Updated:** 29 Dicembre 2025
 **Purpose:** Stato corrente di Stratega, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -20,18 +20,27 @@
 - [ ] n8n: Decidere primo prodotto
 - [ ] Build in Public: Tool Friday prep
 
-### Completati 23 Dic
-- [x] Duomo: Check allocazione budget Retargeting (Carousel 8.5%, aspettare 25-26)
-- [x] Duomo: MCP GA4 configurato (property 324232337)
+### Completati 29 Dic
+- [x] **Git repo separato** - Stratega ora ha repo indipendente, HOME non più git
+- [x] Backup history in `~/Desktop/stratega-backup-20251229.bundle`
+- [x] Duomo: Google Slides MCP configurato
+- [x] Duomo: Annual Report contenuto e guida slides pronti
+- [x] CTO: Decisione Service Account per Google APIs
+- [x] Google Drive API abilitato su GCP
+- [x] Symlink credentials per Slides MCP (`/keys/`)
+- [x] Test creazione slides via API (risultato: non soddisfacente)
 
-### Prossima Sessione (24 Dic)
-- [ ] **URGENTE: Separare repo git** - Attualmente .git è in HOME, causa mixing PickEat/Stratega
+### Prossima Sessione (30 Dic)
+- [ ] **MANDATORY: Contabilità** - Fattura Toma
+- [ ] **MANDATORY: Report Duomo** - Annual report
+- [ ] **Duomo GA4**: Aspetta accesso viewer da cliente, poi configurare MCP locale
+- [ ] **MCP Cleanup**: Rimuovere MCP globali PickEat quando GA4 Duomo ready
+- [ ] **Duomo: Trovare alternativa per slides** - Google Slides API non adatta, esplorare Pitch API / altro tool
 - [ ] **Academy: Review uTeach** - Decidere se migrare o sistemare prima di campagne gennaio
 - [ ] **Academy: Trovare 6 prospect** - Per completare sfida 50 (serve source file scoring)
 - [ ] Inviare reclamo commercialista (MI GESTORÍA) → `notes/reclamo-migestoria-draft.md`
 - [ ] Proroga tarifa plana su IMPORTASS (deadline: 1 feb - 2 mar 2026)
 - [ ] Off The Path: Decisione Supabase (aspetta partner)
-- [ ] Duomo: Re-check Carousel Retargeting (25-26 Dic)
 
 ---
 
@@ -69,7 +78,10 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
-| 23/12 | Separare repo git (domani) | Scoperto .git in HOME, causa mixing progetti |
+| 29/12 | **Git repo separato** | Stratega indipendente, backup in bundle, HOME pulito |
+| 29/12 | MCP isolation per progetto | Ogni workspace ha i suoi MCP locali, evita conflitti (es. GA4) |
+| 29/12 | Google Slides API non adatta per report | Troppo low-level, perde formattazione, serve alternativa (Pitch API?) |
+| 29/12 | Google Slides MCP via Service Account | Stesso pattern GA4, no OAuth complexity |
 | 23/12 | /close multi-tab + /daily-wrap | Workflow robusto per sessioni multiple |
 | 23/12 | Memory-First Infrastructure | Implementata per Stratega, separata da PickEat |
 | 23/12 | Academy: Liste pulite da VC | Rimossi 6 investor, non ICP-fit |
