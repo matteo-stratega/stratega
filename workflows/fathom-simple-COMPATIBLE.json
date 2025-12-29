@@ -1,0 +1,178 @@
+{
+  "name": "Fathom → Notion + Slack (Compatible)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fathom-webhook",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-001",
+      "name": "Fathom Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "fathom-meeting"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "transcript",
+              "value": "={{ $json.body.transcript || $json.transcript || 'No transcript' }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "title",
+              "value": "={{ $json.body.title || $json.title || 'Meeting' }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "date",
+              "value": "={{ $json.body.date || $json.date || $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-001",
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "p1",
+              "name": "prompt",
+              "value": "Clean this transcript and generate a meeting summary with action items in JSON format:\n\n{{ $json.transcript }}\n\nOutput:\n{\n  \"summary\": \"2-3 sentence summary\",\n  \"key_points\": [\"point 1\", \"point 2\"],\n  \"action_items\": [{\"task\": \"task\", \"owner\": \"owner\"}]\n}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prompt-001",
+      "name": "Build Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-haiku-20241022",
+        "options": {}
+      },
+      "id": "claude-001",
+      "name": "Claude Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.9,
+      "position": [900, 480],
+      "credentials": {
+        "anthropicApi": {
+          "id": "anthropic-credential",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Build Prompt').item.json.prompt }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "id": "agent-001",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.output || '';\nconst cleaned = text.replace(/```json\\s*/g, '').replace(/```\\s*/g, '').trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch(e) {\n  parsed = { summary: 'Error parsing', key_points: [], action_items: [] };\n}\nreturn [{ json: { ...parsed, raw: cleaned } }];"
+      },
+      "id": "cleanup-001",
+      "name": "Parse JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "notion_title",
+              "value": "={{ $('Extract Data').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "notion_content",
+              "value": "=# {{ $('Extract Data').item.json.title }}\n\n**Date:** {{ $('Extract Data').item.json.date }}\n\n## Summary\n{{ $json.summary }}\n\n## Key Points\n{{ $json.key_points.map((p, i) => `${i+1}. ${p}`).join('\\n') }}\n\n## Action Items\n{{ $json.action_items.map(a => `- **${a.task}** (${a.owner})`).join('\\n') }}",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "slack_message",
+              "value": "=📝 *{{ $('Extract Data').item.json.title }}*\n\n{{ $json.summary }}\n\n*Actions:* {{ $json.action_items.length }} items",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-001",
+      "name": "Format Outputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Fathom Webhook\n\nPOST webhook endpoint.\n\nConfigure in Fathom:\nSettings → Webhooks → Add this URL\n\nPayload:\n{\n  \"title\": \"Meeting title\",\n  \"date\": \"2025-11-26\",\n  \"transcript\": \"Full transcript...\"\n}",
+        "height": 280,
+        "width": 340
+      },
+      "id": "note-001",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [180, 100]
+    }
+  ],
+  "connections": {
+    "Fathom Webhook": {
+      "main": [[{"node": "Extract Data", "type": "main", "index": 0}]]
+    },
+    "Extract Data": {
+      "main": [[{"node": "Build Prompt", "type": "main", "index": 0}]]
+    },
+    "Build Prompt": {
+      "main": [[{"node": "AI Agent", "type": "main", "index": 0}]]
+    },
+    "Claude Model": {
+      "ai_languageModel": [[{"node": "AI Agent", "type": "ai_languageModel", "index": 0}]]
+    },
+    "AI Agent": {
+      "main": [[{"node": "Parse JSON", "type": "main", "index": 0}]]
+    },
+    "Parse JSON": {
+      "main": [[{"node": "Format Outputs", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

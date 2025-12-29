@@ -1,0 +1,595 @@
+1
+00:00:00,550 --> 00:00:04,150
+All right here it comes
+
+2
+00:00:04,150 --> 00:00:08,300
+my other favorite section that is tools
+
+3
+00:00:08,300 --> 00:00:12,140
+you know I own something
+
+4
+00:00:12,140 --> 00:00:16,980
+like 50/60 lifetime licenses
+
+5
+00:00:16,980 --> 00:00:20,520
+and I partner with a lot of these guys
+
+6
+00:00:20,520 --> 00:00:24,230
+back in the days when I was running the agency so
+
+7
+00:00:24,230 --> 00:00:28,020
+I've seen it all I tested them all for just for
+
+8
+00:00:28,020 --> 00:00:32,280
+fun at the beginning then it became the job and
+
+9
+00:00:32,280 --> 00:00:36,470
+I built infrastructures that go from like
+
+10
+00:00:36,470 --> 00:00:40,400
+just a bunch of emails a day to
+
+11
+00:00:40,400 --> 00:00:44,190
+managing 20 to 30 thousand
+
+12
+00:00:44,190 --> 00:00:48,230
+lits a month so I will help
+
+13
+00:00:48,230 --> 00:00:51,840
+you with the framework and you will
+
+14
+00:00:51,840 --> 00:00:55,450
+see that attached there is the
+
+15
+00:00:55,450 --> 00:00:59,230
+guide that I wrote for for another startup
+
+16
+00:00:59,230 --> 00:01:02,840
+about tools so you can download that and find
+
+17
+00:01:02,840 --> 00:01:06,820
+them yeah an additional more in-depth guide about
+
+18
+00:01:06,820 --> 00:01:10,750
+what we are seeing today so let's go
+
+19
+00:01:10,750 --> 00:01:14,340
+with the mistakes so the mistakes is basically
+
+20
+00:01:14,340 --> 00:01:17,960
+you're feeding your in your kid when it comes to tools at
+
+21
+00:01:17,960 --> 00:01:22,170
+least that's what happens with me flashing lights
+
+22
+00:01:22,170 --> 00:01:25,720
+we chase features because we get promised that
+
+23
+00:01:25,720 --> 00:01:29,360
+there is this database that works particularly well
+
+24
+00:01:29,360 --> 00:01:32,880
+but guys sales and software are two different things
+
+25
+00:01:32,880 --> 00:01:37,320
+you can do just fine and well enough
+
+26
+00:01:37,320 --> 00:01:41,520
+in the early days with the CRM and a
+
+27
+00:01:41,520 --> 00:01:45,100
+structured sales playbook and perhaps I'll tell
+
+28
+00:01:45,100 --> 00:01:48,880
+you later on what the sales playbook is or
+
+29
+00:01:48,880 --> 00:01:52,400
+if you are at the point where
+
+30
+00:01:52,400 --> 00:01:56,610
+you need to scale you must consider
+
+31
+00:01:56,610 --> 00:02:00,710
+quite about quite a few things so let's
+
+32
+00:02:00,710 --> 00:02:04,890
+move on and see as I was mentioning
+
+33
+00:02:04,890 --> 00:02:08,840
+you have a good market so when you're validating you're validating
+
+34
+00:02:08,840 --> 00:02:12,660
+you don't need much but when you're scaling you need
+
+35
+00:02:12,660 --> 00:02:16,290
+to think how can I scale how many lits
+
+36
+00:02:16,290 --> 00:02:20,040
+do I need so I need basically and we'll see that
+
+37
+00:02:20,040 --> 00:02:23,940
+in the last chapter how to reverse engineer
+
+38
+00:02:23,940 --> 00:02:27,800
+that so we will think it this way we'll
+
+39
+00:02:27,800 --> 00:02:32,070
+think I will convert 5-10%
+
+40
+00:02:32,070 --> 00:02:36,350
+of user coming down to demo
+
+41
+00:02:36,350 --> 00:02:40,330
+I need a scalable system that books me 10%
+
+42
+00:02:40,330 --> 00:02:43,890
+of the meeting the emails that I send
+
+43
+00:02:43,890 --> 00:02:47,410
+out how many prospects do I need and
+
+44
+00:02:47,410 --> 00:02:50,990
+within this which channels
+
+45
+00:02:50,990 --> 00:02:54,620
+do I use do I need to integrate with the CRM how
+
+46
+00:02:54,620 --> 00:02:58,280
+use how easy is that okay so
+
+47
+00:02:58,280 --> 00:03:01,880
+and all the other things so we go
+
+48
+00:03:01,880 --> 00:03:05,630
+into the tool evaluation phase now there
+
+49
+00:03:05,630 --> 00:03:09,450
+are kind of three main set of tools that
+
+50
+00:03:09,450 --> 00:03:13,240
+I would like to talk to you about the first
+
+51
+00:03:13,240 --> 00:03:16,940
+and the easiest one for you especially in the early
+
+52
+00:03:16,940 --> 00:03:20,840
+begin and early phase is an all-around tool
+
+53
+00:03:20,840 --> 00:03:24,380
+like for instance one of the
+
+54
+00:03:24,380 --> 00:03:28,220
+most famous is Apollo obviously you you
+
+55
+00:03:28,220 --> 00:03:31,820
+have a tool that is a database but also you can send
+
+56
+00:03:31,820 --> 00:03:35,570
+a bunch of emails and you can do a bunch of outreach actions
+
+57
+00:03:35,570 --> 00:03:39,460
+then you have LinkedIn only tools
+
+58
+00:03:39,460 --> 00:03:43,100
+you have email only tools phone only tools
+
+59
+00:03:43,100 --> 00:03:47,000
+and multi-channel tools that don't have a database
+
+60
+00:03:47,000 --> 00:03:50,960
+so perhaps you on in these tools you can
+
+61
+00:03:50,960 --> 00:03:55,280
+build the side of actions so that go from LinkedIn
+
+62
+00:03:55,280 --> 00:03:58,940
+to to email but you need to feed in
+
+63
+00:03:58,940 --> 00:04:02,790
+your database within that then you
+
+64
+00:04:02,790 --> 00:04:06,340
+have databases okay so
+
+65
+00:04:06,340 --> 00:04:10,260
+databases you can either
+
+66
+00:04:10,260 --> 00:04:14,160
+find them online so for instance
+
+67
+00:04:14,160 --> 00:04:18,230
+you're selling to hotels you can find hotels databases
+
+68
+00:04:18,230 --> 00:04:22,010
+online or you can scrape them okay so you can scrape
+
+69
+00:04:22,010 --> 00:04:25,540
+data in many ways you remember we're talking communities we
+
+70
+00:04:25,540 --> 00:04:29,240
+were talking in the impose there are actually tools that
+
+71
+00:04:29,240 --> 00:04:32,840
+will allow you to scrape certain posts on
+
+72
+00:04:32,840 --> 00:04:36,810
+LinkedIn or other social medias and do outreach
+
+73
+00:04:36,810 --> 00:04:40,600
+on these exact people so you can be specifically on point
+
+74
+00:04:40,600 --> 00:04:44,320
+because they fit your ICP within
+
+75
+00:04:44,320 --> 00:04:48,620
+that case you will need an
+
+76
+00:04:48,620 --> 00:04:52,230
+enrichment tool that kind of helps you out
+
+77
+00:04:52,230 --> 00:04:56,110
+filtering what data is good what data is not good so if
+
+78
+00:04:56,110 --> 00:04:59,970
+person from the company and they will
+
+79
+00:04:59,970 --> 00:05:03,840
+also give you the email address and other
+
+80
+00:05:03,840 --> 00:05:07,760
+couple data that then you can plug in
+
+81
+00:05:07,760 --> 00:05:11,300
+into your multi-channel tool
+
+82
+00:05:11,300 --> 00:05:14,840
+okay so these are the the three types ultimately you're
+
+83
+00:05:14,840 --> 00:05:18,630
+gonna need an outreach tool and you're gonna need some sort
+
+84
+00:05:18,630 --> 00:05:22,440
+of database if you're not going for an all-around solution but again
+
+85
+00:05:22,440 --> 00:05:27,810
+it depends on the go-to-market and the channels
+
+86
+00:05:27,810 --> 00:05:32,010
+so I prepared a few
+
+87
+00:05:32,010 --> 00:05:36,100
+example so let's say that you are a small
+
+88
+00:05:36,100 --> 00:05:39,990
+task selling as this small
+
+89
+00:05:39,990 --> 00:05:43,500
+task to load to your clients you need to
+
+90
+00:05:43,500 --> 00:05:47,280
+came on to the leads you're going email only you use app
+
+91
+00:05:47,280 --> 00:05:51,120
+spot so you need integration if you can manage
+
+92
+00:05:51,120 --> 00:05:54,830
+everything from there it's bonus point easy of
+
+93
+00:05:54,830 --> 00:05:58,380
+you so then I can hire junior staff for it
+
+94
+00:05:58,380 --> 00:06:01,910
+to be managed or a
+
+95
+00:06:01,910 --> 00:06:05,440
+VA virtual assistant and I
+
+96
+00:06:05,440 --> 00:06:09,370
+needed to be rolling out constant solutions
+
+97
+00:06:09,370 --> 00:06:13,080
+and I want to personalize the messages so
+
+98
+00:06:13,080 --> 00:06:16,600
+this is the features that I need so
+
+99
+00:06:16,600 --> 00:06:20,150
+listed from the variables and
+
+100
+00:06:20,150 --> 00:06:23,950
+so if also there is a benefit
+
+101
+00:06:23,950 --> 00:06:28,030
+to buying domains and buying email addresses directly
+
+102
+00:06:28,030 --> 00:06:31,790
+from them that that is a huge bonus point so I'm
+
+103
+00:06:31,790 --> 00:06:35,510
+going to be looking to be looking on the market
+
+104
+00:06:35,510 --> 00:06:39,820
+for something that fits these
+
+105
+00:06:39,820 --> 00:06:43,550
+exact needs okay instead
+
+106
+00:06:43,550 --> 00:06:47,700
+if I'm selling b2b SAS with high average
+
+107
+00:06:47,700 --> 00:06:51,970
+value of the leads and I need much lower
+
+108
+00:06:51,970 --> 00:06:55,750
+level but I need ease of use I need some kind
+
+109
+00:06:55,750 --> 00:07:00,160
+of BDR and prospecting that is a little bit more
+
+110
+00:07:00,160 --> 00:07:03,700
+on point with leads included I will go
+
+111
+00:07:03,700 --> 00:07:07,280
+for another round to that can enhance productivity
+
+112
+00:07:07,280 --> 00:07:12,480
+can go multi-channel can be integrated can have reporting
+
+113
+00:07:12,480 --> 00:07:16,030
+and yeah this is basically it
+
+114
+00:07:16,030 --> 00:07:19,720
+now there is a cheat sheet here
+
+115
+00:07:19,720 --> 00:07:23,710
+so there are a bunch of tools
+
+116
+00:07:23,710 --> 00:07:27,220
+that I already partnered with so for
+
+117
+00:07:27,220 --> 00:07:31,170
+around we have a polo chrono lamb list I'm giving
+
+118
+00:07:31,170 --> 00:07:34,950
+you a couple of automation tools that
+
+119
+00:07:34,950 --> 00:07:38,670
+are a little bit easier or a little bit
+
+120
+00:07:38,670 --> 00:07:42,200
+harder to learn it really depends on your high CP
+
+121
+00:07:42,200 --> 00:07:45,820
+and how on point you want to be and
+
+122
+00:07:45,820 --> 00:07:49,380
+yeah the stage of the the startup at
+
+123
+00:07:49,380 --> 00:07:53,100
+the beginning I usually recommend doing
+
+124
+00:07:53,100 --> 00:07:57,200
+structured work so even with the
+
+125
+00:07:57,200 --> 00:08:00,820
+with the support of the SAS but really do things manually so you
+
+126
+00:08:00,820 --> 00:08:04,480
+can learn all along the way the more you learn the
+
+127
+00:08:04,480 --> 00:08:08,030
+more you'll find a tool that really fits you to a
+
+128
+00:08:08,030 --> 00:08:11,800
+glove and and
+
+129
+00:08:11,800 --> 00:08:15,470
+yeah if you have questions about these tools let me know but also
+
+130
+00:08:15,470 --> 00:08:19,000
+again I'll be sharing my guide
+
+131
+00:08:19,000 --> 00:08:22,680
+so the key takeaways for this are
+
+132
+00:08:22,680 --> 00:08:26,810
+go to market rules so numbers will see the
+
+133
+00:08:26,810 --> 00:08:31,360
+next lesson the absolutely 100% rule
+
+134
+00:08:31,360 --> 00:08:34,920
+and scalable so we need to think limits of course
+
+135
+00:08:34,920 --> 00:08:38,720
+if we are handling cold calling we need x
+
+136
+00:08:38,720 --> 00:08:42,490
+amount of people same for LinkedIn profile so same
+
+137
+00:08:42,490 --> 00:08:46,580
+for email which you will need eventually domains
+
+138
+00:08:46,580 --> 00:08:50,520
+and x amount of email per domains and yeah so
+
+139
+00:08:50,520 --> 00:08:54,240
+you need to think about this when you're picking
+
+140
+00:08:54,240 --> 00:08:57,980
+up a tool and of course it has to be effective I don't
+
+141
+00:08:57,980 --> 00:09:01,600
+know again it depends on the stage you here so if
+
+142
+00:09:01,600 --> 00:09:05,310
+you really have a CRM or if you're really setting up an autonomy
+
+143
+00:09:05,310 --> 00:09:08,920
+automations we tools like make albato and then
+
+144
+00:09:08,920 --> 00:09:12,770
+and such so of course you need some kind
+
+145
+00:09:12,770 --> 00:09:17,600
+of flexibility from the perspective
+
+146
+00:09:17,600 --> 00:09:21,260
+okay so next up we will see we
+
+147
+00:09:21,260 --> 00:09:25,080
+will see the operational side
+
+148
+00:09:25,080 --> 00:09:28,910
+of it so track APIs and all the kind of stuff
+
+149
+00:09:28,910 --> 00:09:34,440
+and so yeah see you next

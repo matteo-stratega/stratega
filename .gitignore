@@ -1,0 +1,68 @@
+# System Files
+.DS_Store
+.env
+*.log
+
+# Data Files (large CSVs, exports)
+data/
+*.csv
+*.xlsx
+*.zip
+
+# Media files - NOT for git
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.heic
+*.tiff
+*.bmp
+*.mp4
+*.mov
+*.psd
+*.pptx
+*.gsheet
+
+# Folders to exclude entirely
+archive/
+assets/
+side-projects/
+stratega/
+Users/
+**/Photos/
+**/Photos-compressed/
+**/Catalogues/
+**/Catalogues-compressed/
+**/database/
+
+# Local config
+.obsidian/
+.claude/
+.credentials/
+vault/
+
+# Temp Files
+temp/
+tmp/
+*.tmp
+
+# Credentials
+credentials.json
+*_credentials.json
+token.json
+
+# Node modules (if any)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# n8n local data
+n8n/data/
+
+# Editor
+.vscode/
+.idea/

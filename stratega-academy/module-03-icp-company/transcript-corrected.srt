@@ -1,0 +1,431 @@
+1
+00:00:01,020 --> 00:00:04,540
+Alright guys, welcome to module 2,
+
+2
+00:00:04,540 --> 00:00:08,100
+ICP. I'll split this into two parts: You're going
+
+3
+00:00:08,100 --> 00:00:11,630
+to see the company side of it and the people side of
+
+4
+00:00:11,630 --> 00:00:15,400
+it in module 3. I don't want to deep dive because
+
+5
+00:00:15,400 --> 00:00:19,000
+it's really important. Because I see most people
+
+6
+00:00:19,000 --> 00:00:23,000
+selling to everyone, and it doesn't matter.
+
+7
+00:00:23,270 --> 00:00:27,300
+They try to sell them the thing, but oh yeah, I selected
+
+8
+00:00:27,300 --> 00:00:30,930
+software development companies, 51 to
+
+9
+00:00:30,930 --> 00:00:35,000
+200, and I sent them my best offer, but I didn't get a response.
+
+10
+00:00:35,000 --> 00:00:39,000
+Guys, you need to be relevant today.
+
+11
+00:00:39,000 --> 00:00:43,000
+We're bombarded constantly with ads. We are bombarded constantly with everything,
+
+12
+00:00:43,000 --> 00:00:46,710
+and sales is another channel that is also annoying.
+
+13
+00:00:46,710 --> 00:00:50,230
+Unless you decide to
+
+14
+00:00:50,230 --> 00:00:55,250
+make things a little bit different,
+
+15
+00:00:55,250 --> 00:00:59,000
+you're not going to cut through the noise. It's impossible.
+
+16
+00:00:59,000 --> 00:01:02,690
+We need to take all this and we need to do it
+
+17
+00:01:02,690 --> 00:01:06,390
+now because this happens both to pre-seed startups but also to people
+
+18
+00:01:06,390 --> 00:01:10,000
+that already have a sales process that is probably working
+
+19
+00:01:10,000 --> 00:01:14,050
+better than the one that the course is proposing. But sometimes
+
+20
+00:01:14,050 --> 00:01:17,610
+the campaigns go up and down, so you need to refresh
+
+21
+00:01:17,610 --> 00:01:21,300
+your point of view or you need to find something different. We'll
+
+22
+00:01:21,300 --> 00:01:25,000
+see how to find something different here from the company perspective.
+
+23
+00:01:25,000 --> 00:01:28,530
+We're going to use three frameworks: The first is demographics, the second is triggers, and the third is tiering. With
+
+24
+00:01:28,530 --> 00:01:32,270
+the first one, we're going to see all the company data that we
+
+25
+00:01:32,270 --> 00:01:35,950
+need. The triggers are going to identify something that can help us be more
+
+26
+00:01:35,950 --> 00:01:39,600
+relevant, and with the third one, we will avoid driving
+
+27
+00:01:39,600 --> 00:01:43,660
+ourselves crazy because it's taking too long
+
+28
+00:01:43,660 --> 00:01:47,340
+to sell just one single thing. We'll see the concept
+
+29
+00:01:47,340 --> 00:01:51,210
+of tiering. Now, before we even begin with
+
+30
+00:01:51,210 --> 00:01:54,980
+the first framework, remember you're never
+
+31
+00:01:54,980 --> 00:01:58,850
+selling to one single person. You're going to have a champion,
+
+32
+00:01:58,850 --> 00:02:02,730
+that is the person that is going to push you. You're going to have the
+
+33
+00:02:02,730 --> 00:02:06,310
+decision maker that will sign the agreement. It could be the
+
+34
+00:02:06,310 --> 00:02:10,050
+same as the champion. But you might also have an influencer, somebody
+
+35
+00:02:10,050 --> 00:02:13,610
+that you can also get in touch with. You might have a person
+
+36
+00:02:13,610 --> 00:02:17,630
+that is reluctant to do anything. So you need to
+
+37
+00:02:17,630 --> 00:02:21,360
+tackle that when you sell. And you have
+
+38
+00:02:21,360 --> 00:02:24,940
+a gatekeeper, so somebody that might actually open the door for
+
+39
+00:02:24,940 --> 00:02:28,760
+you. It's really important that you understand this
+
+40
+00:02:28,760 --> 00:02:32,290
+because we have to convey this in personalized messaging and content later
+
+41
+00:02:32,290 --> 00:02:35,990
+on. Now, without further ado, demographics. What
+
+42
+00:02:35,990 --> 00:02:39,610
+I want to see is something like this.
+
+43
+00:02:39,610 --> 00:02:43,440
+I want to have enough detailed
+
+44
+00:02:43,440 --> 00:02:47,000
+data but not too granular.
+
+45
+00:02:47,000 --> 00:02:51,270
+Meaning that I'm going in, say, as
+
+46
+00:02:51,270 --> 00:02:55,000
+a user of Apollo, and I'm trying to
+
+47
+00:02:55,000 --> 00:02:59,590
+find startups, up to five million, with the
+
+48
+00:02:59,590 --> 00:03:02,130
+company headcount. And I try to narrow it down
+
+49
+00:03:02,130 --> 00:03:05,650
+when I have a batch of two to five thousand.
+
+50
+00:03:05,650 --> 00:03:09,640
+So then I can make the campaign scalable. But if
+
+51
+00:03:09,640 --> 00:03:14,000
+I go below two thousand, that
+
+52
+00:03:14,000 --> 00:03:17,630
+might be too small. So I might go up. So this is
+
+53
+00:03:17,630 --> 00:03:21,360
+a flexible scheme, so you can add things
+
+54
+00:03:21,360 --> 00:03:24,990
+or you can remove things. But roughly five thousand,
+
+55
+00:03:24,990 --> 00:03:29,000
+thirty-five thousand, it's a good range for scaling
+
+56
+00:03:29,000 --> 00:03:33,400
+campaigns. So that is really important
+
+57
+00:03:33,400 --> 00:03:37,040
+for you to get right. Then triggers. We might find
+
+58
+00:03:37,040 --> 00:03:41,600
+out that there are some triggers, some updates that are
+
+59
+00:03:41,600 --> 00:03:45,300
+really good. So some of them could be just
+
+60
+00:03:45,300 --> 00:03:52,400
+related to the timeline that they have, or about
+
+61
+00:03:52,400 --> 00:04:00,340
+social media updates that they publish.
+
+62
+00:04:00,340 --> 00:04:04,000
+So if they are preparing an event, I can get in touch because
+
+63
+00:04:04,000 --> 00:04:08,000
+I can send my software for the event. So if I'm
+
+64
+00:04:08,000 --> 00:04:11,770
+going to a conference, that's another
+
+65
+00:04:11,770 --> 00:04:15,360
+way of doing outbound based on triggers.
+
+66
+00:04:15,360 --> 00:04:19,000
+So you cannot just manage triggers there, and they will look like this.
+
+67
+00:04:19,000 --> 00:04:23,000
+So if there is any useful update: they are
+
+68
+00:04:23,000 --> 00:04:26,700
+hiring a new sales member, or they are
+
+69
+00:04:26,700 --> 00:04:30,320
+closing more clients. Or if you don't see
+
+70
+00:04:30,320 --> 00:04:33,910
+that they are closing clients, there could be some kind of trigger.
+
+71
+00:04:33,910 --> 00:04:38,000
+So please identify them and make good use of them.
+
+72
+00:04:38,000 --> 00:04:42,000
+Whether you are in the first sales phase or whether you're in
+
+73
+00:04:42,000 --> 00:04:45,590
+the most advanced level where you're doing more
+
+74
+00:04:45,590 --> 00:04:49,480
+BDR kind of job. This is going to be really
+
+75
+00:04:49,480 --> 00:04:53,240
+helpful for you. Then tiering.
+
+76
+00:04:53,240 --> 00:04:57,000
+Without going crazy, you can't sell to anybody
+
+77
+00:04:57,000 --> 00:05:00,660
+at the same time or with the same timeline. You
+
+78
+00:05:00,660 --> 00:05:04,250
+always want to go for deals, but unless you know how
+
+79
+00:05:04,250 --> 00:05:07,890
+to sell them, unless you know the pain points of the
+
+80
+00:05:07,890 --> 00:05:11,400
+blockers in the buying committee, because they might block you there,
+
+81
+00:05:11,400 --> 00:05:15,000
+you're going to waste a lot of time in a sales cycle.
+
+82
+00:05:15,000 --> 00:05:19,000
+So what we have to do is we have to keep in mind that
+
+83
+00:05:19,000 --> 00:05:22,860
+there are some deals that will be fast, and some will
+
+84
+00:05:22,860 --> 00:05:26,520
+be medium. Some deals will be long. So we need to build the outbound
+
+85
+00:05:26,520 --> 00:05:30,340
+campaigns within this ratio and within your company's
+
+86
+00:05:30,340 --> 00:05:34,480
+goals, so we can avoid losing our minds
+
+87
+00:05:34,480 --> 00:05:38,000
+and manage the sales pipeline and the
+
+88
+00:05:38,000 --> 00:05:41,920
+campaigns properly. For us,
+
+89
+00:05:41,920 --> 00:05:45,700
+like for example, it would be a pre-seed startup that
+
+90
+00:05:45,700 --> 00:05:49,320
+would be the easy sale, but a seed startup might take long because they have
+
+91
+00:05:49,320 --> 00:05:53,090
+more people, longer adoption, more proof needed, better social
+
+92
+00:05:53,090 --> 00:05:56,880
+proof, and the deals that I know will take three months. I will
+
+93
+00:05:56,880 --> 00:06:00,720
+decide when to reach out, and I can move
+
+94
+00:06:00,720 --> 00:06:04,340
+on with that. Now the key takeaways are the ones
+
+95
+00:06:04,340 --> 00:06:08,070
+in my voice. Target structure, okay.
+
+96
+00:06:08,070 --> 00:06:12,000
+Segmentation leads to scalability because when we find out
+
+97
+00:06:12,000 --> 00:06:15,550
+what works for that specific segment, we can then scale
+
+98
+00:06:15,550 --> 00:06:19,060
+the campaigns. Entry points will help you cut through
+
+99
+00:06:19,060 --> 00:06:23,160
+the noise. So really key, and we'll see later on also
+
+100
+00:06:23,160 --> 00:06:27,160
+with the personal standpoint how to do it with communities
+
+101
+00:06:27,160 --> 00:06:31,420
+and other channels, and target priorities.
+
+102
+00:06:31,420 --> 00:06:35,000
+So you can balance it out, so you can start reaching out to deals while
+
+103
+00:06:35,000 --> 00:06:38,700
+you try to close fast deals with, postpone the intermediate because
+
+104
+00:06:38,700 --> 00:06:42,460
+it also depends on the tools and the amount
+
+105
+00:06:42,460 --> 00:06:46,130
+of time you have for this. But we'll see also
+
+106
+00:06:46,130 --> 00:06:49,770
+that later on. If you have any questions, shout out. Otherwise,
+
+107
+00:06:49,770 --> 00:06:53,280
+I'll see you in a minute or two. It's now your turn.
+
+108
+00:06:53,280 --> 00:07:07,000
+[BLANK_AUDIO]

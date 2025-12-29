@@ -1,0 +1,551 @@
+{
+  "name": "Fathom Meeting Notes → Notion + Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fathom-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger-001",
+      "name": "Webhook - Fathom",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "fathom-meeting-processor",
+      "notes": "Receives POST webhook from Fathom when meeting recording is completed. Configure this URL in Fathom settings."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "extract-transcript",
+              "name": "transcript",
+              "value": "={{ $json.body.transcript || $json.transcript || 'No transcript available' }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-title",
+              "name": "meeting_title",
+              "value": "={{ $json.body.title || $json.title || 'Untitled Meeting' }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-date",
+              "name": "meeting_date",
+              "value": "={{ $json.body.date || $json.date || $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-duration",
+              "name": "meeting_duration",
+              "value": "={{ $json.body.duration || $json.duration || 'Unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-participants",
+              "name": "participants",
+              "value": "={{ $json.body.participants || $json.participants || [] }}",
+              "type": "array"
+            },
+            {
+              "id": "extract-recording-url",
+              "name": "recording_url",
+              "value": "={{ $json.body.recording_url || $json.recording_url || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "extract-fathom-id",
+              "name": "fathom_id",
+              "value": "={{ $json.body.id || $json.id || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-metadata-001",
+      "name": "Extract Metadata",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        300
+      ],
+      "notes": "Extracts transcript and meeting metadata from Fathom webhook payload. Handles different payload structures gracefully."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "build-prompt",
+              "name": "cleanup_prompt",
+              "value": "=You are an expert transcript processor. Your task is to clean and structure a meeting transcript.\n\n**INPUT:**\n{{ $json.transcript }}\n\n**TASK:**\nClean up the transcript by:\n1. Removing filler words (um, uh, like, you know)\n2. Fixing obvious transcription errors\n3. Formatting speaker labels consistently\n4. Breaking into logical paragraphs\n5. Preserving all important content and context\n\n**OUTPUT FORMAT:**\nReturn the cleaned transcript as plain text, formatted in clear paragraphs with speaker labels.\n\nDo NOT add commentary. Just output the cleaned transcript.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "build-cleanup-prompt",
+      "name": "Build Cleanup Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        300
+      ],
+      "notes": "Constructs the prompt for Claude to clean and structure the raw transcript."
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-haiku-20241022",
+        "options": {
+          "maxTokens": 4096,
+          "temperature": 0.3
+        }
+      },
+      "id": "claude-cleanup-model",
+      "name": "Claude Haiku - Cleanup",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.9,
+      "position": [
+        900,
+        480
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "anthropic-api-credential",
+          "name": "Anthropic API"
+        }
+      },
+      "notes": "Claude 3.5 Haiku model for transcript cleaning. Temperature 0.3 for consistency."
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "={{ $('Build Cleanup Prompt').item.json.cleanup_prompt }}"
+        }
+      },
+      "id": "cleanup-agent",
+      "name": "Cleanup Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        900,
+        300
+      ],
+      "notes": "AI Agent that executes the transcript cleanup using Claude Haiku."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "build-report-prompt",
+              "name": "report_prompt",
+              "value": "=You are an executive meeting analyst. Generate a comprehensive meeting report from the cleaned transcript.\n\n**MEETING METADATA:**\n- Title: {{ $('Extract Metadata').item.json.meeting_title }}\n- Date: {{ $('Extract Metadata').item.json.meeting_date }}\n- Duration: {{ $('Extract Metadata').item.json.meeting_duration }}\n- Participants: {{ $('Extract Metadata').item.json.participants.join(', ') }}\n\n**CLEANED TRANSCRIPT:**\n{{ $('Cleanup Agent').item.json.output }}\n\n**TASK:**\nGenerate a structured meeting report in JSON format.\n\n**OUTPUT FORMAT:**\nYou MUST respond with ONLY valid JSON in this exact structure (no markdown wrappers):\n\n```json\n{\n  \"executive_summary\": \"2-3 sentence high-level summary of the meeting\",\n  \"key_discussion_points\": [\n    \"Discussion point 1 with context\",\n    \"Discussion point 2 with context\",\n    \"Discussion point 3 with context\"\n  ],\n  \"action_items\": [\n    {\n      \"task\": \"Specific action to be taken\",\n      \"owner\": \"Person responsible (or 'Unassigned' if not mentioned)\",\n      \"deadline\": \"Due date if mentioned (or 'TBD')\"\n    }\n  ],\n  \"decisions_made\": [\n    \"Decision 1 with context and rationale\",\n    \"Decision 2 with context and rationale\"\n  ],\n  \"next_steps\": [\n    \"Next step 1\",\n    \"Next step 2\"\n  ],\n  \"key_quotes\": [\n    \"Notable quote 1 with speaker attribution\",\n    \"Notable quote 2 with speaker attribution\"\n  ],\n  \"topics_for_follow_up\": [\n    \"Topic 1 that needs further discussion\",\n    \"Topic 2 that needs further discussion\"\n  ]\n}\n```\n\n**RULES:**\n- Output ONLY the JSON object\n- No markdown code fences (```json)\n- No additional commentary\n- Include only content actually discussed in the meeting\n- If a section has no relevant content, use an empty array []\n- Be concise but comprehensive",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "build-report-prompt",
+      "name": "Build Report Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        300
+      ],
+      "notes": "Constructs the prompt for Claude to generate the structured meeting report."
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-haiku-20241022",
+        "options": {
+          "maxTokens": 8192,
+          "temperature": 0.3
+        }
+      },
+      "id": "claude-report-model",
+      "name": "Claude Haiku - Report",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.9,
+      "position": [
+        1340,
+        480
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "anthropic-api-credential",
+          "name": "Anthropic API"
+        }
+      },
+      "notes": "Claude 3.5 Haiku model for report generation. Higher token limit for comprehensive reports."
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "={{ $('Build Report Prompt').item.json.report_prompt }}"
+        }
+      },
+      "id": "report-agent",
+      "name": "Report Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1340,
+        300
+      ],
+      "notes": "AI Agent that generates the structured meeting report using Claude Haiku."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Clean markdown JSON wrappers from LLM output\nconst items = $input.all();\n\nreturn items.map(item => {\n  let text = item.json.output || item.json.text || '';\n\n  // Remove markdown code blocks\n  text = text.replace(/```json\\s*/g, '');\n  text = text.replace(/```\\s*$/g, '');\n  text = text.replace(/```\\s*/g, '');\n  text = text.trim();\n\n  // Parse JSON to validate and clean\n  let parsedReport;\n  try {\n    parsedReport = JSON.parse(text);\n  } catch (e) {\n    // If parsing fails, return error structure\n    parsedReport = {\n      executive_summary: \"Error parsing report: \" + e.message,\n      key_discussion_points: [],\n      action_items: [],\n      decisions_made: [],\n      next_steps: [],\n      key_quotes: [],\n      topics_for_follow_up: [],\n      raw_output: text\n    };\n  }\n\n  return {\n    json: {\n      ...item.json,\n      cleaned_output: text,\n      parsed_report: parsedReport\n    }\n  };\n});"
+      },
+      "id": "json-cleanup",
+      "name": "JSON Cleanup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        300
+      ],
+      "notes": "Removes markdown wrappers from Claude output and validates JSON structure."
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format report for Notion database\nconst item = $input.first();\nconst metadata = $('Extract Metadata').first().json;\nconst report = item.json.parsed_report;\n\n// Build formatted sections\nconst keyDiscussionFormatted = report.key_discussion_points\n  .map((point, i) => `${i + 1}. ${point}`)\n  .join('\\n\\n');\n\nconst actionItemsFormatted = report.action_items\n  .map(action => `• **${action.task}**\\n  Owner: ${action.owner}\\n  Deadline: ${action.deadline}`)\n  .join('\\n\\n');\n\nconst decisionsFormatted = report.decisions_made\n  .map((decision, i) => `${i + 1}. ${decision}`)\n  .join('\\n\\n');\n\nconst nextStepsFormatted = report.next_steps\n  .map((step, i) => `${i + 1}. ${step}`)\n  .join('\\n\\n');\n\nconst quotesFormatted = report.key_quotes\n  .map(quote => `> ${quote}`)\n  .join('\\n\\n');\n\nconst followUpFormatted = report.topics_for_follow_up\n  .map((topic, i) => `${i + 1}. ${topic}`)\n  .join('\\n\\n');\n\n// Build full report content for Notion\nconst notionContent = `# ${metadata.meeting_title}\n\n**Date:** ${metadata.meeting_date}\n**Duration:** ${metadata.meeting_duration}\n**Participants:** ${metadata.participants.join(', ')}\n${metadata.recording_url ? `**Recording:** ${metadata.recording_url}` : ''}\n\n---\n\n## Executive Summary\n\n${report.executive_summary}\n\n---\n\n## Key Discussion Points\n\n${keyDiscussionFormatted || 'No discussion points captured.'}\n\n---\n\n## Action Items\n\n${actionItemsFormatted || 'No action items identified.'}\n\n---\n\n## Decisions Made\n\n${decisionsFormatted || 'No decisions recorded.'}\n\n---\n\n## Next Steps\n\n${nextStepsFormatted || 'No next steps defined.'}\n\n---\n\n## Key Quotes\n\n${quotesFormatted || 'No notable quotes captured.'}\n\n---\n\n## Topics for Follow-Up\n\n${followUpFormatted || 'No follow-up topics identified.'}\n\n---\n\n**Generated by Stratega Meeting Intelligence System**\n*Powered by Claude 3.5 Haiku*`;\n\n// Build Slack summary (shorter version)\nconst actionItemsSummary = report.action_items.length > 0 \n  ? report.action_items.slice(0, 3).map(a => `• ${a.task} (${a.owner})`).join('\\n')\n  : 'No action items';\n\nconst slackSummary = `*${metadata.meeting_title}*\\n\\n${report.executive_summary}\\n\\n*Quick Actions:*\\n${actionItemsSummary}${report.action_items.length > 3 ? `\\n... and ${report.action_items.length - 3} more` : ''}`;\n\nreturn [{\n  json: {\n    notion_title: metadata.meeting_title,\n    notion_content: notionContent,\n    slack_summary: slackSummary,\n    meeting_date: metadata.meeting_date,\n    participants: metadata.participants,\n    recording_url: metadata.recording_url,\n    action_items_count: report.action_items.length,\n    fathom_id: metadata.fathom_id\n  }\n}];"
+      },
+      "id": "format-outputs",
+      "name": "Format for Outputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        300
+      ],
+      "notes": "Formats the report into Notion-ready markdown and Slack-ready summary."
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "id"
+        },
+        "title": "={{ $json.notion_title }}",
+        "properties": {
+          "properties": [
+            {
+              "key": "Date",
+              "type": "date",
+              "date": "={{ $json.meeting_date }}"
+            },
+            {
+              "key": "Participants",
+              "type": "multi_select",
+              "multiSelectValue": "={{ $json.participants }}"
+            },
+            {
+              "key": "Action Items",
+              "type": "number",
+              "numberValue": "={{ $json.action_items_count }}"
+            },
+            {
+              "key": "Recording URL",
+              "type": "url",
+              "urlValue": "={{ $json.recording_url }}"
+            },
+            {
+              "key": "Fathom ID",
+              "type": "rich_text",
+              "richTextValue": "={{ $json.fathom_id }}"
+            }
+          ]
+        },
+        "options": {
+          "icon": "📝",
+          "simplifyOutput": false
+        },
+        "blockUi": {
+          "markdown": "={{ $json.notion_content }}"
+        }
+      },
+      "id": "create-notion-page",
+      "name": "Create Notion Page",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        2000,
+        200
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "notion-api-credential",
+          "name": "Notion API"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "notes": "Creates a new page in your 'Meeting Notes' Notion database with the full report."
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "channel": {
+          "__rl": true,
+          "value": "YOUR_SLACK_CHANNEL_ID",
+          "mode": "id"
+        },
+        "text": "=:memo: *New Meeting Notes Available*\n\n{{ $('Format for Outputs').item.json.slack_summary }}\n\n:point_right: *Full notes:* {{ $json.url || 'Check Notion' }}\n\n_Meeting processed automatically by Stratega OS_",
+        "otherOptions": {
+          "mrkdwn": true
+        }
+      },
+      "id": "send-slack-notification",
+      "name": "Send Slack Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        2220,
+        200
+      ],
+      "credentials": {
+        "slackApi": {
+          "id": "slack-api-credential",
+          "name": "Slack API"
+        }
+      },
+      "onError": "continueRegularOutput",
+      "notes": "Sends a Slack notification with the summary and link to Notion page."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Meeting processed successfully\", \"notion_url\": $('Create Notion Page').first().json.url, \"timestamp\": $now.toISO() } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2440,
+        300
+      ],
+      "notes": "Responds to Fathom webhook with success confirmation."
+    },
+    {
+      "parameters": {
+        "content": "## Fathom Webhook Endpoint\n\nThis webhook receives POST requests from Fathom when a meeting recording is completed.\n\n**Webhook URL:** Copy from the 'Webhook - Fathom' node\n\n**Expected Payload:**\n```json\n{\n  \"id\": \"fathom_meeting_id\",\n  \"title\": \"Meeting Title\",\n  \"date\": \"2025-11-26T10:00:00Z\",\n  \"duration\": \"45 minutes\",\n  \"participants\": [\"Person 1\", \"Person 2\"],\n  \"transcript\": \"Full meeting transcript...\",\n  \"recording_url\": \"https://...\"\n}\n```",
+        "height": 340,
+        "width": 420
+      },
+      "id": "sticky-note-webhook",
+      "name": "Sticky Note - Webhook Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Claude Processing Pipeline\n\n**Step 1:** Clean transcript\n- Remove filler words\n- Fix errors\n- Format speakers\n\n**Step 2:** Generate report\n- Executive summary\n- Action items\n- Decisions\n- Next steps\n\n**Model:** Claude 3.5 Haiku\n**Cost:** ~$0.01-0.05 per meeting",
+        "height": 380,
+        "width": 400
+      },
+      "id": "sticky-note-claude",
+      "name": "Sticky Note - Claude Pipeline",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        840,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Output Distribution\n\n**Notion:** Full structured report\n- Database: 'Meeting Notes'\n- Properties: Date, Participants, Action Items, Recording URL\n\n**Slack:** Quick summary\n- Channel: Configure in node\n- Format: Summary + link to Notion\n\n**Webhook Response:** Success confirmation back to Fathom",
+        "height": 340,
+        "width": 420
+      },
+      "id": "sticky-note-outputs",
+      "name": "Sticky Note - Outputs",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1940,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Fathom": {
+      "main": [
+        [
+          {
+            "node": "Extract Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Metadata": {
+      "main": [
+        [
+          {
+            "node": "Build Cleanup Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Cleanup Prompt": {
+      "main": [
+        [
+          {
+            "node": "Cleanup Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku - Cleanup": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Cleanup Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cleanup Agent": {
+      "main": [
+        [
+          {
+            "node": "Build Report Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Report Prompt": {
+      "main": [
+        [
+          {
+            "node": "Report Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Haiku - Report": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Report Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Agent": {
+      "main": [
+        [
+          {
+            "node": "JSON Cleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON Cleanup": {
+      "main": [
+        [
+          {
+            "node": "Format for Outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format for Outputs": {
+      "main": [
+        [
+          {
+            "node": "Create Notion Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Notion Page": {
+      "main": [
+        [
+          {
+            "node": "Send Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Slack Notification": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Meetings",
+      "id": "tag-meetings"
+    },
+    {
+      "name": "AI Processing",
+      "id": "tag-ai"
+    },
+    {
+      "name": "Claude",
+      "id": "tag-claude"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-26T00:00:00.000Z",
+  "versionId": "custom-v1"
+}

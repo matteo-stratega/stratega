@@ -1,0 +1,12 @@
+{"type":"entity","name":"Stratega","entityType":"Company","observations":["Growth lab, product studio, research engine","Q4 2025 focus: Academy Beta, n8n Revenue, Build in Public","Memory-First infrastructure implementata 23/12/2025","PROBLEMA CRITICO: repo .git è in HOME (~/) invece che in /stratega/ - causa mixing PickEat/Stratega","Task domani: separare repo git (stratega e pickeat indipendenti)","23/12: Token Notion rimosso da git history e force-pushed","/close e /daily-wrap commands creati 23/12 - multi-tab safe workflow"]}
+{"type":"entity","name":"Matteo","entityType":"Person","observations":["Owner di Stratega","Sfida 50 prospect Academy in corso"]}
+{"type":"entity","name":"Stratega Academy","entityType":"Project","observations":["Status: Beta attivo","Focus: DM outreach + Crono sequences","ENG batch: 6 contatti da caricare su Crono","DM pending: 11 To Complete + 5 To Sign Up","Liste pulite da VC il 23/12 (6 rimossi)"]}
+{"type":"entity","name":"n8n Revenue","entityType":"Project","observations":["Status: Ideation","Goal: Primo prodotto revenue-generating","Options: Content Gen template, automation workflows","Decisione pending: quale prodotto lanciare"]}
+{"type":"entity","name":"Off The Path","entityType":"SideProject","observations":["Status: Development","Decisione Supabase in attesa partner"]}
+{"type":"entity","name":"Duomo Design","entityType":"Client","observations":["ADV ongoing","21/12: Carousel in Retargeting per fix CPL €54","Pending: Check allocazione budget Retargeting","GA4 MCP: property 324232337 corretta, attende aggiunta service account da Ale (23/12)"]}
+{"type":"relation","from":"Matteo","to":"Stratega","relationType":"owns"}
+{"type":"relation","from":"Stratega","to":"Stratega Academy","relationType":"has_project"}
+{"type":"relation","from":"Stratega","to":"n8n Revenue","relationType":"has_project"}
+{"type":"relation","from":"Stratega","to":"Off The Path","relationType":"has_side_project"}
+{"type":"relation","from":"Stratega","to":"Duomo Design","relationType":"has_client"}
+{"type":"relation","from":"Matteo","to":"Stratega Academy","relationType":"runs_challenge_for"}

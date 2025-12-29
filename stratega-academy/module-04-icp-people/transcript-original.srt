@@ -1,0 +1,559 @@
+1
+00:00:00,010 --> 00:00:03,740
+Hey guys, welcome to module 3.
+
+2
+00:00:03,740 --> 00:00:07,630
+IACP will deep dive into the customer profile
+
+3
+00:00:07,630 --> 00:00:12,000
+this time. We'll see all the ins and outs and offsets.
+
+4
+00:00:12,000 --> 00:00:15,740
+Now, before we start, let's start again with the mistakes because
+
+5
+00:00:15,740 --> 00:00:19,260
+stop selling everyone is a concept that
+
+6
+00:00:19,260 --> 00:00:23,390
+I want to endorse each and every time because
+
+7
+00:00:23,390 --> 00:00:27,370
+the more bigger the list and the more
+
+8
+00:00:27,370 --> 00:00:30,990
+variable will be your offering
+
+9
+00:00:30,990 --> 00:00:35,000
+and your copywriting, the less learnings,
+
+10
+00:00:35,000 --> 00:00:38,600
+the less meaningful learnings we can make. So if I
+
+11
+00:00:38,600 --> 00:00:42,130
+have a set amount of variables like
+
+12
+00:00:42,130 --> 00:00:45,880
+any problem in math problem, you can change
+
+13
+00:00:45,880 --> 00:00:49,720
+the variables and make learnings and then find the winning path. So we
+
+14
+00:00:49,720 --> 00:00:53,260
+will do the exact same from the
+
+15
+00:00:53,260 --> 00:00:57,000
+perspective of the people.
+
+16
+00:00:57,000 --> 00:01:00,770
+We are going to use the exact same frameworks that we used from
+
+17
+00:01:00,770 --> 00:01:04,650
+the previous chapter. So it's going to be really simple
+
+18
+00:01:04,650 --> 00:01:09,000
+from this standpoint. Now, from the demographic perspective,
+
+19
+00:01:09,000 --> 00:01:12,600
+I want to have one bit on the side that will help
+
+20
+00:01:12,600 --> 00:01:16,150
+me set the tone with this person and the other thing will
+
+21
+00:01:16,150 --> 00:01:19,660
+help me, the thing on the right, so the job
+
+22
+00:01:19,660 --> 00:01:23,220
+title, location, company, site and so on. That will help me
+
+23
+00:01:23,220 --> 00:01:27,000
+find a set of people when I'm going to use a database
+
+24
+00:01:27,000 --> 00:01:30,590
+or when I'm going to do scraping or whatever that is that we will do
+
+25
+00:01:30,590 --> 00:01:34,120
+later. We can use them as filters. So
+
+26
+00:01:34,120 --> 00:01:38,000
+it's important that this stuff is kind of standardized from CS Navigator
+
+27
+00:01:38,000 --> 00:01:41,510
+or other tools that you might use to do a
+
+28
+00:01:41,510 --> 00:01:45,290
+little bit of market research. So it will look
+
+29
+00:01:45,290 --> 00:01:49,990
+something like this. So it's going to be important,
+
+30
+00:01:49,990 --> 00:01:53,940
+the company size and the first bit I know from the
+
+31
+00:01:53,940 --> 00:01:57,680
+company data, but also it's important for me the interest and the
+
+32
+00:01:57,680 --> 00:02:01,350
+touch point that she has on. We'll
+
+33
+00:02:01,350 --> 00:02:05,010
+see how to put that to use. The other bit that I want to
+
+34
+00:02:05,010 --> 00:02:09,000
+spend a little bit of time is the jobs to be done
+
+35
+00:02:09,000 --> 00:02:13,110
+because it's a really important framework
+
+36
+00:02:13,110 --> 00:02:17,160
+because it will help us frame the problem,
+
+37
+00:02:17,160 --> 00:02:20,980
+the outcome and the trigger in a much more
+
+38
+00:02:20,980 --> 00:02:25,270
+relevant way. Because I know, for example,
+
+39
+00:02:25,270 --> 00:02:29,000
+that the jobs to be done, my target CEO
+
+40
+00:02:29,000 --> 00:02:32,730
+of a pre-seed startup right now needs to improve the
+
+41
+00:02:32,730 --> 00:02:36,520
+sales team or has sales inconsistency or it
+
+42
+00:02:36,520 --> 00:02:41,000
+has a low growth rate. These are all triggers I can use in copyrighted.
+
+43
+00:02:41,000 --> 00:02:44,850
+The same triggers I know want to
+
+44
+00:02:44,850 --> 00:02:48,880
+look for something. So I know what they're
+
+45
+00:02:48,880 --> 00:02:52,550
+looking for. And I know the
+
+46
+00:02:52,550 --> 00:02:56,290
+outcome. So let me see. If
+
+47
+00:02:56,290 --> 00:03:00,100
+they are able to sell more, this course really helps them
+
+48
+00:03:00,100 --> 00:03:03,900
+to sell more because of X, Y, Z, they'll be able to release stress
+
+49
+00:03:03,900 --> 00:03:07,540
+from inconsistency and focus on what matters
+
+50
+00:03:07,540 --> 00:03:11,260
+most. So my first intro could
+
+51
+00:03:11,260 --> 00:03:16,000
+be, A, do you feel your time could be optimized?
+
+52
+00:03:16,020 --> 00:03:20,000
+Okay, so that doesn't lead to sale, but it gives me an opening,
+
+53
+00:03:20,000 --> 00:03:24,000
+but we'll see that later again. Then the four forces.
+
+54
+00:03:24,000 --> 00:03:27,550
+This is important for the offering to
+
+55
+00:03:27,550 --> 00:03:31,160
+actually add extra spice to how bad our
+
+56
+00:03:31,160 --> 00:03:35,000
+customer problem situation is. How good is our solution?
+
+57
+00:03:35,000 --> 00:03:38,690
+What kind of anxiety they might have or how we can detach
+
+58
+00:03:38,690 --> 00:03:42,240
+from the status quo because a lot of people might be attached to the
+
+59
+00:03:42,240 --> 00:03:46,350
+status quo. They don't even want to change. So how
+
+60
+00:03:46,350 --> 00:03:49,960
+can we change that? So this is
+
+61
+00:03:49,960 --> 00:03:53,670
+another example. So a lot of stress for growth
+
+62
+00:03:53,670 --> 00:03:57,230
+and lack of time to create frameworks. That's all that we
+
+63
+00:03:57,230 --> 00:04:01,000
+ask funders struggle. So that's why we try to find templates
+
+64
+00:04:01,000 --> 00:04:04,990
+and they don't actually fit because templates are templates
+
+65
+00:04:04,990 --> 00:04:09,000
+and not frameworks. You can plug them in anywhere you want.
+
+66
+00:04:09,000 --> 00:04:12,620
+That's why I'm giving you frameworks. So you can plug them in
+
+67
+00:04:12,620 --> 00:04:16,610
+anywhere you want, whether you're using Ocean, Gera, Trello,
+
+68
+00:04:16,610 --> 00:04:20,440
+whatever. How good is the solution? And then again,
+
+69
+00:04:20,440 --> 00:04:24,000
+anxiety and attachment to the status quo.
+
+70
+00:04:24,000 --> 00:04:27,590
+All these bits will come later on at use. The
+
+71
+00:04:27,590 --> 00:04:31,360
+others are the touch points. So I know that Julia
+
+72
+00:04:31,360 --> 00:04:34,870
+listened to B2B Group podcast. She's part of the
+
+73
+00:04:34,870 --> 00:04:39,560
+female tech funders. And so that is, for instance,
+
+74
+00:04:39,560 --> 00:04:43,080
+a touch point that I can later on
+
+75
+00:04:43,080 --> 00:04:47,790
+use. So this is just a little
+
+76
+00:04:47,790 --> 00:04:51,340
+recap of our ICP. So I
+
+77
+00:04:51,340 --> 00:04:55,000
+have it clear. So I'll share the framework for you.
+
+78
+00:04:55,000 --> 00:04:58,780
+So once you've done everything, you can fill this in and you're
+
+79
+00:04:58,780 --> 00:05:02,720
+going to have your personas right there. The other
+
+80
+00:05:02,720 --> 00:05:06,300
+thing are the touch points. So that's the
+
+81
+00:05:06,300 --> 00:05:09,920
+trigger spit. For instance, we said
+
+82
+00:05:09,920 --> 00:05:13,750
+that she likes podcasts. So we can send the first message
+
+83
+00:05:13,750 --> 00:05:18,000
+reaching out about the latest episode of XYZ podcast
+
+84
+00:05:18,000 --> 00:05:21,540
+that we know she follows. Or we could do an app bank campaign
+
+85
+00:05:21,540 --> 00:05:25,680
+using that exact podcast as a touch point. Hey,
+
+86
+00:05:25,680 --> 00:05:30,000
+have you ever listened to this podcast?
+
+87
+00:05:30,000 --> 00:05:33,580
+They're talking about really interesting stuff about
+
+88
+00:05:33,580 --> 00:05:37,190
+sales. And then you can see if the prospects is
+
+89
+00:05:37,190 --> 00:05:40,740
+interested or not. So you can use a lot
+
+90
+00:05:40,740 --> 00:05:44,400
+of things like this. So accelerator pages
+
+91
+00:05:44,400 --> 00:05:48,030
+like LinkedIn pages. You can use meta communities to see
+
+92
+00:05:48,030 --> 00:05:51,860
+what people are talking about. You can use Slack communities
+
+93
+00:05:51,860 --> 00:05:55,400
+and you can gather these additional touch points and then
+
+94
+00:05:55,400 --> 00:05:58,970
+find the same people on LinkedIn. And then do a Taylor
+
+95
+00:05:58,970 --> 00:06:02,610
+campaign on exactly that. So this
+
+96
+00:06:02,610 --> 00:06:07,000
+is what will give you actually the superpowers.
+
+97
+00:06:07,000 --> 00:06:11,070
+Okay, because you can make a lot of a lot of different
+
+98
+00:06:11,070 --> 00:06:15,000
+things from the perspective standpoint here.
+
+99
+00:06:15,000 --> 00:06:18,590
+Now, do you remember mapping? Last time we talked
+
+100
+00:06:18,590 --> 00:06:22,950
+about tearing and mapping, the one thing
+
+101
+00:06:22,950 --> 00:06:26,600
+that I suggest you and recommend you for
+
+102
+00:06:26,600 --> 00:06:30,680
+each and every people, especially the bigger sales
+
+103
+00:06:30,680 --> 00:06:35,000
+you do is to not only to map out the buying committee,
+
+104
+00:06:35,000 --> 00:06:39,000
+but also to understand what are their concerns,
+
+105
+00:06:39,000 --> 00:06:42,570
+what are their goals, how they may
+
+106
+00:06:42,570 --> 00:06:46,470
+block you. So you can have content
+
+107
+00:06:46,470 --> 00:06:50,000
+later on that is preset and ready.
+
+108
+00:06:50,000 --> 00:06:53,820
+Or when you already do the demo or when you already this
+
+109
+00:06:53,820 --> 00:06:57,460
+happened to me when you already made the first phone
+
+110
+00:06:57,460 --> 00:07:01,290
+call, they say, oh, no, but we don't put in
+
+111
+00:07:01,290 --> 00:07:05,130
+beverage service. I was reaching out to the basketball
+
+112
+00:07:05,130 --> 00:07:09,000
+teams and they were the first thing that they were saying to me,
+
+113
+00:07:09,000 --> 00:07:12,950
+oh, no, we don't manage the thing. And my answer
+
+114
+00:07:12,950 --> 00:07:17,090
+was preset. I know and I'm aware of it,
+
+115
+00:07:17,090 --> 00:07:21,000
+but I would like to have your endorsement before I go to the food and beverage manager.
+
+116
+00:07:21,000 --> 00:07:24,610
+And then they were willing to talk to
+
+117
+00:07:24,610 --> 00:07:28,850
+me because they knew that I had an interest
+
+118
+00:07:28,850 --> 00:07:32,710
+in them. So these kind of things
+
+119
+00:07:32,710 --> 00:07:36,440
+will help you really understand
+
+120
+00:07:36,440 --> 00:07:40,340
+the buying committee and will help you prepare
+
+121
+00:07:40,340 --> 00:07:44,160
+stuff in advance so your sales cycle actually
+
+122
+00:07:44,160 --> 00:07:48,000
+doesn't get out of your hands.
+
+123
+00:07:48,000 --> 00:07:51,820
+So the key takeaways of this module and I hope everything
+
+124
+00:07:51,820 --> 00:07:55,580
+was clear because we covered a lot of things. Again,
+
+125
+00:07:55,580 --> 00:07:59,200
+segmentation leads to scalability variables. If
+
+126
+00:07:59,200 --> 00:08:03,160
+you can find touch points, you can be relevant
+
+127
+00:08:03,160 --> 00:08:07,000
+and I again, please do a lot of it.
+
+128
+00:08:07,000 --> 00:08:10,780
+Based a lot of your route bound on triggers and contents
+
+129
+00:08:10,780 --> 00:08:14,330
+and communities and stuff before you find your path
+
+130
+00:08:14,330 --> 00:08:18,040
+to scale and dynamic. So I see peace change
+
+131
+00:08:18,040 --> 00:08:22,000
+things change. Think about the shift of AI now.
+
+132
+00:08:22,000 --> 00:08:26,000
+Everything is changing with this. So everything is dynamic.
+
+133
+00:08:26,000 --> 00:08:29,730
+So I see peace will change and buying committees
+
+134
+00:08:29,730 --> 00:08:34,000
+will change. So please update everything.
+
+135
+00:08:34,000 --> 00:08:38,000
+If you don't want to do it every six months, every year,
+
+136
+00:08:38,000 --> 00:08:42,050
+let's say something like this. Okay. Now it's
+
+137
+00:08:42,050 --> 00:08:45,730
+your turn to pick tier design and SAP and try
+
+138
+00:08:45,730 --> 00:08:49,400
+to map out the company and stuff. And
+
+139
+00:08:49,400 --> 00:08:53,000
+I will see you for the next module.
+
+140
+00:08:53,000 --> 00:09:05,000
+Ciao. [BLANK_AUDIO]

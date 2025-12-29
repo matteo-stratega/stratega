@@ -1,0 +1,838 @@
+{
+  "name": "turn any Website into AI Knowledge Base",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2240,
+        -336
+      ],
+      "id": "847aa32a-6996-4717-9fe1-af4f6deff790",
+      "name": "When chat message received",
+      "webhookId": "d3ee2e6e-aeee-4a4b-93e5-51f0ae9cb922"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant that have All the Documentation Of N8N. \nUse the tools to answer the questions\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1936,
+        -384
+      ],
+      "id": "08da0ae5-5d10-4021-99be-15761641b5d1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2016,
+        -192
+      ],
+      "id": "758d12d8-202d-4d7d-9679-0d6404ca2e30",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JnS0mmg35R5VwbqR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to get up-to-date, accurate information from N8N Documentation.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -1632,
+        -256
+      ],
+      "id": "8c4ac0e5-5fef-41ff-816c-0483a338a140",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "X2l9eJhGJBsStxGT",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1664,
+        608
+      ],
+      "id": "b6d2ad3a-40cc-4f4d-b61b-ecc6f96c9387",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "JnS0mmg35R5VwbqR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "crawl",
+        "url": "https://docs.n8n.io/",
+        "limit": 2,
+        "delay": 100,
+        "crawlOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+      "typeVersion": 1,
+      "position": [
+        -2160,
+        208
+      ],
+      "id": "82e4dcc0-065b-4ec2-8405-21a27f15c546",
+      "name": "Crawl a website",
+      "credentials": {
+        "firecrawlApi": {
+          "id": "Bb3rryGkKpGIAeAd",
+          "name": "Firecrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2416,
+        208
+      ],
+      "id": "3d1db72e-53b9-4a6c-8b85-c7327594ef37",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -1872,
+        -224
+      ],
+      "id": "7bf1e83f-0c59-49c2-a70e-b162316ae5e5",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "X2bzH9oUK7ElhM6b",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "embeddingBatchSize": 400,
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -1584,
+        432
+      ],
+      "id": "6f0b576e-ea02-4096-bfc7-8737f322b5ff",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "X2l9eJhGJBsStxGT",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -1536,
+        608
+      ],
+      "id": "cb62f801-a454-49b0-94ed-44d089bd0a68",
+      "name": "Default Data Loader1"
+    },
+    {
+      "parameters": {
+        "chunkSize": 3000,
+        "chunkOverlap": 100,
+        "options": {
+          "splitCode": "markdown"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -1520,
+        768
+      ],
+      "id": "f63ce497-519f-4e62-bcf4-fa7f790a37b1",
+      "name": "Recursive Character Text Splitter1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "scraping",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5a23e585-68cb-4f91-a8a0-40b0ff96ca92"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "still scraping"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "46b10b47-8d0f-4cab-ac53-58dbb0ee489d",
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Done"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -1504,
+        192
+      ],
+      "id": "5538100f-649b-4ea0-8dcf-4f57f78d6fe9",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "getCrawlStatus",
+        "crawlId": "={{ $('Crawl a website').last().json.id }}",
+        "requestOptions": {}
+      },
+      "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+      "typeVersion": 1,
+      "position": [
+        -1696,
+        208
+      ],
+      "id": "4ca97189-f552-425a-8cc7-4c61ee4f773f",
+      "name": "Get crawl status",
+      "credentials": {
+        "firecrawlApi": {
+          "id": "Bb3rryGkKpGIAeAd",
+          "name": "Firecrawl account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1904,
+        208
+      ],
+      "id": "2f5ec03b-fc7a-4021-83a5-926a2100a9e1",
+      "name": "Wait",
+      "webhookId": "d2da288a-93f4-4f63-83cc-c90b9f846770"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66bdd858-8c55-4976-856b-f74df01b2ddb",
+              "name": "data",
+              "value": "={{ $json.metadata.title }} \n {{ $json.metadata.description }}\n {{ $json.markdown }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1888,
+        432
+      ],
+      "id": "f3807e85-c95d-4941-b089-6e8114b3173a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1168,
+        224
+      ],
+      "id": "8cc0e2da-9b6e-472c-a710-7cb9eeacf078",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "content": "## **First time Only:** \n### Run this Node Once to Set Up your Supabase Database Tables:",
+        "height": 320,
+        "width": 400,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2976,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "f3ed1dad-822c-4220-adcc-4a828d67d043",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Enable the pgvector extension to work with embedding vectors\ncreate extension IF NOT EXISTS vector;\n-- Create a table to store your documents\ncreate table IF NOT EXISTS documents (\n  id bigserial primary key,\n  content text, -- corresponds to Document.pageContent\n  metadata jsonb, -- corresponds to Document.metadata\n  embedding vector(1536) -- 1536 works for OpenAI embeddings, change if needed\n);\n\n-- Create a function to search for documents\nCREATE OR REPLACE function match_documents (\n  query_embedding vector(1536),\n  match_count int default null,\n  filter jsonb DEFAULT '{}'\n) returns table (\n  id bigint,\n  content text,\n  metadata jsonb,\n  similarity float\n)\nlanguage plpgsql\nas $$\n#variable_conflict use_column\nbegin\n  return query\n  select\n    id,\n    content,\n    metadata,\n    1 - (documents.embedding <=> query_embedding) as similarity\n  from documents\n  where metadata @> filter\n  order by documents.embedding <=> query_embedding\n  limit match_count;\nend;\n$$;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2832,
+        112
+      ],
+      "id": "9d207b66-ccf1-4589-a765-eacbcdd2d4ce",
+      "name": "Setup Supabase Vectors and Create Table",
+      "credentials": {
+        "postgres": {
+          "id": "X2bzH9oUK7ElhM6b",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Getting Started:\nFirst watch this Video [Watch Here!](https://www.youtube.com/@Hadidiz)\n\n### 1. Signup for the free [Firecrawl](https://firecrawl.link/hadidiz) and get your API Key\n\n2. Connect your supabase account!\n3. Run the First time use NODE to setup your supabase for Vectors\n\n4. Choose your desired website then edit the \"Crawl a Website\" node to add the URL.\n\n5. Modify the AI Agent System Prompt To give it context on the Website",
+        "height": 368,
+        "width": 400,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2976,
+        -400
+      ],
+      "id": "72fa5ee1-bb52-4eeb-908e-44b8bd1c38ba",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1680,
+        -112
+      ],
+      "id": "6c09ea5e-7f69-453d-be7b-039dbce466b4",
+      "name": "Embeddings OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "JnS0mmg35R5VwbqR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## By   Hadidiz\n[Youtube!](https://www.youtube.com/@Hadidiz)",
+        "height": 80,
+        "width": 150,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        496
+      ],
+      "id": "cf72ef66-867f-4a44-a222-dbb40e2bffb6",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## AI Agent With Knowledge Base",
+        "height": 528,
+        "width": 960,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2304,
+        -496
+      ],
+      "id": "bceec635-1dd9-43da-b152-d1af00a0a1cd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Crawl a Website And Convert it into Knowldege Base\nA website crawler is employed to retrieve all the webpages of a website. Subsequently, the retrieved content is converted into Markdown format, which is the most comprehensible format for artificial intelligence. \nThe Markdown content is then divided into smaller chunks and ingested into the Vector Table within Supabase.",
+        "height": 496,
+        "width": 1520,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2512,
+        80
+      ],
+      "id": "6303c259-8389-4505-a57a-edfe619e7554",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 512,
+        "width": 496,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        384
+      ],
+      "id": "4da4f15a-371f-4f16-9455-5e8755433512",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Clean and delete the database table  content",
+        "height": 256,
+        "width": 368,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2592,
+        624
+      ],
+      "id": "bcc70423-7cd9-40f7-8e44-5cf99303bb77",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Clean and delete the  AI chat history",
+        "height": 256,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2208,
+        624
+      ],
+      "id": "c1124b84-0819-4931-b8ab-bd2f98b29263",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "n8n_chat_histories",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "neq",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2048,
+        704
+      ],
+      "id": "0fc2dac0-ff5d-49b6-9ad6-91a54e31a075",
+      "name": "Delete ALL rows From Documents_crawler1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "X2l9eJhGJBsStxGT",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "#### ^ Enter Website URL Here\nFeel Free to change the pages limit as you wish",
+        "height": 112,
+        "width": 230,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2224,
+        352
+      ],
+      "id": "c3f73955-3031-4b49-96c0-ab6e912a26ce",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "documents",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "neq",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2448,
+        704
+      ],
+      "id": "dce0af41-37a2-4272-8ffc-441651d14f78",
+      "name": "Delete ALL rows From Documents",
+      "credentials": {
+        "supabaseApi": {
+          "id": "X2l9eJhGJBsStxGT",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## By Hadidiz\n[Youtube!](https://www.youtube.com/@Hadidiz)",
+        "height": 1520,
+        "width": 2336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3216,
+        -544
+      ],
+      "id": "b64092f0-eb3b-4f37-a39b-3296fe339f4a",
+      "name": "Sticky Note9"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {}
+      }
+    ],
+    "Crawl a website": [
+      {
+        "json": {
+          "success": true,
+          "id": "cb60a7ec-10cb-464b-aa16-04b56da9ef01",
+          "url": "https://api.firecrawl.dev/v2/crawl/cb60a7ec-10cb-464b-aa16-04b56da9ef01"
+        }
+      }
+    ],
+    "Wait": [
+      {
+        "json": {
+          "success": true,
+          "id": "cb60a7ec-10cb-464b-aa16-04b56da9ef01",
+          "url": "https://api.firecrawl.dev/v2/crawl/cb60a7ec-10cb-464b-aa16-04b56da9ef01"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Crawl a website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crawl a website": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter1": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader1",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get crawl status": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get crawl status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ddb6e2df-4aad-47d6-8fc0-a8161ea9b6ad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7384244b4de26555986ebcaeaf8ac78e3a6df8d5bf3b6599373804fe6662b1a6"
+  },
+  "id": "wjUiqmhSvZGZ6akf",
+  "tags": [
+    {
+      "createdAt": "2025-03-19T00:20:23.148Z",
+      "updatedAt": "2025-03-19T00:20:23.148Z",
+      "id": "IBMzHCPssICNxiMa",
+      "name": "hadidizflow"
+    },
+    {
+      "createdAt": "2025-03-19T02:42:38.905Z",
+      "updatedAt": "2025-03-19T02:42:38.905Z",
+      "id": "d52MoQFoCvnA1TXN",
+      "name": "youtube"
+    }
+  ]
+}

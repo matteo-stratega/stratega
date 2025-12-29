@@ -1,0 +1,29 @@
+=== BACKUP SYMLINK (pre-rimozione) ===
+/Users/matteolombardi/AI-Projects/stratega/Clients
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1tqfoWqNIP-UH7E5nIBLKXAm8BunKl9tZ
+/Users/matteolombardi/AI-Projects/stratega/archive/drive-duplicates/Clients (1)/Startup-Pack/Partner Kit
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1HNSAsv9DS3vZuQ6VTum4jv5uNTM0izMJ
+/Users/matteolombardi/AI-Projects/stratega/archive/Clients - Archive/Drivio
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1b5cGGtv0X7huUFGQN2TYK3dQZS_FZdeU
+/Users/matteolombardi/AI-Projects/stratega/archive/niccolo@strategaco.com/Video
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1LU-Bd-JRVy--ke7FQnSrWGsVK4bG2kSS
+/Users/matteolombardi/AI-Projects/stratega/archive/niccolo@strategaco.com/Loghi Fixed Size
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/17AHg95GQOvuOp9tPpuYmeDM-W5LK00f0
+/Users/matteolombardi/AI-Projects/stratega/archive/massimo@strategaco.com/Stratega Brand Kit - Sharing
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1E6p9G9gWqY1qxvKkWpxaeOC0QIeLBE1P
+/Users/matteolombardi/AI-Projects/stratega/archive/massimo@strategaco.com/Growth Workshop Stratega    IBL - Shared Folder
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1eDpQ6qh7Vy408RELI9Lpr6eciOkdi5wi
+/Users/matteolombardi/AI-Projects/stratega/archive/massimo@strategaco.com/Partnerships
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1184UkyKz3KbsAG8fcW5QaFHvw9S9lK2P
+/Users/matteolombardi/AI-Projects/stratega/archive/massimo@strategaco.com/Beyond (BYD)
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1ri7pThNqE8QUbDuWAxwuLWEqhd6R-P99
+/Users/matteolombardi/AI-Projects/stratega/archive/massimo@strategaco.com/Evenfi
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/17BR4oMj_sqQ9fo7zA8iAraTycAQHqJTG
+/Users/matteolombardi/AI-Projects/stratega/videos
+/Users/matteolombardi/Stratega old/Screenstudio/Academy videos
+/Users/matteolombardi/AI-Projects/stratega/Stratega - Templates
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/1D4_Zk7sjgJfKgC0wWdgVwwQC0P7ocg84
+/Users/matteolombardi/AI-Projects/stratega/Newsletter
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/11myW_BPTiZcg28-3Wnl-Hn4YMv592bL8
+/Users/matteolombardi/AI-Projects/stratega/assets/logos/New website Logos/SaaS/LeadDelta logo and Icon
+/Users/matteolombardi/Library/CloudStorage/GoogleDrive-matteo@stratega.co/.mirror-symlink/10aYKwwjUiktAIKuwmsrkEjldMcDkYDcQ

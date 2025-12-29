@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "stratega-memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "/Users/matteolombardi/AI-Projects/stratega/.memory/knowledge-graph.jsonl"
+      }
+    }
+  }
+}

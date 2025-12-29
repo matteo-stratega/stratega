@@ -1,0 +1,414 @@
+{
+  "name": "Ultimate Viral Twitter/X Idea Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -144
+      ],
+      "id": "9afb452b-c0aa-4f2e-a489-cbefe1185ca6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4069fb4a-26d0-4d54-8281-bf6243db18f4",
+              "name": "anthropic_version",
+              "value": "2023-06-01",
+              "type": "string"
+            },
+            {
+              "id": "32e637af-4dcf-4554-bbca-bd2339904ceb",
+              "name": "anthropic_model",
+              "value": "claude-sonnet-4-5",
+              "type": "string"
+            },
+            {
+              "id": "70f74268-cb66-4dd6-a04e-eba6bde8c940",
+              "name": "llm_prompt",
+              "value": "=Role: Act as a professional Twitter coach and crypto news curator.\n\nScope: Focus on global cryptocurrency news from the last 24 hours. Provide a balanced mix of:\n- Market movements (BTC, ETH, and major altcoins)\n- Regulatory developments\n- Project updates (e.g., Ethereum upgrades, major network changes)\n\nObjective: Create 10 short, engaging, and informative tweets:\n- Each tweet under 280 characters\n- Professional, authoritative, and approachable tone\n- Attention-grabbing hooks without clickbait\n- Tweets should stand alone, be shareable, and resonate with crypto enthusiasts and investors\n- Use hashtags sparingly and only when highly relevant\n\nImportant: **Return ONLY valid JSON, nothing else. Do NOT include explanations, preambles, or additional commentary.**  \nOutput Format: JSON array of strings:\n\n{\n  \"tweets\": [\n    \"string\",\n    \"string\",\n    \"string\"\n  ]\n}\n\nUse concise, consistent, and structured JSON formatting for every response.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -448,
+        -144
+      ],
+      "id": "b045b3c1-6b18-4003-bacf-f7ec8640747b",
+      "name": "Global Vars"
+    },
+    {
+      "parameters": {
+        "jsCode": "const {\n    anthropic_model,\n    llm_prompt\n} = $input.first().json\nconst body = JSON.stringify({\n    \"model\": `${anthropic_model}`,\n    \"max_tokens\": 1024,\n    \"messages\": [{\n        \"role\": \"user\",\n        \"content\": `${llm_prompt}`\n    }],\n    \"tools\": [{\n        \"type\": \"web_search_20250305\",\n        \"name\": \"web_search\",\n        \"max_uses\": 5\n    }]\n})\nreturn {\n    json: {\n        body\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        -144
+      ],
+      "id": "8465e207-a9fe-413e-8fe7-87a373803c60",
+      "name": "LLM Body"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "={{ $('Global Vars').item.json.anthropic_version }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        -144
+      ],
+      "id": "9aa48382-ba52-477e-a7e8-0217d4df5306",
+      "name": "Anthropic AI Message",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "JfzFwehsrUI1j31o",
+          "name": "Claude Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the LLM output (string)\nconst llmContent = $input.first().json.content;\n\n// Convert array output to string if needed\nlet llmText = '';\nif (Array.isArray(llmContent)) {\n  const textNode = llmContent.find(item => item.type === 'text');\n  llmText = textNode?.text ?? '';\n} else if (typeof llmContent === 'string') {\n  llmText = llmContent;\n}\n\n// Extract JSON inside code fences or first { ... }\nconst jsonMatch = llmText.match(/```json\\s*([\\s\\S]*?)```|({[\\s\\S]*})/);\nif (!jsonMatch) {\n  throw new Error(\"No JSON found in LLM response\");\n}\n\nconst jsonString = jsonMatch[1] || jsonMatch[2];\n\n// Parse JSON safely\nlet parsedJSON;\ntry {\n  parsedJSON = JSON.parse(jsonString);\n} catch (err) {\n  throw new Error(\"Failed to parse JSON: \" + err.message);\n}\n\n// Return parsed JSON only\nreturn [\n  {\n    json: parsedJSON\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -144
+      ],
+      "id": "bb9604cf-d72b-45c3-8e3f-808a626407d0",
+      "name": "Extract JSON from string"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        528,
+        -176
+      ],
+      "id": "7945f26f-1ccb-4f88-b74d-87e69886035f",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "6z6zYFNsqyqFRUEB",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=List: {{ $json.tweets }}",
+        "options": {
+          "systemMessage": "=You are an assistant that summarizes crypto tweet ideas from JSON input.\n\nYour responsibilities:\n1. Accept JSON data containing any number of tweet ideas. Each entry may have keys like: heading, tweet_text, link, hashtags, or others.\n2. Dynamically handle any keys: include them in the summary table if present, skip them if missing.\n3. Present a **clean, professional HTML summary** of the tweets.\n4. Include at least these details if available: Heading (bold), Tweet Ideas, Quick Link to open X (Twitter) and auto-populate tweet.\n5. Highlight tweets that are highly recommended (if `priority` key is \"high\").\n6. Structure HTML with a table for easy reading, with headers and alternating row colors.\n7. Include a total count of tweets and today's date at the top.\n8. Only return **direct HTML**, no extra text or explanations.\n9. Ensure the HTML works for any number of tweets and variable JSON keys.\n\nExample HTML structure:\n\n<div>\n  <h2>Crypto Tweet Ideas Daily Summary</h2>\n  <p>Total Tweet Ideas: X</p>\n  <p>Date: TODAY'S DATE</p>\n  <table>\n    <thead>\n      <tr>\n        <th>Heading</th>\n        <th>Tweet Idea</th>\n        <th>Quick Link</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td><b>Market Update</b></td>\n        <td>Bitcoin dips 2% amid Fed comments.</td>\n        <td><a href=\"https://twitter.com/intent/tweet?text=Bitcoin%20dips%202%25%20amid%20Fed%20comments.\">Tweet</a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n\nToday is {{ $now.format('cccc') }} the {{ $now.format('yyyy-MM-dd HH:mm') }}.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -400
+      ],
+      "id": "f4843963-2f66-4ee6-b59a-22507e4d4de8",
+      "name": "AI Compose Email Body"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "=Tweets Daily <onboarding@resend.dev>"
+            },
+            {
+              "name": "to",
+              "value": "=xxxx@gmail.com"
+            },
+            {
+              "name": "subject",
+              "value": "=Tweets Daily | {{ new Date().toLocaleDateString() }}"
+            },
+            {
+              "name": "html",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        -304
+      ],
+      "id": "2e1f5faf-5fcd-4372-ac52-9d3157dc19fe",
+      "name": "Send Mail",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "9yxG8hHGCrFmQQ1K",
+          "name": "Resend Bearer Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1jx5MDp4Y5TBrPF-klKHSTY4U4F68z8Gd-RSwG2Psd2g",
+          "mode": "list",
+          "cachedResultName": "n8n | Tweets Ideas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jx5MDp4Y5TBrPF-klKHSTY4U4F68z8Gd-RSwG2Psd2g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jx5MDp4Y5TBrPF-klKHSTY4U4F68z8Gd-RSwG2Psd2g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quick_add",
+              "displayName": "quick_add",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        800,
+        0
+      ],
+      "id": "a9f04ddc-4cab-4bcc-b47e-7402958c9c55",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "TB2tCNqF1GBm2ag8",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Assuming the previous node output is named 'LLM'\nconst tweetsArray = $input.first().json.tweets; // parsed JSON from previous node\n\n// Get current timestamp in ISO format\nconst now = new Date().toDateString();\n\n// Map tweets to objects with content + created_at + link\nconst output = tweetsArray.map(tweet => {\n  // Encode tweet content for URL\n  const encodedTweet = encodeURIComponent(tweet);\n\n  return {\n    content: tweet,\n    created_at: now,\n    quick_add: `https://x.com/intent/tweet?text=${encodedTweet}`\n  };
+});\n\n// Return as array of items for next n8n node\nreturn output.map(item => ({ json: item }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        0
+      ],
+      "id": "f80cd080-e7f2-4e9c-9dd7-a5cee50f50ae",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -672,
+        -320
+      ],
+      "id": "fba2766f-0f68-411e-ba5a-9c53e540094b",
+      "name": "Trigger Daily"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Global Vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Global Vars": {
+      "main": [
+        [
+          {
+            "node": "LLM Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Body": {
+      "main": [
+        [
+          {
+            "node": "Anthropic AI Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic AI Message": {
+      "main": [
+        [
+          {
+            "node": "Extract JSON from string",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Compose Email Body",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Compose Email Body": {
+      "main": [
+        [
+          {
+            "node": "Send Mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract JSON from string": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Compose Email Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Daily": {
+      "main": [
+        [
+          {
+            "node": "Global Vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "961404a7-812b-4518-8640-88cad52d938c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9fb634bb746cbe3fe9f7fa86fdd635510d2f0c24c4ba919fbba1ca6aec3c4e57"
+  },
+  "id": "vVIUMHGBJvIw9yOO",
+  "tags": []
+}

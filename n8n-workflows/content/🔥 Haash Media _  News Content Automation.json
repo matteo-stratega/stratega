@@ -1,0 +1,443 @@
+{
+  "name": "🔥 Haash Media |  News Content Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/extract",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "X-Return-Format",
+              "value": "html"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"urls\": [\n    \"{{ $json.link }}\"\n  ],\n  \"extract_depth\": \"advanced\",\n  \"format\": \"text\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -32,
+        -144
+      ],
+      "id": "85e6e446-55d0-4a8a-a7bf-77b406525bfb",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        80
+      ],
+      "id": "66960a54-49c8-441e-9606-c5577e608bb6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "4lNQPa9gghe50Y3q",
+          "name": "🤝 KG > N8N"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"headline\": \"Short catchy headline (max 10 words)\",\n  \"reframed_article\": \"Full reframed article text (≤1000 words)\",\n  \"slug\": \"short-hyphen-separated-slug\",\n  \"seo_title\": \"SEO-friendly title (≤60 characters)\",\n  \"meta_description\": \"SEO-friendly meta description (140–160 characters)\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        80
+      ],
+      "id": "7d4ac2d0-e971-4c33-bd34-4f37ef9db071",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://insideaimedia.com/wp-json/wp/v2/posts/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "featured_media",
+              "value": "={{ $('Upload Featured Image').item.json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3d8e5ba2-5744-410b-82cc-8202083d1ba4",
+      "name": "Set Featured Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1072,
+        0
+      ],
+      "typeVersion": 4.1,
+      "credentials": {
+        "wordpressApi": {
+          "id": "0yMdh3xL4D35rTex",
+          "name": "InsideAIMedia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "feedUrl": "https://rss.app/feeds/_bNnPULwfVOgulSta.xml"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -144
+      ],
+      "id": "32cce0a8-48e2-4c4c-a2e1-2507a05be7a8",
+      "name": "AI Latest news and Updates - rss.app"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "GPT-5"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a professional blog designer that is an expert in making blog posts beautiful. Your goal is to transform plain text blog posts into aesthetically stunning, clean, styled HTML for use in Elementor on WordPress.\n\nFollow these exact rules:\n\nWrap the entire blog post in clean, valid HTML — no escape characters, no control characters.\n\nInclude the blog post title as an <h1> at the top.\n\nBreak the content into sections using <h2> or <h3> tags, as appropriate.\n\nUse simple inline CSS for basic styling (e.g., font family, colors, padding), compatible with WordPress & Elementor defaults.\n\nHeadings (h1, h2, h3) must always be bold and larger than the normal text for clear readability.\n\nExample: <h2 style=\"font-size: 26px; font-weight: bold; color: #111;\">Section Title</h2>\n\nParagraph text should remain slightly smaller (e.g., 16–18px).\n\nDo not include any intros, disclaimers, or extra messages. Only return the final HTML content.\n\nPreserve all apostrophes, quotes, em dashes, and punctuation properly — no escape sequences or unicode junk.\n\nMake sure to use the full URL absolute path for images.\n\nAlways make sure the blog post looks stunning and professional.\n\nIt must be valid HTML every time! The response MUST start with <!DOCTYPE html>. NEVER start it with ```html.\n\nEnsure images are always full height and not cut off.\n\nMaintain a consistent structure so that headings stand out visually against body text in every output.",
+              "role": "system"
+            },
+            {
+              "content": "=Title: {{ $('Latest News Editor Agent').first().json.output.seo_title }}\n\nmeta description: {{ $('Latest News Editor Agent').first().json.output.meta_description }}\n\nContent: {{ $('Latest News Editor Agent').first().json.output.reframed_article }}\n\nHeadline: {{ $('Latest News Editor Agent').first().json.output.headline }}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        544,
+        0
+      ],
+      "id": "773ada58-8c0b-4f11-8329-d1f50d75ffc2",
+      "name": "News Designer",
+      "credentials": {
+        "openAiApi": {
+          "id": "4lNQPa9gghe50Y3q",
+          "name": "🤝 KG > N8N"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "GPT-5"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Create a prompt for generating realistic, high-resolution news feature image representing the main subject of this article: [Insert reframed article here].\n\nRequirements:\n\nEditorial/news photography style\n\nNatural lighting and realistic colors\n\nNo text, logos, or watermarks\n\nFocus on the main event, person, place, or theme\n\nSuitable for general audiences (no explicit or sensitive visuals)\n\nAspect ratio: 16:9 (landscape)",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.output.reframed_article }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        544,
+        -320
+      ],
+      "id": "73085757-4d72-4e42-9f27-d39adb00e603",
+      "name": "Image Prompting Agent",
+      "credentials": {
+        "openAiApi": {
+          "id": "4lNQPa9gghe50Y3q",
+          "name": "🤝 KG > N8N"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.results[0].raw_content }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an expert news editor and SEO copywriter. You will be given the full text of a news article from an RSS feed. Your task is to:\n\n1. Reframe the Article\n\nKeep all key facts and context, but rewrite it entirely in fresh words.\n\nAvoid plagiarism — no sentence should be copied exactly from the source.\n\nUse clear, concise, and engaging language for a general audience.\n\nMaintain a neutral and factual tone (unless instructed otherwise).\n\nRemove filler, repetition, and unnecessary details.\n\nCorrect any grammar, spelling, or clarity issues.\n\nWord count must not exceed 1000 words.\n\nStructure: short headline, engaging intro, clear body, and conclusion.\n\n2. Create SEO Elements\n\nSlug: short, lowercase, hyphen-separated, 3–6 words, no stop words if possible.\n\nSEO Title: up to 60 characters, keyword-rich, clear, and enticing.\n\nMeta Description: 140–160 characters summarizing the article and encouraging clicks."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        -144
+      ],
+      "id": "4521a49c-6edc-45f5-a51b-54ab6bfbed3e",
+      "name": "Latest News Editor Agent",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/imagen-4.0-generate-preview-06-06",
+          "mode": "list",
+          "cachedResultName": "models/imagen-4.0-generate-preview-06-06"
+        },
+        "prompt": "=Create a realistic, high-resolution news feature image representing the main subject of this article: [Insert reframed article here].\n\nRequirements:\n\nEditorial/news photography style\n\nNatural lighting and realistic colors\n\nNo text, logos, or watermarks\n\nFocus on the main event, person, place, or theme\n\nSuitable for general audiences (no explicit or sensitive visuals)\n\nAspect ratio: 16:9 (landscape)\n\nHere' s the description of the image:\n{{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        848,
+        -320
+      ],
+      "id": "35c1c360-619b-44c2-8bfa-4126b7cf78df",
+      "name": "Image Agent",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zQPjcJxlsYBMWJPM",
+          "name": "Gemini - Haash Media Account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://insideaimedia.com/wp-json/wp/v2/media",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wordpressApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Disposition",
+              "value": "=attachment; filename={{ $json.fileName }}"
+            },
+            {
+              "name": "content-type",
+              "value": "={{ $json.mimeType }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1072,
+        -272
+      ],
+      "id": "2c216c28-fa89-4891-a456-d0833604ea22",
+      "name": "Upload Featured Image",
+      "credentials": {
+        "wordpressApi": {
+          "id": "0yMdh3xL4D35rTex",
+          "name": "InsideAIMedia"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "title": "={{ $('Latest News Editor Agent').first().json.output.seo_title }}",
+        "additionalFields": {
+          "authorId": 1,
+          "content": "={{ $json.message.content }}",
+          "slug": "={{ $('Latest News Editor Agent').first().json.output.slug }}",
+          "status": "draft",
+          "format": "standard",
+          "postTemplate": {
+            "values": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "a2ea8356-5ff8-4c46-91ef-514f60c43dcf",
+      "name": "Post Drafting",
+      "credentials": {
+        "wordpressApi": {
+          "id": "0yMdh3xL4D35rTex",
+          "name": "InsideAIMedia"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Latest News Editor Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Latest News Editor Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Latest News Editor Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Latest news and Updates - rss.app": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "News Designer": {
+      "main": [
+        [
+          {
+            "node": "Post Drafting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompting Agent": {
+      "main": [
+        [
+          {
+            "node": "Image Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Latest News Editor Agent": {
+      "main": [
+        [
+          {
+            "node": "Image Prompting Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Agent": {
+      "main": [
+        [
+          {
+            "node": "Upload Featured Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Featured Image": {
+      "main": [
+        [
+          {
+            "node": "News Designer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Drafting": {
+      "main": [
+        [
+          {
+            "node": "Set Featured Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "saveExecutionProgress": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "uNLWr527B18r2RE7"
+  },
+  "versionId": "3f95ffed-3d02-4665-9436-30639c0e487e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fb22f7934b4c2aa4c6dbb751b143cff7411f5835baf83253384f40decb17fd61"
+  },
+  "id": "uNLWr527B18r2RE7",
+  "tags": []
+}
