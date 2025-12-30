@@ -158,8 +158,7 @@ stratega/
 ### Project-Specific
 | Agent | File | Use Case |
 |-------|------|----------|
-| Duomo Design | `duomo-design.md` | Duomo client work |
-| Duomo ADV | `duomo-adv.md` | Duomo advertising |
+| Duomo | `duomo_agent.md` | Duomo brand + performance marketing |
 
 ---
 

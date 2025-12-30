@@ -6,6 +6,13 @@
       "env": {
         "MEMORY_FILE_PATH": "/Users/matteolombardi/AI-Projects/stratega/.memory/knowledge-graph.jsonl"
       }
+    },
+    "google-slides": {
+      "command": "npx",
+      "args": ["-y", "@bohachu/google-slides-mcp"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/Users/matteolombardi/AI-Projects/stratega/.credentials/duomo-analytics-668da1823fd3.json"
+      }
     }
   }
 }
