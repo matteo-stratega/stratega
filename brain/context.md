@@ -29,6 +29,10 @@
 - [x] Google Drive API abilitato su GCP
 - [x] Symlink credentials per Slides MCP (`/keys/`)
 - [x] Test creazione slides via API (risultato: non soddisfacente)
+- [x] **Claude Code Setup Guide** - Guida completa per non-tecnici (babbo)
+- [x] Template files Stratega (context.md, start.md, close.md)
+- [x] Glossario comandi terminale per principianti
+- [x] Build in Public asset ready (thread, posts ideas)
 
 ### Prossima Sessione (30 Dic)
 - [ ] **MANDATORY: Contabilità** - Fattura Toma
@@ -78,6 +82,7 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
+| 29/12 | **Claude Code Guide per non-tecnici** | NetworkChuck base + Stratega OS upgrades, Build in Public asset |
 | 29/12 | **Git repo separato** | Stratega indipendente, backup in bundle, HOME pulito |
 | 29/12 | MCP isolation per progetto | Ogni workspace ha i suoi MCP locali, evita conflitti (es. GA4) |
 | 29/12 | Google Slides API non adatta per report | Troppo low-level, perde formattazione, serve alternativa (Pitch API?) |
@@ -129,31 +134,31 @@ stratega/
 ### Core
 | Agent | File | Use Case |
 |-------|------|----------|
-| Metis | `stratega-brain.md` | Core brain, strategy, identity |
-| CTO | `cto.md` | Architecture, code review, tech decisions |
-| Archivista | `archivista.md` | Workspace organization, git, memory |
+| Metis | `stratega_brain_agent.md` | Core brain, strategy, identity |
+| CTO | `cto_agent.md` | Architecture, code review, tech decisions |
+| Archivista | `archivista_agent.md` | Workspace organization, git, memory |
 
 ### Execution
 | Agent | File | Use Case |
 |-------|------|----------|
-| Archimede | `archimede.md` | n8n, Supabase, coding, technical tutor |
-| Content Engine | `content-engine.md` | Writing, copy, editorial |
-| Marketer | `marketer.md` | Campaign copy, positioning, messaging |
-| Build in Public | `build-in-public.md` | Public content, Tool Fridays |
+| Archimede | `archimede_agent.md` | n8n, Supabase, coding, technical tutor |
+| Content Engine | `content_engine_agent.md` | Writing, copy, editorial |
+| Marketer | `marketer_agent.md` | Campaign copy, positioning, messaging |
+| Build in Public | `build_in_public_agent.md` | Public content, Tool Fridays |
 
 ### Strategy
 | Agent | File | Use Case |
 |-------|------|----------|
-| Esattore | `esattore.md` | MRR accountability, revenue tracking |
-| Growth Hacker | `growth-hacker.md` | Experiments, campaigns, growth tactics |
-| Growth Orchestrator | `growth-orchestrator.md` | Campaign coordination, sequencing |
-| Content Strategist | `content-strategist.md` | Editorial planning, content calendar |
+| Esattore | `esattore_agent.md` | MRR accountability, revenue tracking |
+| Growth Hacker | `growth_hacker_agent.md` | Experiments, campaigns, growth tactics |
+| Growth Orchestrator | `growth_orchestrator_agent.md` | Campaign coordination, sequencing |
+| Content Strategist | `content_strategist_agent.md` | Editorial planning, content calendar |
 
 ### Operations
 | Agent | File | Use Case |
 |-------|------|----------|
-| Session Closer | `session-closer.md` | End-of-day wrap, closing summaries |
-| Matteo Voice | `matteo-voice.md` | Personal brand voice |
+| Session Closer | `session_closer_agent.md` | End-of-day wrap, closing summaries |
+| Matteo Voice | `matteo_voice_agent.md` | Personal brand voice |
 
 ### Project-Specific
 | Agent | File | Use Case |
