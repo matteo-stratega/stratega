@@ -1,4 +1,4 @@
-# Jubatus / Pops.photos - Discovery Meeting Prep
+# Jubatus / - Discovery Meeting Prep
 
 **Date:** 30 Dicembre 2025
 **Contact:** Logan Para (CEO)
@@ -77,7 +77,7 @@
 *Domande chiave per capire situazione attuale*
 
 **Sulla situazione attuale:**
-1. "Raccontami dove siete oggi con le sales - avete già clienti? Come li avete acquisiti?"
+1. "Raccontami dove siete oggi con le sales - avete già clienti? Come li avete acquisiti?" -> 50 50 agenzie fotografiche - 50% di eventi stessi
 2. "Chi si occupa di sales attualmente? Tu direttamente o avete qualcuno?"
 3. "State assumendo un SDR/sales - avete già identificato il profilo?"
 
@@ -234,3 +234,8 @@
 ---
 
 *Prepared by: Metis | Framework: FAVORITE*
+
+
+transcript
+
+![[Week-X-availability-Logan-Para-13cafefd-5cdb]]

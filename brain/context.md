@@ -1,6 +1,6 @@
 # Stratega Brain - Context File
 
-**Last Updated:** 29 Dicembre 2025
+**Last Updated:** 30 Dicembre 2025
 **Purpose:** Stato corrente di Stratega, decisioni chiave, context persistente tra sessioni
 
 ---
@@ -20,31 +20,24 @@
 - [ ] n8n: Decidere primo prodotto
 - [ ] Build in Public: Tool Friday prep
 
-### Completati 29 Dic
-- [x] **Git repo separato** - Stratega ora ha repo indipendente, HOME non più git
-- [x] Backup history in `~/Desktop/stratega-backup-20251229.bundle`
-- [x] Duomo: Google Slides MCP configurato
-- [x] Duomo: Annual Report contenuto e guida slides pronti
-- [x] CTO: Decisione Service Account per Google APIs
-- [x] Google Drive API abilitato su GCP
-- [x] Symlink credentials per Slides MCP (`/keys/`)
-- [x] Test creazione slides via API (risultato: non soddisfacente)
-- [x] **Claude Code Setup Guide** - Guida completa per non-tecnici (babbo)
-- [x] Template files Stratega (context.md, start.md, close.md)
-- [x] Glossario comandi terminale per principianti
-- [x] Build in Public asset ready (thread, posts ideas)
+### Completati 30 Dic
+- [x] **Jubatus Discovery Call** - Prep, call, transcript analysis, follow-up
+- [x] Meeting prep con FAVORITE framework
+- [x] Analisi profilo Logan Para (CEO)
+- [x] Follow-up email mandata con strategia 2 fasi
+- [x] Sales Hub PickEat estratto in `data/sales-hub-pickeat/`
 
-### Prossima Sessione (30 Dic)
+### Prossima Sessione (31 Dic / Gennaio)
 - [ ] **MANDATORY: Contabilità** - Fattura Toma
 - [ ] **MANDATORY: Report Duomo** - Annual report
+- [ ] **Jubatus: Definire pacchetti Stratega** - Pricing proprio, non Crono
+- [ ] **Jubatus: Mandare contatto persona mkt/sales** a Logan
+- [ ] **Jubatus: Follow-up call** - Settimana 13 gennaio
 - [ ] **Duomo GA4**: Aspetta accesso viewer da cliente, poi configurare MCP locale
-- [ ] **MCP Cleanup**: Rimuovere MCP globali PickEat quando GA4 Duomo ready
-- [ ] **Duomo: Trovare alternativa per slides** - Google Slides API non adatta, esplorare Pitch API / altro tool
-- [ ] **Academy: Review uTeach** - Decidere se migrare o sistemare prima di campagne gennaio
-- [ ] **Academy: Trovare 6 prospect** - Per completare sfida 50 (serve source file scoring)
-- [ ] Inviare reclamo commercialista (MI GESTORÍA) → `notes/reclamo-migestoria-draft.md`
+- [ ] **Duomo: Trovare alternativa per slides** - Google Slides API non adatta
+- [ ] **Academy: Review uTeach** - Decidere se migrare prima campagne gennaio
+- [ ] Inviare reclamo commercialista (MI GESTORÍA)
 - [ ] Proroga tarifa plana su IMPORTASS (deadline: 1 feb - 2 mar 2026)
-- [ ] Off The Path: Decisione Supabase (aspetta partner)
 
 ---
 
@@ -62,6 +55,14 @@
 - **Goal:** Primo prodotto revenue-generating
 - **Options:** Content Gen template, automation workflows
 - **File:** `notes/n8n-revenue-map-dec2025.md`
+
+### Jubatus Consulting (NEW)
+- **Status:** Discovery done, follow-up sent
+- **Client:** Logan Para (CEO) - pops.photos
+- **Prodotto:** SaaS eventi sportivi, AI face recognition video
+- **Need:** Sales playbook + processo prima di assumere SDR
+- **Next:** Call settimana 13 gennaio per chiudere Fase 1
+- **Files:** `notes/meetings/jubatus-discovery-prep-30122025.md`, `outputs/jubatus-followup-30122025.md`
 
 ### Off The Path (Side Project)
 - **Status:** Development
@@ -82,6 +83,8 @@
 
 | Data | Decisione | Rationale |
 |------|-----------|-----------|
+| 30/12 | **Pacchetti Stratega separati da Crono** | Pricing e moduli propri, non dipendere da listino Crono Expert |
+| 30/12 | **Jubatus: Strategia 2 fasi** | Fase 1 con founder (playbook), Fase 2 con SDR (training) |
 | 29/12 | **Claude Code Guide per non-tecnici** | NetworkChuck base + Stratega OS upgrades, Build in Public asset |
 | 29/12 | **Git repo separato** | Stratega indipendente, backup in bundle, HOME pulito |
 | 29/12 | MCP isolation per progetto | Ogni workspace ha i suoi MCP locali, evita conflitti (es. GA4) |
